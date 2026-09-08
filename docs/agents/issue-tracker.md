@@ -13,7 +13,7 @@ Issues and specs for this repo live as GitHub issues. Use the `gh` CLI for all o
 
 Infer the repo from `git remote -v`; `gh` does this automatically when run inside a clone.
 
-> Hiện tại repo chưa gắn remote GitHub. Chạy `git remote add origin <url>` + `gh auth login` trước khi dùng. Chưa có remote thì tạm ghi việc ở `.scratch/<ten-viec>/`.
+> The repo currently has no GitHub remote attached. Run `git remote add origin <url>` + `gh auth login` first. Without a remote, track work temporarily under `.scratch/<task-name>/`.
 
 ## Pull requests as a triage surface
 

@@ -1,6 +1,6 @@
--- 02_data.sql: R4 viết. Mỗi bảng >=15 dòng thật,
--- đủ để 12 query đều có kết quả.
--- Thứ tự insert: cha trước con sau
+-- 02_data.sql: owned by R4. At least 15 realistic rows per table,
+-- enough for all 12 queries to return non-empty results.
+-- Insert order: parents before children.
 -- (Building -> Patient -> Student/Staff -> Allergy
 -- -> PatientAllergy -> MedicalStaff -> Appointment
 -- -> Consultation -> Medicine -> Prescription

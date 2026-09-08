@@ -4,3 +4,6 @@ db.name=uhs_db
 db.user=uhs_app
 db.password=change_me
 db.params=useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+# Standard way: use real ENV or the .env file (see .env.example).
+# ENV / the .env file override the values below. Temporary TiDB Cloud dev DB requires TLS:
+# db.params=sslMode=VERIFY_IDENTITY&serverTimezone=UTC

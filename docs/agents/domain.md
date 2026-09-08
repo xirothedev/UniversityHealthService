@@ -38,7 +38,7 @@ Multi-context repo (presence of `CONTEXT-MAP.md` at the root):
         └── docs/adr/
 ```
 
-Repo này là single-context: 1 `CONTEXT.md` + `docs/adr/ADR-*.md` ở root. ADR viết tiếng Việt ngắn gọn, mẫu 5 mục (xem `docs/adr/ADR-00-template.md`).
+This repo is single-context: 1 `CONTEXT.md` + `docs/adr/ADR-*.md` at the root. ADRs are short, plain English, 5 sections (see `docs/adr/ADR-00-template.md`).
 
 ## Use the glossary's vocabulary
 

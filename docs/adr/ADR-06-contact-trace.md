@@ -1,16 +1,16 @@
-# ADR-06: Self-rel ContactTrace
+# ADR-06: ContactTrace self-relationship
 
-## 1. Bối cảnh
-Truy ổ dịch cần biết ai tiếp xúc ai. Cả 2 đầu đều là Patient.
+## 1. Context
+Outbreak tracing needs to know who contacted whom. Both ends are Patients.
 
-## 2. Quyết định
-Bảng ContactTrace nối Patient với Patient. Ghi rõ 2 vai: nguồn bệnh / người tiếp xúc + ngày tiếp xúc.
+## 2. Decision
+ContactTrace table joins Patient to Patient. Mark both roles explicitly: source case / contact + contact date.
 
-## 3. Bỏ gì
-Bỏ quan hệ Doctor-quản-Doctor (cũng là self-rel nhưng không giúp tìm dịch).
+## 3. Dropped
+Dropped a Doctor-manages-Doctor relationship (also a self-rel but useless for tracing).
 
-## 4. Hậu quả
-Được: trả lời câu ổ dịch 14 ngày cùng tòa. Mất: phải chặn tự tiếp xúc chính mình bằng CHECK/test.
+## 4. Consequences
+Gain: answers the same-building 14-day outbreak query. Loss: self-contact must be blocked via CHECK/test.
 
-## 5. Liên quan
-Bảng NotifiableCase, ContactTrace, Building. Query Q-T5.
+## 5. Related
+Tables NotifiableCase, ContactTrace, Building. Query Q-T5.

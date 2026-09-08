@@ -1,16 +1,16 @@
-# ADR-05: PatientAllergy M-M có thuộc tính
+# ADR-05: PatientAllergy M-M with attributes
 
-## 1. Bối cảnh
-1 người có nhiều dị ứng, 1 dị ứng ở nhiều người. Mức nặng nhẹ là của từng cặp, không của riêng ai.
+## 1. Context
+1 person has many allergies, 1 allergy affects many people. Severity belongs to each pair, not to either side alone.
 
-## 2. Quyết định
-Bảng giữa PatientAllergy: khóa (patient_id + allergy_id) + severity + onset_date.
+## 2. Decision
+Junction table PatientAllergy: key (patient_id + allergy_id) + severity + onset_date.
 
-## 3. Bỏ gì
-Bỏ cột allergy_list kiểu chuỗi (nhanh nhưng sai chuẩn, không truy vấn được).
+## 3. Dropped
+Dropped a string allergy_list column (fast but unnormalized, unqueryable).
 
-## 4. Hậu quả
-Được: hỏi ai bị gì nặng đều được. Mất: thêm 1 bảng join.
+## 4. Consequences
+Gain: any who-has-what-severe question is answerable. Loss: one extra join table.
 
-## 5. Liên quan
-Bảng Patient, Allergy, PatientAllergy. Query Q6.
+## 5. Related
+Tables Patient, Allergy, PatientAllergy. Query Q6.

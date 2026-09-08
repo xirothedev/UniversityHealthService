@@ -1,16 +1,16 @@
-# ADR-04: PrescriptionLine yếu
+# ADR-04: Weak PrescriptionLine
 
-## 1. Bối cảnh
-1 dòng thuốc không đứng một mình được. Dòng số 3 vô nghĩa nếu không biết của đơn nào.
+## 1. Context
+1 medication line cannot stand alone. Line number 3 means nothing without knowing whose order it belongs to.
 
-## 2. Quyết định
-PrescriptionLine là weak entity. Khóa gồm (presc_id + line_no). Xóa đơn kéo theo dòng.
+## 2. Decision
+PrescriptionLine is a weak entity. Key is (presc_id + line_no). Deleting the order cascades to its lines.
 
-## 3. Bỏ gì
-Bỏ cho nó id riêng (dễ code hơn nhưng mất điểm weak entity).
+## 3. Dropped
+Dropped giving it its own id (easier to code but loses weak-entity marks).
 
-## 4. Hậu quả
-Được: đúng đề, demo master-detail đẹp. Mất: thêm thuốc phải biết đơn trước.
+## 4. Consequences
+Gain: matches the brief, clean master-detail demo. Loss: adding a drug requires knowing the order first.
 
-## 5. Liên quan
-Bảng Prescription, PrescriptionLine, Medicine. Form F3.
+## 5. Related
+Tables Prescription, PrescriptionLine, Medicine. Form F3.

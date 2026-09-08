@@ -1,0 +1,17 @@
+# Java / Maven / IDE
+target/
+*.class
+*.jar
+*.war
+.idea/
+*.iml
+.vscode/
+.DS_Store
+# Eclipse
+.classpath
+.project
+.settings/
+# DB local (giữ example, bỏ file thật)
+db.properties
+# scratch cá nhân
+.scratch/*/*.local.md

@@ -1,0 +1,6 @@
+db.host=localhost
+db.port=3306
+db.name=uhs_db
+db.user=uhs_app
+db.password=change_me
+db.params=useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true

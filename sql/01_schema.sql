@@ -1,0 +1,2 @@
+-- 01_schema.sql: drop -> create, cha truoc con sau. Phai chay 2 lan lien tiep khong sua tay.
+-- R4 viet tiep theo danh sach bang da chot (Patient/Student/Staff ... ContactTrace).

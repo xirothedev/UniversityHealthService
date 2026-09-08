@@ -24,3 +24,32 @@ jobs:
       - uses: actions/checkout@v7
       - run: python3 -m pip install --break-system-packages sqlfluff
       - run: sqlfluff lint sql/
+
+  guards:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - name: SSOT untouched
+        run: |
+          if git diff --name-only "origin/${{ github.base_ref }}"...HEAD 2>/dev/null | grep -qx 'docs/assignment.md'; then
+            echo "ERROR: docs/assignment.md is SSOT, do not edit by hand."; exit 1
+          fi
+          echo "SSOT OK"
+      - name: No placeholder text left in touched sql
+        run: |
+          base="origin/${{ github.base_ref }}"
+          if [ -z "${{ github.base_ref }}" ]; then echo "skip on push"; exit 0; fi
+          if git diff --name-only "$base"...HEAD | grep -q '^sql/'; then
+            if grep -rnE 'R4 viết|R5 viết|viết tiếp' sql/; then
+              echo "ERROR: this PR touches sql/ but placeholders remain."; exit 1
+            fi
+          fi
+          echo "SQL placeholders OK"
+      - name: src ASCII only (English)
+        run: |
+          if grep -r '[^[:print:][:space:]]' src/; then
+            echo "ERROR: non-ASCII text in src/."; exit 1
+          fi
+          echo "src language OK"

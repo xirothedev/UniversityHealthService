@@ -1,17 +1,20 @@
 package com.uhs;
 
 import com.uhs.util.DBConnection;
-import java.io.FileInputStream;
 import java.util.Properties;
 
-// ponytail: shared skeleton, R6 continues with UI. No hard-coded DB here.
+// Shared skeleton: no hard-coded DB here. R6 continues with the UI in com.uhs.ui.
 public class App {
   public static void main(String[] args) throws Exception {
-    Properties p = new Properties();
-    try (FileInputStream in = new FileInputStream("db.properties")) {
-      p.load(in);
-    } catch (java.io.FileNotFoundException e) {
-      System.out.println("Missing db.properties. Copy db.properties.example and edit it.");
+    Properties p;
+    try {
+      p = DBConnection.loadSettings();
+    } catch (Exception e) {
+      System.out.println("Missing DB config. Copy .env.example to .env and edit it.");
+      return;
+    }
+    if (p.getProperty("db.user") == null) {
+      System.out.println("Missing db.user/DB_USERNAME. Copy .env.example to .env and edit it.");
       return;
     }
     String url = DBConnection.buildUrl(p);

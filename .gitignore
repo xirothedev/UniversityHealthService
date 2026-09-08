@@ -13,5 +13,7 @@ target/
 .settings/
 # DB local (giữ example, bỏ file thật)
 db.properties
+.env
+!.env.example
 # scratch cá nhân
 .scratch/*/*.local.md

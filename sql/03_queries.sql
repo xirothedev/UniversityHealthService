@@ -1,5 +1,5 @@
--- 03_queries.sql: R5 viết. Mỗi câu có comment
--- tiếng Anh phía trên. 12 câu, mỗi câu đều non-empty.
+-- 03_queries.sql: owned by R5. Each statement has an English
+-- comment above it. 12 statements, each returning non-empty results.
 -- Q-T1 history 1 patient (multi-join)
 -- Q-T2 free slots (outer join)
 -- Q-T3 top-5 diagnosis (GROUP BY/HAVING)

@@ -1,4 +1,4 @@
--- 01_schema.sql: drop -> create, cha truoc con sau.
--- Phai chay 2 lan lien tiep khong sua tay.
--- R4 viet tiep theo danh sach bang da chot
+-- 01_schema.sql: drop -> create, parents before children.
+-- Must run twice in a row without manual repair.
+-- R4 continues with the agreed table list
 -- (Patient/Student/Staff ... ContactTrace).

@@ -1,2 +1,8 @@
--- 02_data.sql: R4 viết. Mỗi bảng >=15 dòng thật, đủ để 12 query đều có kết quả.
--- Thứ tự insert: cha trước con sau (Building -> Patient -> Student/Staff -> Allergy -> PatientAllergy -> MedicalStaff -> Appointment -> Consultation -> Medicine -> Prescription -> PrescriptionLine -> VaccinationCourse -> VaccinationRecord -> NotifiableCase -> ContactTrace).
+-- 02_data.sql: R4 viết. Mỗi bảng >=15 dòng thật,
+-- đủ để 12 query đều có kết quả.
+-- Thứ tự insert: cha trước con sau
+-- (Building -> Patient -> Student/Staff -> Allergy
+-- -> PatientAllergy -> MedicalStaff -> Appointment
+-- -> Consultation -> Medicine -> Prescription
+-- -> PrescriptionLine -> VaccinationCourse
+-- -> VaccinationRecord -> NotifiableCase -> ContactTrace).

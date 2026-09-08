@@ -1,4 +1,10 @@
--- 03_queries.sql: R5 viết. Mỗi câu có comment tiếng Anh phía trên. 12 câu, mỗi câu đều non-empty.
--- Q-T1 history 1 patient (multi-join) | Q-T2 free slots (outer join) | Q-T3 top-5 diagnosis (GROUP BY/HAVING)
--- Q-T4 full-dose (NOT EXISTS for-all) | Q-T5 outbreak same building 14d (self-join)
--- Q6 allergy join | Q7 doctors never booked | Q8 high-risk HAVING | Q9 EXISTS nested | Q10 set op | Q11 view v_patient_summary | Q12 out-of-stock check
+-- 03_queries.sql: R5 viết. Mỗi câu có comment
+-- tiếng Anh phía trên. 12 câu, mỗi câu đều non-empty.
+-- Q-T1 history 1 patient (multi-join)
+-- Q-T2 free slots (outer join)
+-- Q-T3 top-5 diagnosis (GROUP BY/HAVING)
+-- Q-T4 full-dose (NOT EXISTS for-all)
+-- Q-T5 outbreak same building 14d (self-join)
+-- Q6 allergy join | Q7 doctors never booked
+-- Q8 high-risk HAVING | Q9 EXISTS nested | Q10 set op
+-- Q11 view v_patient_summary | Q12 out-of-stock check

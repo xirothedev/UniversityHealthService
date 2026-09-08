@@ -7,7 +7,7 @@ on:
     branches: [main]
 
 jobs:
-  build:
+  java:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -16,4 +16,11 @@ jobs:
           distribution: temurin
           java-version: '21'
           cache: maven
-      - run: mvn -B package
+      - run: mvn -B verify
+
+  sql:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - run: python3 -m pip install --break-system-packages sqlfluff
+      - run: sqlfluff lint sql/

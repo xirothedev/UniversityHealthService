@@ -1,26 +1,26 @@
-# CONTRIBUTING — Luật đóng góp để PR đạt điểm tối đa
+# CONTRIBUTING — Rules for maximum-score PRs
 
-SSOT là `docs/assignment.md` (đề gốc, cấm sửa). Mọi yêu cầu dưới đây đối chiếu từ file đó.
+SSOT is `docs/assignment.md` (original brief, do not edit). Every rule below traces back to that file.
 
-## 1. Nhánh & PR
+## 1. Branches & PRs
 
-- 1 task Sheet = 1 nhánh: `d1/rules`, `d2/er`, `d5/schema`, `d6/form-f3`... Không push thẳng `main`.
-- PR nhỏ, 1 đầu nộp/loại thay đổi. Điền đủ template PR (tick checklist thật, không tick cho có).
-- Merge bằng **squash** (repo chặn merge commit).
+- 1 Sheet task = 1 branch: `d1/rules`, `d2/er`, `d5/schema`, `d6/form-f3`... Never push straight to `main`.
+- Small PRs, one deliverable/change type each. Fill in the full PR template (tick the checklist honestly, no box-ticking for show).
+- Merge with **squash** (repo blocks merge commits).
 
-## 2. Review & merge (không cần reviewer, chỉ admin merge)
+## 2. Review & merge (no reviewer required, admin-only merge)
 
-- PR merge được khi CI xanh, không cần reviewer approve. Khuyến khích nhờ bạn khác vai trò xem qua để phục vụ chấm cá nhân.
-- Chỉ admin bấm merge vào `main` (quy ước nhóm — repo cá nhân nên GitHub không khóa kỹ thuật nút merge theo role; muốn khóa cứng thì chuyển repo sang organization để bật push-restriction).
-- Tác giả tự check tay 3 thứ CI không bắt được trước khi nhờ admin merge: SQL nối chuỗi, `docs/assignment.md` bị sửa, checklist PR tick ẩu.
+- A PR can merge once CI is green, no reviewer approval needed. Asking a teammate from a different role to take a look is encouraged (individual grading).
+- Only admins press merge into `main` (team convention — personal repos cannot technically lock the merge button by role on GitHub; for hard enforcement, move the repo to an organization and enable push-restriction).
+- Authors must hand-check 3 things CI cannot catch before requesting an admin merge: string-concatenated SQL, edits to `docs/assignment.md`, sloppily ticked PR checklists.
 
 ## 3. Definition of Done
 
-- **SQL:** script chạy 2 lần không sửa; đủ PK/FK/NOT NULL/UNIQUE/CHECK/DEFAULT + ON DELETE/UPDATE; data thật ≥15 dòng/bảng; query non-empty; `sqlfluff` sạch.
-- **Java:** PreparedStatement mọi input; connection ngoài code; try-with-resources; validate + báo lỗi dễ hiểu; tiếng Anh; `mvn verify` xanh.
-- **Docs:** đúng mục, đủ trang, screenshot + SQL, AI appendix khi dùng AI.
+- **SQL:** script runs twice with no manual fix; full PK/FK/NOT NULL/UNIQUE/CHECK/DEFAULT + ON DELETE/UPDATE; realistic data ≥15 rows/table; non-empty queries; clean `sqlfluff`.
+- **Java:** PreparedStatement for every input; externalized connection; try-with-resources; validation + readable error messages; English; green `mvn verify`.
+- **Docs:** correct sections, minimum page counts, screenshots + SQL, AI appendix when AI was used.
 
-## 4. Cấm
+## 4. Forbidden
 
-- Sửa `docs/assignment.md` (CI chặn). Muốn diễn giải khác SSOT → mở issue thảo luận trước.
-- Hard-code user/pass/URL DB, mảng/file cứng chứa data, commit `db.properties` thật, commit file IDE (`.classpath`, `.project`, `.settings/`).
+- Editing `docs/assignment.md` (blocked by CI). To interpret the SSOT differently → open an issue for discussion first.
+- Hard-coding DB user/pass/URL, hard-coded data arrays/files, committing the real `db.properties` or `.env`, committing IDE files (`.classpath`, `.project`, `.settings/`).

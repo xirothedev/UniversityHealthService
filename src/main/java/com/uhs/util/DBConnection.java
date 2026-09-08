@@ -5,7 +5,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.util.Properties;
 
-// Khung chung: mở DB từ file ngoài code. Mọi chỗ dùng try-with-resources.
+// Shared skeleton: open DB from a file outside the code. Use try-with-resources everywhere.
 public final class DBConnection {
     private DBConnection() {}
 

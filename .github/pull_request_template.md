@@ -25,7 +25,8 @@
 - [ ] Đúng mục/thứ tự 12 mục D3, số trang tối thiểu
 - [ ] Screenshot form + SQL đằng sau (mục 9), AI appendix nếu có dùng AI
 
-## Review
+## Review & merge
 
-- [ ] Reviewer khác vai trò với người làm (quy tắc chấm cá nhân: ai cũng phải hiểu bài người khác)
 - [ ] CI xanh (java + sql + guards)
+- [ ] Tự check tay 3 thứ CI không bắt được: SQL nối chuỗi, `docs/assignment.md` bị sửa, checklist tick ẩu
+- [ ] Nhờ admin merge (chỉ admin bấm merge vào `main`; không cần reviewer approve)

@@ -8,10 +8,11 @@ SSOT là `docs/assignment.md` (đề gốc, cấm sửa). Mọi yêu cầu dư�
 - PR nhỏ, 1 đầu nộp/loại thay đổi. Điền đủ template PR (tick checklist thật, không tick cho có).
 - Merge bằng **squash** (repo chặn merge commit).
 
-## 2. Reviewer (bắt buộc, phục vụ chấm cá nhân)
+## 2. Review & merge (không cần reviewer, chỉ admin merge)
 
-- Mỗi PR cần 1 reviewer **khác vai trò** với người làm, approve mới merge.
-- Reviewer check tay 3 thứ CI không bắt được: SQL nối chuỗi, `docs/assignment.md` bị sửa, checklist PR tick ẩu.
+- PR merge được khi CI xanh, không cần reviewer approve. Khuyến khích nhờ bạn khác vai trò xem qua để phục vụ chấm cá nhân.
+- Chỉ admin bấm merge vào `main` (quy ước nhóm — repo cá nhân nên GitHub không khóa kỹ thuật nút merge theo role; muốn khóa cứng thì chuyển repo sang organization để bật push-restriction).
+- Tác giả tự check tay 3 thứ CI không bắt được trước khi nhờ admin merge: SQL nối chuỗi, `docs/assignment.md` bị sửa, checklist PR tick ẩu.
 
 ## 3. Definition of Done
 

@@ -1,16 +1,16 @@
-# ADR-07: Connection ngoài code + PreparedStatement
+# ADR-07: Externalized connection + PreparedStatement
 
-## 1. Bối cảnh
-Máy chấm trỏ DB khác mà không muốn build lại. Nhập dấu `'` dễ vỡ SQL nối chuỗi.
+## 1. Context
+The grader points the app at a different DB with no rebuild. An apostrophe `'` breaks concatenated SQL.
 
-## 2. Quyết định
-Thông tin DB nằm ở `db.properties` ngoài code. Mọi câu có giá trị người nhập đều dùng `PreparedStatement ?` + try-with-resources.
+## 2. Decision
+DB settings live in `db.properties` (overridable via ENV/`.env`, see ADR-11) outside the code. Every statement with user input uses `PreparedStatement ?` + try-with-resources.
 
-## 3. Bỏ gì
-Bỏ nối chuỗi vào SQL (nhanh nhưng lỗi injection, bị trừ điểm). Bỏ hard-code user/pass trong `.java`.
+## 3. Dropped
+Dropped string concatenation into SQL (fast but injection-prone, penalized). Dropped hard-coded user/pass in `.java`.
 
-## 4. Hậu quả
-Được: an toàn, dễ chấm. Mất: viết dài hơn chút.
+## 4. Consequences
+Gain: safe, easy to grade. Loss: slightly more verbose code.
 
-## 5. Liên quan
-Mọi DAO. Form F1-F5. File `db.properties.example`.
+## 5. Related
+All DAOs. Forms F1-F5. Files `db.properties.example`, `.env.example`.

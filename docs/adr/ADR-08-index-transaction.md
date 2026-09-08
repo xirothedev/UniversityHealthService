@@ -1,16 +1,16 @@
 # ADR-08: Index + Transaction
 
-## 1. Bối cảnh
-Tìm slot trống và top chẩn đoán chậm nếu quét cả bảng. Tạo khám + đơn phải cùng thành công hoặc cùng hủy.
+## 1. Context
+Free-slot lookup and top-diagnosis scan whole tables when slow. Creating a visit + its order must succeed or fail together.
 
-## 2. Quyết định
-Đánh index `Appointment(doctor_id,slot_time)` cho Q-T2 và `Consultation(diagnosis,consult_date)` cho Q-T3. Tạo Consultation + Prescription trong 1 transaction có COMMIT/ROLLBACK.
+## 2. Decision
+Index `Appointment(doctor_id,slot_time)` for Q-T2 and `Consultation(diagnosis,consult_date)` for Q-T3. Create Consultation + Prescription in 1 transaction with COMMIT/ROLLBACK.
 
-## 3. Bỏ gì
-Bỏ đánh index mọi cột (nhanh đọc nhưng chậm ghi, khó giải thích).
+## 3. Dropped
+Dropped indexing every column (faster reads but slower writes, hard to justify).
 
-## 4. Hậu quả
-Được: query nhanh, số liệu đúng. Mất: phải ghi trong báo cáo index giúp query nào.
+## 4. Consequences
+Gain: fast queries, correct numbers. Loss: the report must state which query each index serves.
 
-## 5. Liên quan
-Bảng Appointment, Consultation, Prescription. Query Q-T2, Q-T3.
+## 5. Related
+Tables Appointment, Consultation, Prescription. Queries Q-T2, Q-T3.

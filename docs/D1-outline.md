@@ -1,10 +1,10 @@
-# D1 outline (1-3 trang, hạn W3 22/9-28/9) — R1+R2+Writer điền
+# D1 outline (1-3 pages, due W3 22/9-28/9) — R1+R2+Writer fill in
 
-1. Header: tên nhóm + topic 14 + bảng 12 người (tên+MSSV+SĐT) + stack khóa.
-2. Objective 1 câu: cho trạm y tế tra hồ sơ nhanh + phát hiện ổ dịch sớm.
-3. Business rules 15-20 câu đánh số (R2 viết, cả nhóm duyệt). Gợi ý đã có trong chat, copy vào đây rồi sửa.
-4. Entity list 11 bảng + ghi weak/M-M/ISA/self-rel nằm ở đâu.
-5. Plan W3/W5/W10/W13-15 + bảng R1-R7 (chưa gán tên).
-6. References + khai AI (dùng gì + verify sao).
+1. Header: team name + topic 14 + 12-person table (name+student ID+phone) + pinned stack.
+2. Objective in 1 sentence: fast record lookup for the health station + early outbreak detection.
+3. Business rules, 15-20 numbered sentences (R2 writes, whole team approves). Drafts already in chat, copy them here then revise.
+4. Entity list of 11 tables + where the weak/M-M/ISA/self-rel sit.
+5. Plan W3/W5/W10/W13-15 + R1-R7 table (names not assigned yet).
+6. References + AI disclosure (what was used + how it was verified).
 
-Xong D1 thì khóa topic, không đổi sau W5 nếu cô không duyệt.
+Once D1 is done the topic is locked; no changes after W5 without instructor approval.

@@ -1,28 +1,16 @@
-# ADR-11: ENV + .env cho DB, TiDB Cloud chỉ làm dev tạm
+# ADR-11: ENV + .env for the DB, TiDB Cloud as dev-only
 
-## 1. Bối cảnh
-Máy chấm trỏ DB khác mà không muốn build lại (ADR-07). Docker/CI/TiDB
-Cloud đưa credential qua ENV (DB_HOST...), còn local quen sửa file.
-TiDB Cloud bắt buộc TLS nên `useSSL=false` cũ không nối được.
+## 1. Context
+The grader points the app at a different DB with no rebuild (ADR-07). Docker/CI/TiDB Cloud pass credentials via ENV (DB_HOST...), while local devs prefer editing a file. TiDB Cloud mandates TLS, so the old `useSSL=false` cannot connect.
 
-## 2. Quyết định
-Thứ tự đọc: ENV thật > file `.env` > `db.properties` > default.
-Key ENV: DB_HOST, DB_PORT, DB_DATABASE, DB_USERNAME, DB_PASSWORD,
-DB_PARAMS. Parser `.env` tự viết, không thêm dependency.
-TiDB Cloud chỉ là DB dev tạm để test connector; bài nộp vẫn MySQL 8.4
-LTS (ADR-01 không đổi). TLS TiDB: `sslMode=VERIFY_IDENTITY`.
+## 2. Decision
+Lookup order: real ENV > `.env` file > `db.properties` > defaults. ENV keys: DB_HOST, DB_PORT, DB_DATABASE, DB_USERNAME, DB_PASSWORD, DB_PARAMS. Hand-rolled `.env` parser, no new dependency. TiDB Cloud is a dev-only DB for connector testing; the submission stays MySQL 8.4 LTS (ADR-01 unchanged). TiDB TLS: `sslMode=VERIFY_IDENTITY`.
 
-## 3. Bỏ gì
-Bỏ đọc duy nhất `db.properties` (kém với Docker/CI). Bỏ lib dotenv-java
-(thừa cho 6 key). Bỏ `useSSL=false` khi nối TiDB (server từ chối).
-Bỏ commit `.env` thật (lộ pass); chỉ commit `.env.example`.
+## 3. Dropped
+Dropped `db.properties`-only reading (poor fit for Docker/CI). Dropped dotenv-java (overkill for 6 keys). Dropped `useSSL=false` against TiDB (server refuses). Never commit the real `.env` (leaks the password); only `.env.example` is committed.
 
-## 4. Hậu quả
-Được: local + marker + CI cùng 1 code; không recompile. Mất: `buildUrl`
-không còn `?` treo khi params rỗng (sửa test cũ cho đúng JDBC).
-Ai chịu: R6 (Java) giữ `DBConnection`, cả nhóm copy `.env.example`.
+## 4. Consequences
+Gain: local + grader + CI share one code path; no recompile. Loss: `buildUrl` no longer leaves a dangling `?` on empty params (old test fixed for correct JDBC). Owners: R6 (Java) owns `DBConnection`, everyone copies `.env.example`.
 
-## 5. Liên quan
-`src/main/java/com/uhs/util/DBConnection.java`, `src/main/java/com/uhs/App.java`,
-`.env.example`, `db.properties.example`, ADR-01, ADR-07.
-SSOT `docs/assignment.md` §2.4 (settings ngoài code) vẫn đạt.
+## 5. Related
+`src/main/java/com/uhs/util/DBConnection.java`, `src/main/java/com/uhs/App.java`, `.env.example`, `db.properties.example`, ADR-01, ADR-07. SSOT `docs/assignment.md` §2.4 (settings outside the code) still satisfied.

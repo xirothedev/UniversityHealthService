@@ -11,9 +11,9 @@ target/
 .classpath
 .project
 .settings/
-# DB local (giữ example, bỏ file thật)
+# DB local (keep the example, ignore the real file)
 db.properties
 .env
 !.env.example
-# scratch cá nhân
+# personal scratch
 .scratch/*/*.local.md

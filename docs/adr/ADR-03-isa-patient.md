@@ -1,16 +1,16 @@
-# ADR-03: ISA Patient 3 bảng
+# ADR-03: ISA Patient in 3 tables
 
-## 1. Bối cảnh
-Người khám gồm sinh viên và nhân viên. Chung tên, ngày sinh, SĐT. Riêng mã số, khoa/phòng.
+## 1. Context
+Patients are students and staff. Shared name, birth date, phone. Separate IDs, faculty/office.
 
-## 2. Quyết định
-3 bảng: Patient (cha) + Student + Staff (con). Khóa chính con cũng là khóa ngoại tới cha, xóa cha kéo theo con.
+## 2. Decision
+3 tables: Patient (parent) + Student + Staff (children). Each child PK is also an FK to the parent; deleting the parent cascades to the child.
 
-## 3. Bỏ gì
-Bỏ gộp 1 bảng (ít bảng hơn nhưng nhiều cột null, khó ăn điểm ISA).
+## 3. Dropped
+Dropped a single merged table (fewer tables but many null columns, loses ISA marks).
 
-## 4. Hậu quả
-Được: đúng đề, rõ ràng. Mất: join nhiều hơn khi lấy đủ thông tin.
+## 4. Consequences
+Gain: matches the brief, explicit. Loss: more joins to fetch full info.
 
-## 5. Liên quan
-Bảng Patient, Student, Staff. Query Q-T1, Q6.
+## 5. Related
+Tables Patient, Student, Staff. Queries Q-T1, Q6.

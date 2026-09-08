@@ -1,23 +1,24 @@
 # UniversityHealthService (IT079IU — Topic 14)
 
-Trạm y tế đại học: hồ sơ khám + phát hiện ổ dịch sớm.
+University health station: visit records + early outbreak detection.
 
-## Stack khóa
+## Pinned stack
 
 JDK 21 LTS + MySQL 8.4 LTS + Connector/J 8.4.x + Maven 3.9.x + Swing + draw.io.
 
-## Chạy
+## Run
 
-1. Copy `db.properties.example` thành `db.properties`, sửa host/user/pass.
-2. Chạy SQL theo thứ tự: `sql/01_schema.sql` → `02_data.sql` → `03_queries.sql`.
-3. Build + chạy: `mvn -q -DskipTests package && mvn -q exec:java`.
+1. Copy `.env.example` to `.env`, edit host/user/pass (local MySQL or temporary TiDB dev DB). `db.properties` still works for backward compatibility, but ENV/`.env` take precedence.
+2. Run SQL in order: `sql/01_schema.sql` → `02_data.sql` → `03_queries.sql`.
+3. Build + run: `mvn -q -DskipTests package && mvn -q exec:java`.
+4. Check the TiDB/MySQL connector: `mvn -q test` (unit, no DB needed) then a live connection using `.env`.
 
-Chi tiết chấm: `CONTEXT.md`, `docs/adr/`, `docs/D1-outline.md`.
+Grading details: `CONTEXT.md`, `docs/adr/`, `docs/D1-outline.md`.
 
-## Nhóm (12 người, tự điền)
+## Team (12 members, fill in)
 
-| # | Họ tên | MSSV | SĐT | Role tự nhận |
-|---|--------|------|-----|--------------|
+| # | Name | Student ID | Phone | Claimed role |
+|---|------|------------|-------|--------------|
 | 1 | Lê Thành Trung | | | |
 | 2 | Nguyễn Trần Quốc Vinh | | | |
 | 3 | Phan Nguyên Vũ | | | |

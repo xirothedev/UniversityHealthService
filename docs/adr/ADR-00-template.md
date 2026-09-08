@@ -1,18 +1,18 @@
-# Mẫu ADR (copy cho ADR mới)
+# ADR template (copy for a new ADR)
 
-Mỗi ADR nửa trang, tiếng Việt đơn giản. 5 mục:
+Each ADR is half a page, plain English. 5 sections:
 
-## 1. Bối cảnh
-Vì sao phải quyết? Người mới không biết gì cũng hiểu.
+## 1. Context
+Why must this be decided? A newcomer with zero background still gets it.
 
-## 2. Quyết định
-Chốt làm gì, version gì, để ở đâu.
+## 2. Decision
+What is settled: what, which version, where it lives.
 
-## 3. Bỏ gì
-Đã xem lựa chọn khác nào, vì sao bỏ.
+## 3. Dropped
+Which alternatives were considered, why they were dropped.
 
-## 4. Hậu quả
-Được gì, mất gì, ai chịu.
+## 4. Consequences
+What is gained, what is lost, who owns it.
 
-## 5. Liên quan
-Chạm bảng nào, query nào, form nào.
+## 5. Related
+Which tables, queries, forms it touches.

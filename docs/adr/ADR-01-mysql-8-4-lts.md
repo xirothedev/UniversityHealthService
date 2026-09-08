@@ -1,16 +1,16 @@
-# ADR-01: Dùng MySQL 8.4 LTS
+# ADR-01: Use MySQL 8.4 LTS
 
-## 1. Bối cảnh
-Đề cho MySQL hoặc SQL Server, lab dùng MySQL. Cần DB chặn được khóa chính, khóa ngoại, UNIQUE, CHECK.
+## 1. Context
+The brief allows MySQL or SQL Server, and labs use MySQL. The DB must actually enforce primary keys, foreign keys, UNIQUE, and CHECK.
 
-## 2. Quyết định
-Dùng MySQL 8.4 LTS. Ghi version vào báo cáo + README.
+## 2. Decision
+Use MySQL 8.4 LTS. Record the version in the report + README.
 
-## 3. Bỏ gì
-Bỏ Postgres (không trong đề, dễ bị trừ điểm). Bỏ MySQL 9.x (bản mới thử nghiệm, máy chấm không có).
+## 3. Dropped
+Dropped Postgres (not in the brief, risks lost marks). Dropped MySQL 9.x (bleeding edge, grader machines do not have it).
 
-## 4. Hậu quả
-Được: khớp lab, dễ chấm. Mất: CHECK yếu hơn Postgres, phải bù bằng test tay.
+## 4. Consequences
+Gain: matches the labs, easy to grade. Loss: weaker CHECK than Postgres, compensated with manual tests.
 
-## 5. Liên quan
-Mọi bảng. Query Q-T2, Q-T3 dùng index.
+## 5. Related
+All tables. Queries Q-T2, Q-T3 use indexes.

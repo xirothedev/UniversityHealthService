@@ -4,20 +4,22 @@ Newcomers read this file first. Use each term as defined, do not invent new ones
 
 ## Glossary
 
-- **Patient**: person receiving care. Two disjoint subtypes.
-- **Student / Staff**: the 2 subtypes of Patient. Student has a student ID, Staff has a staff ID.
+- **Patient**: person receiving care. Every Patient is exactly one of Student or Staff, never both, never neither.
+- **Student / Staff**: the 2 disjoint + complete subtypes of Patient. Student has a student ID + faculty + dorm building; Staff has a staff ID + office.
 - **Allergy**: allergy (peanuts, penicillin...).
-- **PatientAllergy**: who has which allergy + how severe. Severity lives here, not in Patient or Allergy.
-- **MedicalStaff**: doctors/nurses. Have a specialty + consulting hours.
-- **Appointment**: booking. Who + with whom + when + outcome.
-- **Consultation**: visit. Recorded symptoms + diagnosis.
-- **Prescription**: medication order of 1 visit.
-- **PrescriptionLine**: 1 line of an order. Meaningless without its order.
+- **PatientAllergy**: who has which allergy + how severe. Severity lives here, not in Patient or Allergy. Severity is one of mild / moderate / severe; extra detail goes in a free-text note.
+- **Diagnosis / Disease**: free-text words for what the doctor found (on Consultation) and the reportable illness (on NotifiableCase). No controlled list for D2; sample data uses consistent spelling so GROUP BY works.
+- **MedicalStaff**: doctors/nurses employed by the service. Separate from Patient; the same human may have one row in each and the rows are not linked. Has a specialty + consulting hours expressed as ConsultSlots.
+- **ConsultSlot**: weekly consulting-hours template of one MedicalStaff member (weekday + start + end + slot length). Free slots are template slots with no blocking Appointment.
+- **Appointment**: booking. Who + with whom + when + status (scheduled / completed / cancelled / no-show). May exist without a Consultation; at most one Consultation per Appointment. Scheduled + completed block a slot; cancelled + no-show free it.
+- **Consultation**: visit. Recorded symptoms + diagnosis. May be a walk-in with no Appointment; at most one Appointment per Consultation.
+- **Prescription**: medication order of 1 visit. Header holds consultation + date + doctor only; all drug facts live on its lines.
+- **PrescriptionLine**: 1 line of an order. Meaningless without its order. Holds one Medicine + dose + frequency + duration + quantity; durations may differ per line.
 - **Medicine**: drug. Has stock + price.
-- **VaccinationCourse / VaccinationRecord**: course (how many doses needed) + log of doses given.
-- **NotifiableCase**: reportable case (dengue...). Records disease + report date + building.
-- **ContactTrace**: who contacted whom. Used to find outbreak clusters.
-- **Building**: hall/dorm. Used for 14-day cluster tracing.
+- **VaccinationCourse / VaccinationRecord**: course (how many doses needed) + log of doses given. One record holds patient + course + dose number + date given; uniqueness on (patient + course + dose number). Completion means distinct dose-number count >= required doses, with no interval check.
+- **NotifiableCase**: reportable case (dengue...). Always derived from exactly one Consultation; records disease + report date + exposure/report building + source consultation. External reports enter via a walk-in Consultation first.
+- **ContactTrace**: who contacted whom. Patient-to-Patient link with roles source / contact + contact date + optional source case. Meaningful even before the contact becomes sick.
+- **Building**: hall/dorm/clinic location. A NotifiableCase points at exactly one Building; a Student dorm points at one Building for admin.
 
 ## Reading rules
 

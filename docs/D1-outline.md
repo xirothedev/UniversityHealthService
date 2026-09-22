@@ -32,13 +32,15 @@
 | **NotifiableCase** | Regular Entity | `case_id` | `consultation_id` (FK), `disease_name`, `date_reported`, `building_id` (FK) | Regular entity anchored to Consultation; carries exposure building (ADR-13). |
 | **ContactTrace** | **Self-Rel Entity** | `trace_id` | `source_patient_id` (FK), `contact_patient_id` (FK), `contact_date`, `source_case_id` (FK) | **Self-referencing (ADR-06):** Patient-to-Patient trace with 2 explicit roles (`source` and `contact`). |
 5. Plan W3/W5/W10/W13-15 + R1-R7 table (names not assigned yet).
-### Milestone Plan
-| Milestone | Timeline | Deliverables | Key Responsibilities |
+### Milestone Plan (Resolved Deadlines: Earliest-Deadline-Wins)
+| Milestone | Timeline / Deadline | Deliverables | Key Responsibilities |
 | :--- | :---: | :--- | :--- |
-| **D1. Project Proposal** | Week 3 (22/9 - 28/9) | 1-3 pages (outline, BRs, stack, entity list, plan) | R1 + R2 + Writer |
-| **D2. Progress Report** | Week 5 (6/10 - 12/10) | 3-5 pages (ER diagram, draft schema, FDs) | R2 (draw.io, mapping) + R3 (FDs) |
-| **D3. Final Report & Code** | Week 10 (16/11) | 25+ pages report, SQL scripts, Java app | Full group integration |
-| **D4. Demo & Presentation**| Weeks 13–15 | 15 mins live demo and database defense | All members |
+| **D1. Proposal Report** | **Week 2 (21/09/2026)** | 1–3 pages: Cover, Abstract, Task Allocation Table, Pinned Stack, 18 BRs, Entity list, Plan, References & AI disclosure | Lead (R1) + Data Modeller (R2) + Writer |
+| **D2. Progress Report** | **Week 5 (12/10/2026)** | 3–5 pages: Updated Info, TOC, full ERD (draw.io) + draft schema + mapping rules + initial FDs | Data Modeller (R2) + Normalization (R3) |
+| **D3. Final Report** | **Week 10 (16/11/2026)** | 25+ pages report (exact 12 sections in order), lossless proofs, normalization to 3NF/BCNF | Tester & Writer (R7) assembles; all roles write sections |
+| **D5. SQL Scripts** | **Week 10 (16/11/2026)** | `01_schema.sql`, `02_data.sql` (≥15 rows/table), `03_queries.sql` (12/12 queries non-empty), transaction + index | DB Developer (R4) + Query Developer (R5) |
+| **D6. Java Desktop App** | **Week 10 (16/11/2026)** | Java Swing project (`src/`), Maven, `db.properties`, 6 screens (F1–F5), `README.md` build/run instructions | Java Developer (R6) + Tester (R7) |
+| **D4. Demo & Presentation** | **Weeks 13–15 (01/12 – 21/12/2026)** | 15-minute live demo (CRUD & DB reflection) + individual Q&A defense (Whole project scope) | All team members |
 
 ### Role Allocation Matrix (R1–R7)
 | Role Code | Role Title | Slots | Primary Responsibility | Assigned Members |

@@ -14,7 +14,7 @@ governs packaging/format. Detail: `docs/deliverables-detail.md`.
 
 - [ ] Order: Cover → Abstract → Task Allocation → Tools/Languages → Objective → Business rules → Entity list → Plan → References + AI disclosure.
 - [ ] Abstract: topic + objectives in 1 short paragraph.
-- [ ] Tools: pinned stack named (JDK 21 LTS + MySQL 8.4 LTS + Connector/J 8.4.x + Maven 3.9.x + Swing + draw.io).
+- [ ] Tools: pinned stack named (JDK 25 LTS + MySQL 8.4 LTS + Connector/J 8.4.x + Maven 3.9.x + Swing + draw.io).
 - [ ] 15–20 numbered business rules; 11-table entity list with weak / M-M / ISA / self-rel marked.
 
 ## Midterm = D2 (3–5 pages, due 12/10 W5)

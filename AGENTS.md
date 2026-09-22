@@ -1,6 +1,6 @@
 # UniversityHealthService — AGENTS.md
 
-IT079IU course project, topic 14 University Health Service. Pinned stack: JDK 21 LTS + MySQL 8.4 LTS + Connector/J 8.4.x + Maven 3.9.x + Swing + draw.io.
+IT079IU course project, topic 14 University Health Service. Pinned stack: JDK 25 LTS + MySQL 8.4 LTS + Connector/J 8.4.x + Maven 3.9.x + Swing + draw.io.
 
 SSOT: `docs/assignment.md` (original brief converted from PDF, do not edit by hand). Check every technical requirement against that file.
 

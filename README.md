@@ -4,7 +4,7 @@ University health station: visit records + early outbreak detection.
 
 ## Pinned stack
 
-JDK 21 LTS + MySQL 8.4 LTS + Connector/J 8.4.x + Maven 3.9.x + Swing + draw.io.
+JDK 25 LTS + MySQL 8.4 LTS + Connector/J 8.4.x + Maven 3.9.x + Swing + draw.io.
 
 ## Run
 

@@ -38,10 +38,10 @@ Section order: guideline sections first, then assignment sections (both checklis
 1. Cover Page (see Cover rule).
 2. Abstract — brief topic + objectives (guideline).
 3. Task Allocation Table — per-member × per-week specific tasks (guideline). Ban generic `All`; template `docs/templates/task-allocation.md`.
-4. Tools and Programming Languages — pinned stack: JDK 21 LTS + MySQL 8.4 LTS + Connector/J 8.4.x + Maven 3.9.x + Swing + draw.io (ADR-01, ADR-02).
+4. Tools and Programming Languages — pinned stack: JDK 25 LTS + MySQL 8.4 LTS + Connector/J 8.4.x + Maven 3.9.x + Swing + draw.io (ADR-01, ADR-02).
 5. Objective in 1 sentence: fast record lookup for the health station + early outbreak detection (topic 14 objective).
 6. Business rules, 15–20 numbered sentences.
-7. Entity list of 11 tables + where the weak / M-M / ISA / self-rel sit.
+7. Entity list of 17 tables + where the weak / M-M / ISA / self-rel sit.
 8. Plan W3/W5/W10/W13–15 + roles table.
 9. References + AI disclosure (what was used + how it was verified, per assignment §2.6).
 
@@ -99,7 +99,7 @@ submit/final/
 
 ## D6 — Java app, submitted with D3
 
-- 6 mandatory screens: externalized connection (properties file, grader points at another server with no rebuild), browse grid + row count, parameterized search, master–detail (Consultation→PrescriptionLine), editing CRUD + delete confirmation, aggregate report (Top-5 diagnoses). Put ≥4/5 topic queries on the menu.
+- 6 mandatory screens, numbered F0–F5 (the numbering ADR-02 uses; ADR-07's "F1–F5" predates F0): F0 externalized connection (properties file, grader points at another server with no rebuild), F1 browse grid + row count, F2 parameterized search, F3 master–detail (Consultation→PrescriptionLine), F4 editing CRUD + delete confirmation, F5 aggregate report (Top-5 diagnoses). Put ≥4/5 topic queries on the menu.
 - Code rules: PreparedStatement for every user-valued statement (concatenation = defect, grader tests with an apostrophe), FK errors in plain language not stack traces, validate required/range/date order, close connections with try-with-resources.
 - Submit source + README (JDK, driver, connection, build/run steps). A project that does not run scores zero for screens.
 - Leads: Java developer + Tester.

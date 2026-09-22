@@ -1,6 +1,12 @@
 ## Which deliverable? (delete the lines that do not apply)
 
-- [ ] D1 proposal · [ ] D2 ER/schema · [ ] D3 report · [ ] D5 SQL · [ ] D6 Java · [ ] D4 demo · [ ] Repo/CI scaffolding
+- [ ] D1 proposal
+- [ ] D2 ER/schema
+- [ ] D3 report
+- [ ] D5 SQL
+- [ ] D6 Java
+- [ ] D4 demo
+- [ ] Repo/CI scaffolding
 
 ## SSOT check (`docs/assignment.md`)
 
@@ -29,5 +35,6 @@
 ## Review & merge
 
 - [ ] CI green (java + sql + guards)
+- [ ] CI **run** confirmed, not just assumed: `gh pr checks <n>` lists all three jobs (a branch with no runs is not green)
 - [ ] Hand-checked 3 things CI cannot catch: concatenated SQL, `docs/assignment.md` edits, sloppily ticked checklist
 - [ ] Request an admin merge (only admins merge into `main`; no reviewer approval needed)

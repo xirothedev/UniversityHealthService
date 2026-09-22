@@ -1,4 +1,4 @@
-# ADR-12: Submission-format mapping (guideline PDF ↔ D1–D6)
+# ADR-15: Submission-format mapping (guideline PDF ↔ D1–D6)
 
 ## 1. Context
 The course has two requirement sources: `docs/assignment.md` (SSOT, CI-blocked, D1–D6 with

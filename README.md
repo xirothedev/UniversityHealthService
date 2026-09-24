@@ -23,15 +23,15 @@ Proposal = D1, Midterm = D2, Final = D3+D5+D6 (+ D4 slides/demo). Mapping + cove
 
 | # | Name | Student ID | Phone | Claimed role |
 |---|------|------------|-------|--------------|
-| 1 | Lê Thành Trung | | | |
-| 2 | Nguyễn Trần Quốc Vinh | | | |
-| 3 | Phan Nguyên Vũ | | | |
-| 4 | Nguyễn Hoàng Thiên Tứ | | | |
-| 5 | Nguyễn Quốc Duy Lộc | | | |
-| 6 | Trần Pham Quốc Nam | | | |
-| 7 | Lê Đức Phát | | | |
-| 8 | Nguyễn Minh Khôi | | | |
-| 9 | Lê Thảo My | | | |
-| 10 | Nguyễn Trần Anh Tuấn | | | |
-| 11 | Nguyễn Trọng Đức | | | |
-| 12 | Nguyễn Hiền Minh | | | |
+| 1 | Lê Thành Trung |ITCSIU25055 |0359186887 |Query Developer |
+| 2 | Nguyễn Trần Quốc Vinh |MAMAIU25041 |0837991399 |Java Developer |
+| 3 | Phan Nguyên Vũ |ITITIU25047 |0945719666 |Java Developer |
+| 4 | Nguyễn Hoàng Thiên Tứ |ITDSIU25050 |0374749542 |Query Developer |
+| 5 | Nguyễn Quốc Duy Lộc |ITITIU25018 |0906648951 |Data Modeller |
+| 6 | Trần Pham Quốc Nam |ITCSIU25037 |0375314749 |Database Developer |
+| 7 | Lê Đức Phát |ITCSIU25042 |0767393239 |Database Developer |
+| 8 | Nguyễn Minh Khôi |SESEIU24013 |0902305920 |Tester & Writer/Integrator |
+| 9 | Lê Thảo My |SESEIU23018 |0835931468 |Normalization lead |
+| 10 | Nguyễn Trần Anh Tuấn |SESEIU24030 |0972235718 |Normalization lead |
+| 11 | Nguyễn Trọng Đức |ITITIU25003 |0775327007 |Data Modeller |
+| 12 | Nguyễn Hiền Minh |ITITWE25011 |0919150220 |Group leader |

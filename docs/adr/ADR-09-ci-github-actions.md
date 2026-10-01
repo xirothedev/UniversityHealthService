@@ -1,10 +1,10 @@
 # ADR-09: Minimal GitHub Actions CI
 
 ## 1. Context
-A 12-person team pushes PRs to `main` with no automated checks. Breaks in `pom.xml` or `src/` must surface early, before D1 (W3 22/9-28/9). `sql/*.sql` are still placeholders, so CI cannot demand a DB yet.
+A 12-person team pushes PRs to `main` with no automated checks. Breaks in `pom.xml` or `src/` must surface early, before the confirmed D1 deadline of 27/9/2026 at 22:30. `sql/*.sql` are still placeholders, so CI cannot demand a DB yet.
 
 ## 2. Decision
-GitHub Actions: `.github/workflows/ci.yml`, runs on `push` + `pull_request` to `main`. Job `build` on `ubuntu-latest`: `actions/checkout@v7` + `actions/setup-java@v6` (Temurin 21, `cache: maven`) + `mvn -B package`. No DB, no branch protection in V1.
+GitHub Actions: `.github/workflows/ci.yml`, runs on `push` + `pull_request` to `main`. Job `build` on `ubuntu-latest`: `actions/checkout@v7` + `actions/setup-java@v6` (Temurin 25, `cache: maven`) + `mvn -B package`. No DB, no branch protection in V1.
 
 ## 3. Dropped
 Dropped GitLab CI/Jenkins (extra infra, repo already on GitHub). Dropped a `mysql:8.4` service in V1 (no schema yet, CI would be red from day 1). Dropped Maven wrapper/pinned 3.9.x (runner already ships 3.9.x, a wrapper only confuses newcomers).

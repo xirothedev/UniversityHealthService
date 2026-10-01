@@ -17,5 +17,7 @@ db.properties
 !.env.example
 # personal scratch
 .scratch/*/*.local.md
-.firecrawl
-.private
+
+# Local-only source documents and sensitive group data
+.firecrawl/
+.private/

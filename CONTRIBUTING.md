@@ -18,7 +18,7 @@ SSOT is `docs/assignment.md` (original brief, do not edit). Packaging/format fol
 
 - **SQL:** script runs twice with no manual fix; full PK/FK/NOT NULL/UNIQUE/CHECK/DEFAULT + ON DELETE/UPDATE; realistic data ≥15 rows/table; non-empty queries; clean `sqlfluff`.
 - **Java:** PreparedStatement for every input; externalized connection; try-with-resources; validation + readable error messages; English; green `mvn verify`.
-- **Docs:** merged section orders in `docs/deliverables-detail.md` (Proposal=D1, Midterm=D2, Final=D3+D5+D6); superset cover from `docs/templates/cover.md` on every submission; task table from `docs/templates/task-allocation.md` (per-member × per-week, specific — generic `All` rows banned); minimum page counts; screenshots + SQL; AI appendix when AI was used; final package layout + `docs/submission-checklist.md` ticked.
+- **Docs:** merged section orders in `docs/deliverables-detail.md` (Proposal=D1, Midterm=D2, Final=D3+D5+D6); superset cover from `docs/templates/cover.md` on every submission; proposal task table from `docs/templates/task-allocation.md` (seven named R1–R7 role groups, specific shared outputs per week-window, generic `All` rows banned); minimum page counts; screenshots + SQL; AI appendix when AI was used; final package layout + `docs/submission-checklist.md` ticked.
 
 ## 4. Forbidden
 

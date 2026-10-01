@@ -1,0 +1,106 @@
+# ADR-16: T18 — one view, one index, two transactions
+
+Supersedes ADR-08 (reason below).
+
+## 1. Context
+The brief requires the submitted scripts to include at least one view, at least one index
+justified against a named query, and a two-table transaction demonstrating COMMIT and
+ROLLBACK. Sheet task T18 ("View + index + transaction 2 bảng") owns all three. ADR-08 had
+already claimed index + transaction, but its column names were stale.
+
+ADR-08 is superseded, not reversed: it named `Appointment(doctor_id, slot_time)` and
+`Consultation(diagnosis, consult_date)`. None of those three columns exist. `doctor_id`
+predates ADR-14, which split MedicalStaff out of the Patient ISA; the column is `staff_id`
+and `CONTEXT.md` bans `doctor_id` as an identifier. `slot_time` became `appointment_time`
+and `consult_date` became `consultation_date`. The decision to index and to transact stands;
+only the names were wrong.
+
+## 2. Decision
+
+**One index, not two.** `Appointment(staff_id, appointment_time)` serves Q-T2 (doctors with
+free slots this week), the only required query that does a genuine seek — `staff_id`
+equality plus a time range. ADR-08's second index, `Consultation(diagnosis, …)`, is dropped:
+`diagnosis` is free text (`CONTEXT.md`), so a B-tree over it is never sought by equality, and
+Q-T3 groups by it rather than filtering on it.
+
+**One view, `v_patient_summary`.** A `UNION ALL` over `Patient JOIN Student` and
+`Patient JOIN Staff`, exposing demographics from Patient plus `subtype`, `subtype_code`, and
+`faculty`. It reaches the subtypes by union because `faculty` is declared on both subtypes
+(BR-02) while `student_code` and `staff_code` exist on only one side each. It joins
+MedicalStaff nowhere: `CONTEXT.md` states the two are never joined. The union doubles as the
+set operation §2.2 requires. It is Q11 — one of the twelve, not a thirteenth.
+
+**Two transactions, rollback first.** Both span Consultation + Prescription.
+
+1. Insert a Consultation, then fail the Prescription insert on a non-existent `staff_id`
+   (foreign key violation), then ROLLBACK. Proves the visit did not survive.
+2. Insert a Consultation and its Prescription, COMMIT, then DELETE both rows in reverse
+   order so the script reruns clean.
+
+Ordering matters: the rollback demo runs first so the committed rows are the last thing
+written and the cleanup is unambiguous. Both use ids in the 9000 block to stay clear of
+`02_data.sql`.
+
+**All three live in `sql/03_queries.sql`.** The file header already assigns it to R5. T16 and
+T18 have different owners, so R5 splits the file by line range internally rather than moving
+the `CREATE INDEX` into R4's `01_schema.sql`. The index is DDL among SELECTs, and its comment
+says so.
+
+## 3. Dropped
+- **Second index on `Consultation`.** An index that exists but that `EXPLAIN` ignores is
+  worse than none — a marker can spot it in one query. If a second index is wanted later,
+  `Consultation(consultation_date)` is the honest one: it serves Q-T3's semester range filter.
+- **Prescription + PrescriptionLine as the transaction pair.** A better domain story (it
+  exercises the CASCADE), but it demonstrates nothing. Consultation + Prescription lets the
+  Prescription insert fail on a constraint and show the Consultation disappearing.
+- **Rollback-only demo.** Idempotent, but the brief names COMMIT as well as ROLLBACK and a
+  script that only ever rolls back never exercises it.
+- **Moving the index into `01_schema.sql`.** Technically tidier, but that file is R4's
+  (T13) and the sheet assigns T18 to R5. Reassigning silently is worse than an odd-looking
+  file.
+- **A second index, kept "just in case".** Verified unnecessary — the single index is chosen
+  by the query it was built for.
+- **Widening the rerun caveat to "the whole database must be recreated".** Overstated. Only
+  the view and the index need to be absent; the DML half is idempotent on its own. Verified,
+  and the file header now says the narrow thing.
+
+## 4. Consequences
+Gain: three brief requirements met by three artefacts a reader can check in one file; the
+rollback is demonstrated rather than asserted; the view is reusable as F1's browse grid and
+shows subtype without the Java layer knowing about the ISA. Loss: `CREATE VIEW` and
+`CREATE INDEX` are DDL inside a query script, and MySQL has no `IF NOT EXISTS` for either, so
+a second run needs the view and index dropped first — the usual `01_schema.sql` run order
+satisfies this without anyone thinking about it. Report cost: the report must name Q-T2 as
+the query the index helps.
+
+Verified 2026-10-01 against a live server, using the 7 tables these three blocks touch
+(`Patient`, `Student`, `Staff`, `MedicalStaff`, `Appointment`, `Consultation`,
+`Prescription`) built from the column names in `docs/D1-outline.md`: all 11 statements run,
+the only error being the intended foreign key violation (`ERROR 1452`, constraint
+`fk_presc_staff`); ROLLBACK does discard `consultation_id 9001` and the commit demo's DELETE
+leaves the 9000 block empty; `v_patient_summary` returns one correctly labelled row per
+Patient; `EXPLAIN` for a Q-T2-shaped seek picks `IndexRangeScan_8` on
+`idx_appt_staff_time(staff_id, appointment_time)`, so the index is used rather than merely
+present; and the file runs twice over a fresh database with no unexpected failure.
+
+Two limits on that evidence. The server was TiDB v8.5.3 serverless, and ADR-11 makes TiDB
+dev-only — MySQL 8.4 remains the submission target, so MySQL-specific syntax is still
+unconfirmed. And the tables came from the D1 outline, not from R4's `01_schema.sql`, which is
+still a stub; re-check the column names when that lands.
+
+**Case-sensitivity bug, found and fixed 2026-10-01.** The first version of this SQL
+lower-cased every identifier (`FROM patient`, `INSERT INTO consultation`) to satisfy
+sqlfluff's CP02 default. That passes lint and fails on the submission target: MySQL 8.4
+on Linux runs with `lower_case_table_names=0`, where `FROM patient` cannot find a table
+created as `Patient`. Verified against a real MySQL 8.4.11 container — 8 of 11 statements
+failed with `ERROR 1146 Table 'uhs_t18_scratch.patient' doesn't exist`. Fixed by writing
+table names in the schema's exact CamelCase, unquoted. All 11 statements then executed,
+the only error being the intended foreign key violation.
+
+`.sqlfluff` now excludes CP02 from its rule allowlist. The schema mixes CamelCase tables
+with lower_case columns, and no `capitalisation_policy` accepts both; the convention is
+fixed by D1. Other rules (LT01, LT05, RF06, ...) remain active — verified.
+
+## 5. Related
+Tables Appointment, Patient, Student, Staff, Consultation, Prescription. Queries Q-T2, Q-T3,
+Q11. Rules BR-02, BR-07, BR-08, BR-19. Supersedes ADR-08; depends on ADR-01, ADR-11, ADR-14.

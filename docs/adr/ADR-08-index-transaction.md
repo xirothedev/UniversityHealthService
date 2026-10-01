@@ -1,5 +1,10 @@
 # ADR-08: Index + Transaction
 
+**Status: superseded by ADR-16** (view + index + transaction, T18). Kept for history: the
+decision to index and to transact stands, but every column name here is stale — `doctor_id`
+predates ADR-14 and is banned by `CONTEXT.md`, `slot_time` is now `appointment_time`, and
+`consult_date` is now `consultation_date`. Do not implement from this file.
+
 ## 1. Context
 Free-slot lookup and top-diagnosis scan whole tables when slow. Creating a visit + its order must succeed or fail together.
 

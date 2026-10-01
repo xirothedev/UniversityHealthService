@@ -4,9 +4,9 @@ Newcomers read this file first. Use each term as defined, do not invent new ones
 
 ## Glossary
 
-- **Patient**: person receiving care. Every Patient is exactly one of Student or Staff, never both, never neither.
+- **Patient**: person receiving care. Every Patient is exactly one of Student or Staff, never both, never neither. Owns the demographics recorded once for every subtype — full name, date of birth, gender, phone — and nothing else; `Student` / `Staff` never copy them.
 - **Student / Staff**: the 2 disjoint + complete subtypes of Patient. Student has a student ID + faculty + dorm building; Staff has a staff ID + office + faculty. **Faculty** is the one organisational-unit term, used for both subtypes; "department" is not a second unit and must not be introduced.
-- **Allergy**: allergy (peanuts, penicillin...).
+- **Allergy**: allergy (peanuts, penicillin...). It carries only the allergen name; how badly it affects a given person is `PatientAllergy`, not a column here.
 - **PatientAllergy**: who has which allergy + how severe. Severity lives here, not in Patient or Allergy. Severity is one of mild / moderate / severe; the onset date of the allergy also lives here; extra detail goes in a free-text note.
 - **Diagnosis / Disease**: free-text words for what the doctor found (on Consultation) and the reportable illness (on NotifiableCase). No controlled list for D2; sample data uses consistent spelling so GROUP BY works.
 - **MedicalStaff**: doctors/nurses employed by the service. Separate from Patient; the same human may have one row in each and the rows are not linked. Has a specialty + consulting hours expressed as ConsultSlots. The bare word "staff" is ambiguous between MedicalStaff and the Staff subtype of Patient: in any identifier, `staff_id` means MedicalStaff, and the Patient subtype is only ever identified by its staff code. The two are never joined.

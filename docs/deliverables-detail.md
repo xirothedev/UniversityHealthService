@@ -27,8 +27,10 @@ Superset cover on all three stages — satisfies both the guideline and assignme
 - Team table: name + student ID + phone + topic (assignment §1.2 requires a copy with every deliverable).
 - Template: `docs/templates/cover.md`.
 
-Group size note: assignment §1.2 says 10–11; this repo currently lists 12 members in `README.md`.
-Keep the table truthful (one row per real member) — never invent or drop rows to fit a number.
+Group size note: assignment §1.2 suggests ten or eleven and freezes membership at registration.
+This group has **12 confirmed members**, the size the instructor set at registration — that
+override outranks the §1.2 suggestion, so every team table keeps all 12 rows. Never invent or
+drop a row to match a number. Roster of record: `.private/group02-members.csv`.
 
 ## D1 — Proposal (= guideline Proposal Report), 1–3 pages, due 27/9/2026 at 22:30
 

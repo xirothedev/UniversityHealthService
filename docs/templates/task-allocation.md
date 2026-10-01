@@ -1,11 +1,13 @@
-# Task allocation table (copy for D1 proposal; link the live Sheet)
+# Task allocation table (copy for D1 proposal)
 
-Rules: one row per member × week-window with a specific deliverable. Generic `All`
-rows score low and are banned by `CONTRIBUTING.md`. Roles: R1 lead, R2 data model,
-R3 normalization, R4 DB dev, R5 query dev, R6 Java dev, R7 tester/writer.
+Rules: use a compact 7-row role matrix. Each row names every confirmed member
+assigned to R1–R7, and each week-window cell states the shared responsibilities
+and outputs of that role. Do not use a generic `All` row; named role groups remain
+collectively accountable. The final signed work-allocation section may record
+individual contributions.
 
-Live sheet: <paste Google Sheet link>
+Live allocation sheet: <paste the confirmed shared-sheet URL>
 
-| Week | Member | Student ID | Role | Specific task | Output |
-|------|--------|------------|------|---------------|--------|
-| W3 | | | R2 | e.g. Draft business rules 1–10 | D1 §6 draft |
+| Role | Members | W3 output | W5 output | W10 output | W13–15 output |
+|---|---|---|---|---|---|
+| R2 — Data modeller | All confirmed R2 members | Specific entity/relationship modelling tasks | Specific ER and mapping deliverables | Specific model-review deliverables | Specific model explanations and corrections |

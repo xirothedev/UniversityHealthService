@@ -12,10 +12,9 @@ governs packaging/format only. Mapping: Proposal = D1, Midterm = D2, Final = D3+
 (+ D4 slides/demo). Superset cover (course + topic 14 + instructor + name/ID/phone/topic
 table) on all three stages. Merged section orders and the final package layout live in
 `docs/deliverables-detail.md`; per-stage tick boxes in `docs/submission-checklist.md`;
-copy-paste covers/tables in `docs/templates/`. Date conflicts resolved by
-earliest-deadline-wins: D1 ships 21/9 W2 (guideline W2 beats assignment W3 28/9, which
-remains the hard latest); D2 12/10 W5 (both agree); D3 ships 16/11 W10 (assignment W10
-beats guideline W11). A dated instructor announcement overrides both.
+copy-paste covers/tables in `docs/templates/`. A dated instructor announcement
+overrides the earlier planning dates: D1 is due 27/9/2026 at 22:30 and is submitted as
+one PDF through Blackboard; D2 is due 12/10/2026 (W5); D3 is due 16/11/2026 (W10).
 
 ## 3. Dropped
 Dropped editing `docs/assignment.md` to match the guideline (blocked by CI, destroys SSOT).

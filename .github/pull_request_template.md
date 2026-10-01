@@ -29,7 +29,7 @@
 
 **Report (`docs/`):**
 - [ ] Merged section order per `docs/deliverables-detail.md` (Proposal=D1, Midterm=D2, Final=D3 12 sections in order), minimum page counts
-- [ ] Superset cover (`docs/templates/cover.md`) + specific task table (`docs/templates/task-allocation.md`, no generic `All`)
+- [ ] Superset cover (`docs/templates/cover.md`) + named role-group task table (`docs/templates/task-allocation.md`, no generic `All`)
 - [ ] Form screenshots + SQL behind each (section 9), AI appendix when AI was used; final package layout + `docs/submission-checklist.md` ticked
 
 ## Review & merge

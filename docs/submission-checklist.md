@@ -7,15 +7,15 @@ governs packaging/format. Detail: `docs/deliverables-detail.md`.
 
 - [ ] Cover from `docs/templates/cover.md`: course + topic 14 + instructor + team table (name + student ID + phone + topic).
 - [ ] Team table rows match the real group (no invented/dropped rows).
-- [ ] Task/work allocation is per-member × per-week, specific — no generic `All` rows.
+- [ ] Task/work allocation uses seven named role groups (R1–R7) with specific shared outputs per week-window — no generic `All` rows.
 - [ ] AI disclosure present wherever AI was used (what + how verified).
 
-## Proposal = D1 (1–3 pages, due 21/9 W2; hard latest 28/9 W3)
+## Proposal = D1 (1–3 pages, due 27/9/2026 at 22:30)
 
 - [ ] Order: Cover → Abstract → Task Allocation → Tools/Languages → Objective → Business rules → Entity list → Plan → References + AI disclosure.
 - [ ] Abstract: topic + objectives in 1 short paragraph.
 - [ ] Tools: pinned stack named (JDK 25 LTS + MySQL 8.4 LTS + Connector/J 8.4.x + Maven 3.9.x + Swing + draw.io).
-- [ ] 15–20 numbered business rules; 11-table entity list with weak / M-M / ISA / self-rel marked.
+- [ ] 15–20 numbered business rules; 17-table entity list with weak / M-M / ISA / self-rel marked.
 
 ## Midterm = D2 (3–5 pages, due 12/10 W5)
 

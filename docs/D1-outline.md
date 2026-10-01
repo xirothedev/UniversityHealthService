@@ -1,4 +1,4 @@
-# D1 outline (= guideline Proposal Report, 1–3 pages, due W2 21/9 — hard latest W3 28/9) — R1+R2+Writer fill in
+# D1 outline (= guideline Proposal Report, 1–3 pages, due 27/9/2026 at 22:30) — R1+R2+Writer fill in
 
 Section order is fixed: guideline sections first, then assignment sections.
 Both checklists pass only in this order. Source: `docs/deliverables-detail.md`.
@@ -28,7 +28,7 @@ Both checklists pass only in this order. Source: `docs/deliverables-detail.md`.
 
 | Entity / Table Name | Construct Type | Primary Key (PK) | Attributes & Foreign Keys (FK) | Technical Requirement Mapping (Section 2.2 & ADR) |
 | :--- | :--- | :--- | :--- | :--- |
-| **Patient** | Regular (Superclass) | `patient_id` | `full_name` (NN), `date_of_birth`, `gender`, `phone_number`, `email` | **ISA Superclass (ADR-03):** Root entity for all healthcare recipients. |
+| **Patient** | Regular (Superclass) | `patient_id` | `full_name` (NN), `date_of_birth`, `gender`, `phone_number` | **ISA Superclass (ADR-03):** Root entity for all healthcare recipients. Demographics are recorded once here and inherited by both subtypes (BR-19). |
 | **Student** | Subclass (ISA) | `patient_id` | `patient_id` (FK), `student_code` (UQ), `faculty`, `dorm_building_id` (FK) | **ISA Subclass (ADR-03):** Disjoint + total `(d, total)` with Staff; child PK is also the FK, CASCADE on delete. |
 | **Staff** | Subclass (ISA) | `patient_id` | `patient_id` (FK), `staff_code` (UQ), `faculty`, `office_room` | **ISA Subclass (ADR-03):** Disjoint + total `(d, total)` with Student; `faculty` is the one organisational-unit term for Students and Staff alike (BR-02). |
 | **MedicalStaff** | Regular Entity | `staff_id` | `full_name` (NN), `specialty`, `phone_number` | **Independent Entity (ADR-14):** Kept outside the Patient ISA; `staff_id` always denotes this table, never the Staff Patient subtype (BR-03). |
@@ -38,7 +38,7 @@ Both checklists pass only in this order. Source: `docs/deliverables-detail.md`.
 | **Prescription** | Regular (Owner) | `prescription_id` | `consultation_id` (FK, NN, UQ), `staff_id` (FK, NN), `issue_date` (NN) | UQ on `consultation_id` enforces the 1:1 of BR-08 (one Consultation issues at most one Prescription); owner of the lines (ADR-04). |
 | **PrescriptionLine** | **Weak Entity** | `(prescription_id, line_no)` | `prescription_id` (FK), `line_no` (Partial Key), `medicine_id` (FK, NN), `dosage`, `frequency`, `duration_days` (CK > 0), `quantity` (CK > 0) | **Weak Entity (ADR-04):** Identified only inside Prescription via partial discriminator `line_no`; CASCADE on delete (BR-09). |
 | **Medicine** | Regular Entity | `medicine_id` | `medicine_name` (NN, UQ), `stock_quantity` (NN, CK >= 0), `unit_price` (NN, CK >= 0) | Drug catalog and pricing; stock is informational only, never auto-decremented by prescribing (BR-11). |
-| **Allergy** | Regular Entity | `allergy_id` | `allergen_name` (NN, UQ), `category` | Regular entity for allergens. `category` needs a BR before D2 or it is dropped. |
+| **Allergy** | Regular Entity | `allergy_id` | `allergen_name` (NN, UQ) | Regular entity for allergens; carries the allergen name only. Severity belongs to the Patient–Allergy pair, not here (BR-12). |
 | **PatientAllergy** | **M:N Associative** | `(patient_id, allergy_id)` | `patient_id` (FK), `allergy_id` (FK), `severity` (NN, CK in mild / moderate / severe), `onset_date`, `note` | **M:N with Attributes (ADR-05):** Severity and onset date live on the pair, not on Patient or Allergy (BR-12). |
 | **VaccinationCourse** | Regular Entity | `course_id` | `course_name` (NN, UQ), `target_disease`, `required_doses` (NN, CK >= 1) | Regular entity defining vaccine regimens (BR-13). |
 | **VaccinationRecord** | Associative Log | `record_id` (surrogate); UQ `(patient_id, course_id, dose_number)` | `patient_id` (FK, NN), `course_id` (FK, NN), `dose_number` (NN, CK >= 1), `date_given` (NN) | Dose log; the UQ triple is the real candidate key and rejects a double dose (BR-14). Deliberate deviation from the plain M:N mapping rule used for PatientAllergy — justified in D2. |
@@ -52,11 +52,11 @@ Both checklists pass only in this order. Source: `docs/deliverables-detail.md`.
 
 8. Plan W3/W5/W10/W13–15 + roles table.
 
-   ### Milestone Plan (earliest-deadline-wins, ADR-15)
+   ### Milestone Plan (confirmed instructor dates, ADR-15)
 
 | Milestone | Timeline / Deadline | Deliverables | Key Responsibilities |
 | :--- | :---: | :--- | :--- |
-| **D1. Proposal Report** | **W2 (21/09/2026)**, hard latest W3 (28/09/2026) | 1–3 pages: Cover, Abstract, Task Allocation Table, Pinned Stack, 18 BRs, Entity list, Plan, References & AI disclosure | Lead (R1) + Data Modeller (R2) + Writer |
+| **D1. Proposal Report** | **27/09/2026, 22:30** (submitted) | 1–3 pages: Cover, Abstract, Task Allocation Table, Pinned Stack, 18 BRs, Entity list, Plan, References & AI disclosure | Lead (R1) + Data Modeller (R2) + Writer |
 | **D2. Progress Report** | **W5 (12/10/2026)** | 3–5 pages: Updated Info, TOC, full ERD (draw.io) + draft schema + mapping rules + initial FDs | Data Modeller (R2) + Normalization (R3) |
 | **D3. Final Report** | **W10 (16/11/2026)** | 25+ pages (exact 12 sections in order), lossless proofs, normalization to 3NF/BCNF | Tester & Writer (R7) assembles; all roles write their sections |
 | **D5. SQL Scripts** | **W10 (16/11/2026)** | `01_schema.sql`, `02_data.sql` (≥15 rows/table), `03_queries.sql` (12/12 queries non-empty), transaction + index | DB Developer (R4) + Query Developer (R5) |
@@ -75,13 +75,15 @@ Both checklists pass only in this order. Source: `docs/deliverables-detail.md`.
 | **R6** | Java Developer | 2 | JDBC layer, Swing UI (F0–F5), input validation, properties | Nguyễn Trần Quốc Vinh, Phan Nguyên Vũ |
 | **R7** | Tester / Writer | 1 | End-to-end testing, report integration, AI disclosure appendix | Nguyễn Minh Khôi |
 
-   The per-member × per-week Task Allocation Table that section 3 requires is a separate
-   artefact (`docs/templates/task-allocation.md`); this matrix is the role mapping it summarises.
+   Section 3's Task Allocation Table shipped with D1 as a 7-row R1–R7 role matrix: each row
+   names its confirmed members and each week-window cell states that role's specific outputs
+   (template `docs/templates/task-allocation.md`). This matrix is the role-to-member mapping
+   that table is built from. At D2, section 3 is revised to break each group out per member.
 
 9. References + AI disclosure (what was used + how it was verified, per assignment §2.6).
 
-Note: date conflict resolved by earliest-deadline-wins (`docs/deliverables-detail.md`).
-Guideline says week 2, assignment §2.1 says Week 3 (28/9). Team ships 21/9 (W2);
-28/9 is the hard latest, not the target. A dated instructor announcement overrides both.
+Note: D1 was submitted on time. The dated instructor announcement (27/9/2026, 22:30,
+one PDF via Blackboard) superseded the earlier guideline W2 and assignment W3 planning
+dates; it is recorded in ADR-15 and `docs/deliverables-detail.md`.
 
 Once D1 is done the topic is locked; no changes after W5 without instructor approval.

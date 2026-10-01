@@ -2,11 +2,10 @@
 
 Formatting/packaging source: `Project Submittion Guideline.pdf` (course submission stages).
 Authority rule: `docs/assignment.md` is SSOT for technical content (never edit by hand, CI-blocked).
-The guideline PDF governs packaging/format only. Date conflicts are resolved, not flagged:
-earliest-deadline-wins. A dated instructor announcement (Zalo/email) overrides both docs.
-Concretely: proposal W2 (guideline) beats D1 W3 (assignment) → team ships W2; final W10
-(assignment, 16/11) beats guideline W11 → team ships W10. Submitting early always
-satisfies the later deadline; submitting late never does.
+The guideline PDF governs packaging/format only. Where dates disagree, a dated instructor
+announcement (Zalo/email) overrides both documents; failing that, earliest-deadline-wins.
+Concretely: the instructor set D1 at 27/9/2026 22:30 (one PDF via Blackboard), superseding
+the guideline's W2 and the assignment's W3; D3 ships 16/11 W10, which beats the guideline's W11.
 
 Deadlines count from Week 1 = 8/9/2026. Late submission only for a pre-reported force-majeure reason (illness); "busy with another course" does not count.
 
@@ -14,7 +13,7 @@ Deadlines count from Week 1 = 8/9/2026. Late submission only for a pre-reported 
 
 | Guideline stage | Repo deliverable | Due (resolved) | Length |
 |---|---|---|---|
-| Proposal Report (week 2) | D1 — Proposal | 21/9 (W2, earlier of W2 vs assignment W3 28/9) | 1–3 pages |
+| Proposal Report (week 2) | D1 — Proposal | 27/9/2026, 22:30 (instructor announcement) | 1–3 pages |
 | Midterm Report (week 5) | D2 — Progress report | 12/10 (W5, both agree) | 3–5 pages |
 | Final Report (week 11) | D3 + D5 + D6, D3 due 16/11 (W10, earlier of W10 vs guideline W11); D4 demo W13–15 | see below | 25+ pages + code + SQL + slides |
 
@@ -31,13 +30,13 @@ Superset cover on all three stages — satisfies both the guideline and assignme
 Group size note: assignment §1.2 says 10–11; this repo currently lists 12 members in `README.md`.
 Keep the table truthful (one row per real member) — never invent or drop rows to fit a number.
 
-## D1 — Proposal (= guideline Proposal Report), 1–3 pages, due 21/9 (W2)
+## D1 — Proposal (= guideline Proposal Report), 1–3 pages, due 27/9/2026 at 22:30
 
 Section order: guideline sections first, then assignment sections (both checklists pass):
 
 1. Cover Page (see Cover rule).
 2. Abstract — brief topic + objectives (guideline).
-3. Task Allocation Table — per-member × per-week specific tasks (guideline). Ban generic `All`; template `docs/templates/task-allocation.md`.
+3. Task Allocation Table — seven named role groups (R1–R7) with specific shared responsibilities and outputs per week-window (guideline). Ban generic `All`; template `docs/templates/task-allocation.md`.
 4. Tools and Programming Languages — pinned stack: JDK 25 LTS + MySQL 8.4 LTS + Connector/J 8.4.x + Maven 3.9.x + Swing + draw.io (ADR-01, ADR-02).
 5. Objective in 1 sentence: fast record lookup for the health station + early outbreak detection (topic 14 objective).
 6. Business rules, 15–20 numbered sentences.

@@ -1,2 +1,13 @@
 [sqlfluff]
 dialect = mysql
+
+# CP02 ("unquoted identifiers must be consistently lower case") is excluded
+# from the rule allowlist below. The schema (docs/D1-outline.md) deliberately
+# names tables in CamelCase (Patient, Student, Staff, ...) and columns in
+# lower_case (patient_id, full_name, ...). No capitalisation_policy accepts
+# that mix: "consistent" rejects it because the two classes differ, and every
+# other policy rejects one side or the other. The convention is fixed by D1
+# and cannot be changed without resubmitting, so the rule that fights it is
+# disabled. Table names are written exactly as the schema defines them.
+# Verified: with CP02 excluded, other rules (LT01, LT05, RF06, ...) still fire.
+rules = AL01,AL02,AL03,AL04,AL05,AL06,AL07,AL08,AL09,AL10,AM01,AM02,AM03,AM04,AM05,AM06,AM07,AM08,AM09,CP01,CP03,CP04,CP05,CV01,CV02,CV03,CV04,CV05,CV06,CV07,CV08,CV09,CV10,CV11,CV12,JJ01,LT01,LT02,LT03,LT04,LT05,LT06,LT07,LT08,LT09,LT10,LT11,LT12,LT13,LT14,LT15,OR01,PG01,PG02,RF01,RF02,RF03,RF04,RF05,RF06,RF07,ST01,ST02,ST03,ST04,ST05,ST06,ST07,ST08,ST09,ST10,ST11,ST12,TQ01,TQ02,TQ03,TQ04

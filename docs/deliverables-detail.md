@@ -2,11 +2,10 @@
 
 Formatting/packaging source: `Project Submittion Guideline.pdf` (course submission stages).
 Authority rule: `docs/assignment.md` is SSOT for technical content (never edit by hand, CI-blocked).
-The guideline PDF governs packaging/format only. Date conflicts are resolved, not flagged:
-earliest-deadline-wins. A dated instructor announcement (Zalo/email) overrides both docs.
-Concretely: proposal W2 (guideline) beats D1 W3 (assignment) → team ships W2; final W10
-(assignment, 16/11) beats guideline W11 → team ships W10. Submitting early always
-satisfies the later deadline; submitting late never does.
+The guideline PDF governs packaging/format only. Where dates disagree, a dated instructor
+announcement (Zalo/email) overrides both documents; failing that, earliest-deadline-wins.
+Concretely: the instructor set D1 at 27/9/2026 22:30 (one PDF via Blackboard), superseding
+the guideline's W2 and the assignment's W3; D3 ships 16/11 W10, which beats the guideline's W11.
 
 Deadlines count from Week 1 = 8/9/2026. Late submission only for a pre-reported force-majeure reason (illness); "busy with another course" does not count.
 
@@ -14,7 +13,7 @@ Deadlines count from Week 1 = 8/9/2026. Late submission only for a pre-reported 
 
 | Guideline stage | Repo deliverable | Due (resolved) | Length |
 |---|---|---|---|
-| Proposal Report (week 2) | D1 — Proposal | 21/9 (W2, earlier of W2 vs assignment W3 28/9) | 1–3 pages |
+| Proposal Report (week 2) | D1 — Proposal | 27/9/2026, 22:30 (instructor announcement) | 1–3 pages |
 | Midterm Report (week 5) | D2 — Progress report | 12/10 (W5, both agree) | 3–5 pages |
 | Final Report (week 11) | D3 + D5 + D6, D3 due 16/11 (W10, earlier of W10 vs guideline W11); D4 demo W13–15 | see below | 25+ pages + code + SQL + slides |
 
@@ -31,17 +30,17 @@ Superset cover on all three stages — satisfies both the guideline and assignme
 Group size note: assignment §1.2 says 10–11; this repo currently lists 12 members in `README.md`.
 Keep the table truthful (one row per real member) — never invent or drop rows to fit a number.
 
-## D1 — Proposal (= guideline Proposal Report), 1–3 pages, due 21/9 (W2)
+## D1 — Proposal (= guideline Proposal Report), 1–3 pages, due 27/9/2026 at 22:30
 
 Section order: guideline sections first, then assignment sections (both checklists pass):
 
 1. Cover Page (see Cover rule).
 2. Abstract — brief topic + objectives (guideline).
-3. Task Allocation Table — per-member × per-week specific tasks (guideline). Ban generic `All`; template `docs/templates/task-allocation.md`.
-4. Tools and Programming Languages — pinned stack: JDK 21 LTS + MySQL 8.4 LTS + Connector/J 8.4.x + Maven 3.9.x + Swing + draw.io (ADR-01, ADR-02).
+3. Task Allocation Table — seven named role groups (R1–R7) with specific shared responsibilities and outputs per week-window (guideline). Ban generic `All`; template `docs/templates/task-allocation.md`.
+4. Tools and Programming Languages — pinned stack: JDK 25 LTS + MySQL 8.4 LTS + Connector/J 8.4.x + Maven 3.9.x + Swing + draw.io (ADR-01, ADR-02).
 5. Objective in 1 sentence: fast record lookup for the health station + early outbreak detection (topic 14 objective).
 6. Business rules, 15–20 numbered sentences.
-7. Entity list of 11 tables + where the weak / M-M / ISA / self-rel sit.
+7. Entity list of 17 tables + where the weak / M-M / ISA / self-rel sit.
 8. Plan W3/W5/W10/W13–15 + roles table.
 9. References + AI disclosure (what was used + how it was verified, per assignment §2.6).
 
@@ -99,7 +98,7 @@ submit/final/
 
 ## D6 — Java app, submitted with D3
 
-- 6 mandatory screens: externalized connection (properties file, grader points at another server with no rebuild), browse grid + row count, parameterized search, master–detail (Consultation→PrescriptionLine), editing CRUD + delete confirmation, aggregate report (Top-5 diagnoses). Put ≥4/5 topic queries on the menu.
+- 6 mandatory screens, numbered F0–F5 (the numbering ADR-02 uses; ADR-07's "F1–F5" predates F0): F0 externalized connection (properties file, grader points at another server with no rebuild), F1 browse grid + row count, F2 parameterized search, F3 master–detail (Consultation→PrescriptionLine), F4 editing CRUD + delete confirmation, F5 aggregate report (Top-5 diagnoses). Put ≥4/5 topic queries on the menu.
 - Code rules: PreparedStatement for every user-valued statement (concatenation = defect, grader tests with an apostrophe), FK errors in plain language not stack traces, validate required/range/date order, close connections with try-with-resources.
 - Submit source + README (JDK, driver, connection, build/run steps). A project that does not run scores zero for screens.
 - Leads: Java developer + Tester.

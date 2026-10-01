@@ -17,3 +17,5 @@ db.properties
 !.env.example
 # personal scratch
 .scratch/*/*.local.md
+.firecrawl
+.private

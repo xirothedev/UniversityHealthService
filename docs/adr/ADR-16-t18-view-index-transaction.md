@@ -17,8 +17,8 @@ only the names were wrong.
 
 ## 2. Decision
 
-**One index, not two.** `Appointment(staff_id, appointment_time)` serves Q-T2 (doctors with
-free slots this week), the only required query that does a genuine seek — `staff_id`
+**One index, not two.** `Appointment(med_staff_id, appointment_time)` serves Q-T2 (doctors with
+free slots this week), the only required query that does a genuine seek — `med_staff_id`
 equality plus a time range. ADR-08's second index, `Consultation(diagnosis, …)`, is dropped:
 `diagnosis` is free text (`CONTEXT.md`), so a B-tree over it is never sought by equality, and
 Q-T3 groups by it rather than filtering on it.
@@ -26,14 +26,17 @@ Q-T3 groups by it rather than filtering on it.
 **One view, `v_patient_summary`.** A `UNION ALL` over `Patient JOIN Student` and
 `Patient JOIN Staff`, exposing demographics from Patient plus `subtype`, `subtype_code`, and
 `faculty`. It reaches the subtypes by union because `faculty` is declared on both subtypes
-(BR-02) while `student_code` and `staff_code` exist on only one side each. It joins
+(BR-02) while `student_code` and `uni_staff_code` exist on only one side each. It joins
 MedicalStaff nowhere: `CONTEXT.md` states the two are never joined. The union doubles as the
 set operation §2.2 requires. It is Q11 — one of the twelve, not a thirteenth.
 
 **Two transactions, rollback first.** Both span Consultation + Prescription.
 
-1. Insert a Consultation, then fail the Prescription insert on a non-existent `staff_id`
-   (foreign key violation), then ROLLBACK. Proves the visit did not survive.
+1. Insert a Consultation, then fail the Prescription insert on a non-existent
+   `consultation_id` (foreign key violation on `fk_presc_consult`), then ROLLBACK.
+   Proves the visit did not survive. The Prescription carries no doctor column: the
+   prescriber is read through the visit's Consultation, so a wrong-doctor failure is
+   inexpressible by construction (ADR-17).
 2. Insert a Consultation and its Prescription, COMMIT, then DELETE both rows in reverse
    order so the script reruns clean.
 
@@ -77,11 +80,19 @@ Verified 2026-10-01 against a live server, using the 7 tables these three blocks
 (`Patient`, `Student`, `Staff`, `MedicalStaff`, `Appointment`, `Consultation`,
 `Prescription`) built from the column names in `docs/D1-outline.md`: all 11 statements run,
 the only error being the intended foreign key violation (`ERROR 1452`, constraint
-`fk_presc_staff`); ROLLBACK does discard `consultation_id 9001` and the commit demo's DELETE
+`fk_presc_consult`); ROLLBACK does discard `consultation_id 9001` and the commit demo's DELETE
 leaves the 9000 block empty; `v_patient_summary` returns one correctly labelled row per
 Patient; `EXPLAIN` for a Q-T2-shaped seek picks `IndexRangeScan_8` on
-`idx_appt_staff_time(staff_id, appointment_time)`, so the index is used rather than merely
+`idx_appt_medstaff_time(med_staff_id, appointment_time)`, so the index is used rather than merely
 present; and the file runs twice over a fresh database with no unexpected failure.
+
+Re-verification owed after ADR-17 renamed the columns (`staff_id` → `med_staff_id`,
+`staff_code` → `uni_staff_code`, `slot_length_min` → `booking_unit_min`) and moved the
+rollback trip-wire from `fk_presc_staff` to `fk_presc_consult`: R5/T18 must rerun the
+`01_schema.sql` + `02_data.sql` + `03_queries.sql` sequence on MySQL 8.4 and confirm the
+single intended `ERROR 1452` (now on `fk_presc_consult`) before D3. What CI can check
+(sqlfluff parse, guards) is green on this branch; what it cannot (live execution) is
+explicitly deferred, not assumed.
 
 Two limits on that evidence. The server was TiDB v8.5.3 serverless, and ADR-11 makes TiDB
 dev-only — MySQL 8.4 remains the submission target, so MySQL-specific syntax is still
@@ -103,4 +114,5 @@ fixed by D1. Other rules (LT01, LT05, RF06, ...) remain active — verified.
 
 ## 5. Related
 Tables Appointment, Patient, Student, Staff, Consultation, Prescription. Queries Q-T2, Q-T3,
-Q11. Rules BR-02, BR-07, BR-08, BR-19. Supersedes ADR-08; depends on ADR-01, ADR-11, ADR-14.
+Q11. Rules BR-02, BR-07, BR-08, BR-19. Supersedes ADR-08; depends on ADR-01, ADR-11, ADR-14;
+column renames and the rollback trip-wire move decided in ADR-17.

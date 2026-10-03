@@ -33,8 +33,10 @@ INSERT INTO Building (building_id, building_name, building_type) VALUES
 -- ============================================================
 -- Patient (30 rows)
 -- ============================================================
-INSERT INTO Patient (patient_id, full_name, date_of_birth, gender,
-    phone_number) VALUES
+INSERT INTO Patient (
+    patient_id, full_name, date_of_birth, gender,
+    phone_number
+) VALUES
 (1, 'Nguyen Van An', '2002-03-15', 'M', '0901234567'),
 (2, 'Tran Thi Binh', '2001-07-22', 'F', '0902345678'),
 (3, 'Le Hoang Cuong', '2000-11-08', 'M', '0903456789'),
@@ -129,8 +131,10 @@ INSERT INTO Allergy (allergy_id, allergen_name) VALUES
 -- ============================================================
 -- PatientAllergy (16 rows)
 -- ============================================================
-INSERT INTO PatientAllergy (patient_id, allergy_id, severity, onset_date,
-    note) VALUES
+INSERT INTO PatientAllergy (
+    patient_id, allergy_id, severity, onset_date,
+    note
+) VALUES
 (1, 1, 'severe', '2015-03-10', 'Anaphylaxis risk'),
 (1, 3, 'mild', '2018-07-22', 'Seasonal'),
 (2, 2, 'moderate', '2019-11-05', 'Rash'),
@@ -151,8 +155,10 @@ INSERT INTO PatientAllergy (patient_id, allergy_id, severity, onset_date,
 -- ============================================================
 -- MedicalStaff (15 rows)
 -- ============================================================
-INSERT INTO MedicalStaff (med_staff_id, full_name, specialty,
-    phone_number) VALUES
+INSERT INTO MedicalStaff (
+    med_staff_id, full_name, specialty,
+    phone_number
+) VALUES
 (1, 'Dr. Nguyen Thi Mai', 'General Practice', '0911234567'),
 (2, 'Dr. Tran Van Hoa', 'Cardiology', '0912345678'),
 (3, 'Dr. Le Thi Nga', 'Dermatology', '0913456789'),
@@ -172,8 +178,10 @@ INSERT INTO MedicalStaff (med_staff_id, full_name, specialty,
 -- ============================================================
 -- ConsultSlot (15 rows)
 -- ============================================================
-INSERT INTO ConsultSlot (slot_id, med_staff_id, weekday, start_time, end_time,
-    booking_unit_min) VALUES
+INSERT INTO ConsultSlot (
+    slot_id, med_staff_id, weekday, start_time, end_time,
+    booking_unit_min
+) VALUES
 (1, 1, 1, '08:00:00', '12:00:00', 30),
 (2, 1, 3, '08:00:00', '12:00:00', 30),
 (3, 1, 5, '13:00:00', '17:00:00', 30),
@@ -193,8 +201,10 @@ INSERT INTO ConsultSlot (slot_id, med_staff_id, weekday, start_time, end_time,
 -- ============================================================
 -- Appointment (15 rows)
 -- ============================================================
-INSERT INTO Appointment (appointment_id, patient_id, med_staff_id,
-    appointment_time, status) VALUES
+INSERT INTO Appointment (
+    appointment_id, patient_id, med_staff_id,
+    appointment_time, status
+) VALUES
 (1, 1, 1, '2026-10-01 08:30:00', 'completed'),
 (2, 2, 1, '2026-10-01 09:00:00', 'completed'),
 (3, 3, 2, '2026-10-02 08:30:00', 'completed'),
@@ -214,44 +224,90 @@ INSERT INTO Appointment (appointment_id, patient_id, med_staff_id,
 -- ============================================================
 -- Consultation (15 rows)
 -- ============================================================
-INSERT INTO Consultation (consultation_id, patient_id, med_staff_id,
-    appointment_id, consultation_date, symptoms, diagnosis, notes) VALUES
-(1, 1, 1, 1, '2026-10-01 08:30:00', 'Fever, cough, sore throat', 'Common cold',
-    'Rest and fluids'),
-(2, 2, 1, 2, '2026-10-01 09:00:00', 'Headache, nausea', 'Migraine',
-    'Prescribed painkillers'),
-(3, 3, 2, 3, '2026-10-02 08:30:00', 'Chest pain, shortness of breath',
-    'Hypertension', 'Referred to cardiology'),
-(4, 4, 3, 4, '2026-10-02 13:30:00', 'Skin rash, itching', 'Eczema',
-    'Topical cream prescribed'),
-(5, 5, 4, 5, '2026-10-03 13:30:00', 'Fever, cough', 'Influenza',
-    'Antiviral medication'),
-(6, 6, 5, 6, '2026-10-03 08:30:00', 'Abdominal pain', 'Gastritis',
-    'Dietary changes recommended'),
-(7, 7, 6, 7, '2026-10-04 08:30:00', 'Back pain', 'Muscle strain',
-    'Physical therapy'),
-(8, 8, 7, 8, '2026-10-04 08:30:00', 'Dizziness, headache', 'Tension headache',
-    'Stress management'),
-(9, 9, 8, 9, '2026-10-05 08:30:00', 'Eye redness', 'Conjunctivitis',
-    'Eye drops prescribed'),
-(10, 10, 9, 10, '2026-10-05 13:30:00', 'Sore throat', 'Pharyngitis',
-    'Antibiotics prescribed'),
-(11, 11, 10, 11, '2026-10-06 08:30:00', 'Toothache', 'Dental caries',
-    'Filling needed'),
-(12, 12, 11, 12, '2026-10-06 13:30:00', 'Skin acne', 'Acne vulgaris',
-    'Topical treatment'),
-(13, 13, 12, 13, '2026-10-07 08:30:00', 'Fever, body ache', 'Dengue',
-    'Notifiable case reported'),
-(14, 14, 13, 14, '2026-10-07 13:30:00', 'Chest tightness', 'Asthma',
-    'Inhaler prescribed'),
-(15, 15, 14, 15, '2026-10-08 08:30:00', 'Fatigue', 'Anemia',
-    'Blood test ordered');
+INSERT INTO Consultation (
+    consultation_id, patient_id, med_staff_id,
+    appointment_id, consultation_date, symptoms, diagnosis, notes
+) VALUES
+(
+    1,
+    1,
+    1,
+    1,
+    '2026-10-01 08:30:00',
+    'Fever, cough, sore throat',
+    'Common cold',
+    'Rest and fluids'
+),
+(
+    2, 2, 1, 2, '2026-10-01 09:00:00', 'Headache, nausea', 'Migraine',
+    'Prescribed painkillers'
+),
+(
+    3, 3, 2, 3, '2026-10-02 08:30:00', 'Chest pain, shortness of breath',
+    'Hypertension', 'Referred to cardiology'
+),
+(
+    4, 4, 3, 4, '2026-10-02 13:30:00', 'Skin rash, itching', 'Eczema',
+    'Topical cream prescribed'
+),
+(
+    5, 5, 4, 5, '2026-10-03 13:30:00', 'Fever, cough', 'Influenza',
+    'Antiviral medication'
+),
+(
+    6, 6, 5, 6, '2026-10-03 08:30:00', 'Abdominal pain', 'Gastritis',
+    'Dietary changes recommended'
+),
+(
+    7, 7, 6, 7, '2026-10-04 08:30:00', 'Back pain', 'Muscle strain',
+    'Physical therapy'
+),
+(
+    8,
+    8,
+    7,
+    8,
+    '2026-10-04 08:30:00',
+    'Dizziness, headache',
+    'Tension headache',
+    'Stress management'
+),
+(
+    9, 9, 8, 9, '2026-10-05 08:30:00', 'Eye redness', 'Conjunctivitis',
+    'Eye drops prescribed'
+),
+(
+    10, 10, 9, 10, '2026-10-05 13:30:00', 'Sore throat', 'Pharyngitis',
+    'Antibiotics prescribed'
+),
+(
+    11, 11, 10, 11, '2026-10-06 08:30:00', 'Toothache', 'Dental caries',
+    'Filling needed'
+),
+(
+    12, 12, 11, 12, '2026-10-06 13:30:00', 'Skin acne', 'Acne vulgaris',
+    'Topical treatment'
+),
+(
+    13, 13, 12, 13, '2026-10-07 08:30:00', 'Fever, body ache', 'Dengue',
+    'Notifiable case reported'
+),
+(
+    14, 14, 13, 14, '2026-10-07 13:30:00', 'Chest tightness', 'Asthma',
+    'Inhaler prescribed'
+),
+(
+    15, 15, 14, 15, '2026-10-08 08:30:00', 'Fatigue', 'Anemia',
+    'Blood test ordered'
+);
 
 -- ============================================================
 -- Medicine (15 rows)
 -- ============================================================
-INSERT INTO Medicine (medicine_id, medicine_name, stock_quantity,
-    unit_price) VALUES
+INSERT INTO Medicine (
+    medicine_id, medicine_name, stock_quantity,
+    unit_price
+) VALUES
 (1, 'Paracetamol 500mg', 100, 5000.00),
 (2, 'Amoxicillin 250mg', 80, 12000.00),
 (3, 'Ibuprofen 400mg', 120, 8000.00),
@@ -291,8 +347,10 @@ INSERT INTO Prescription (prescription_id, consultation_id, issue_date) VALUES
 -- ============================================================
 -- PrescriptionLine (15 rows)
 -- ============================================================
-INSERT INTO PrescriptionLine (prescription_id, line_no, medicine_id, dosage,
-    frequency, duration_days, quantity, unit_price) VALUES
+INSERT INTO PrescriptionLine (
+    prescription_id, line_no, medicine_id, dosage,
+    frequency, duration_days, quantity, unit_price
+) VALUES
 (1, 1, 1, '1 tablet', '3 times daily', 5, 15, 5000.00),
 (1, 2, 14, '1 tablet', '2 times daily', 5, 10, 7000.00),
 (2, 1, 3, '1 tablet', 'as needed', 3, 6, 8000.00),
@@ -313,8 +371,10 @@ INSERT INTO PrescriptionLine (prescription_id, line_no, medicine_id, dosage,
 -- ============================================================
 -- VaccinationCourse (15 rows)
 -- ============================================================
-INSERT INTO VaccinationCourse (course_id, course_name, target_disease,
-    required_doses) VALUES
+INSERT INTO VaccinationCourse (
+    course_id, course_name, target_disease,
+    required_doses
+) VALUES
 (1, 'Hepatitis B', 'Hepatitis B', 3),
 (2, 'Tetanus', 'Tetanus', 1),
 (3, 'Influenza', 'Influenza', 1),
@@ -334,8 +394,10 @@ INSERT INTO VaccinationCourse (course_id, course_name, target_disease,
 -- ============================================================
 -- VaccinationRecord (15 rows)
 -- ============================================================
-INSERT INTO VaccinationRecord (record_id, patient_id, course_id, dose_number,
-    date_given) VALUES
+INSERT INTO VaccinationRecord (
+    record_id, patient_id, course_id, dose_number,
+    date_given
+) VALUES
 (1, 1, 1, 1, '2025-01-15'),
 (2, 1, 1, 2, '2025-02-15'),
 (3, 1, 1, 3, '2025-03-15'),
@@ -355,8 +417,10 @@ INSERT INTO VaccinationRecord (record_id, patient_id, course_id, dose_number,
 -- ============================================================
 -- NotifiableCase (15 rows)
 -- ============================================================
-INSERT INTO NotifiableCase (case_id, consultation_id, disease_name,
-    date_reported, building_id) VALUES
+INSERT INTO NotifiableCase (
+    case_id, consultation_id, disease_name,
+    date_reported, building_id
+) VALUES
 (1, 13, 'Dengue', '2026-10-07', 4),
 (2, 13, 'Dengue', '2026-10-08', 4),
 (3, 5, 'Influenza', '2026-10-03', 5),
@@ -376,8 +440,10 @@ INSERT INTO NotifiableCase (case_id, consultation_id, disease_name,
 -- ============================================================
 -- ContactTrace (15 rows)
 -- ============================================================
-INSERT INTO ContactTrace (trace_id, source_patient_id, contact_patient_id,
-    contact_date, source_case_id) VALUES
+INSERT INTO ContactTrace (
+    trace_id, source_patient_id, contact_patient_id,
+    contact_date, source_case_id
+) VALUES
 (1, 1, 2, '2026-10-07', 1),
 (2, 1, 3, '2026-10-07', 1),
 (3, 1, 4, '2026-10-08', 1),

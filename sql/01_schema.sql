@@ -5,9 +5,9 @@
 -- child PK contains the parent PK (Student/Staff -> Patient,
 -- PrescriptionLine -> Prescription); every other FK RESTRICTs so a booking,
 -- visit, or outbreak record can never vanish with its parent. ON UPDATE CASCADE
--- FKs, RESTRICT elsewhere (surrogate keys are never updated; the actions
--- document intent). Minimal DEFAULTs: Appointment.status and
--- Medicine.stock_quantity.
+-- on the same PK-containing FKs, RESTRICT elsewhere (surrogate keys are
+-- never updated; the actions only document intent). DEFAULTs only on
+-- Appointment.status and Medicine.stock_quantity.
 -- Runs twice in a row without manual repair: DROP IF EXISTS first.
 
 DROP DATABASE IF EXISTS uhs_db;
@@ -205,8 +205,8 @@ CREATE TABLE Prescription (
     ON DELETE RESTRICT ON UPDATE RESTRICT
 ) ENGINE = InnoDB;
 
--- Always derived from exactly one consultation (BR-15, ADR-13); the building —
--- not the patient's dorm — drives the 14-day cluster (BR-16).
+-- Always derived from exactly one consultation (BR-15, ADR-13); the
+-- building, not the patient's dorm, drives the 14-day cluster (BR-16).
 
 CREATE TABLE NotifiableCase (
     case_id INT AUTO_INCREMENT PRIMARY KEY,

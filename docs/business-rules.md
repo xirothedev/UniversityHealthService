@@ -20,7 +20,7 @@ Each rule is one numbered plain-English sentence. Every rule maps to at least on
 - **BR-06.** At most one Consultation results from one Appointment, and a Consultation comes from at most one Appointment; walk-in Consultations without Appointment and Appointments without Consultation (no-show / cancelled) are both allowed.
 - **BR-07.** A Consultation records symptoms, diagnosis (free text, consistent spelling), notes, the attending MedicalStaff member, and optionally its source Appointment.
 - **BR-08.** One Consultation issues at most one Prescription; every Prescription belongs to exactly one Consultation.
-- **BR-09.** A PrescriptionLine is identified only inside its Prescription by (presc_id + line_no); deleting a Prescription deletes its lines.
+- **BR-09.** A PrescriptionLine is identified only inside its Prescription by (prescription_id + line_no); deleting a Prescription deletes its lines.
 - **BR-10.** Each PrescriptionLine gives exactly one Medicine with its own dose, frequency, duration in days, and quantity; durations may differ between lines of the same order.
 - **BR-11.** Medicine has a price and a stock level with stock >= 0; stock is informational only and is not auto-decremented by prescribing (D2 scope).
 - **BR-20.** Each PrescriptionLine freezes the Medicine unit price at order time; today's Medicine price never overwrites history.

@@ -4,6 +4,9 @@
 -- Line-range split inside R5: T16 owns Q1-Q10 and Q12; T18 owns
 -- the three blocks marked "T18". See docs/adr/ADR-16.
 --
+-- Column contract: docs/er/UHS-ERD.drawio via sql/01_schema.sql
+-- (med_staff_id, uni_staff_code, booking_unit_min — ADR-17).
+--
 -- DDL note (T18): CREATE VIEW and CREATE INDEX have no IF NOT
 -- EXISTS in MySQL 8.4, so those two statements fail if the view
 -- or the index already exists. Running this file a second time
@@ -51,7 +54,7 @@ SELECT
     p.date_of_birth,
     p.phone_number,
     'STAFF' AS subtype,
-    st.staff_code AS subtype_code,
+    st.uni_staff_code AS subtype_code,
     st.faculty
 FROM Patient AS p
 INNER JOIN Staff AS st ON p.patient_id = st.patient_id;
@@ -60,12 +63,12 @@ INNER JOIN Staff AS st ON p.patient_id = st.patient_id;
 -- ============================================================
 -- T18 / 2 of 3 -- the index. DDL, not a query: it exists to serve
 -- Q-T2 (doctors with free Appointment slots this week), which
--- seeks staff_id for equality then narrows on appointment_time.
+-- seeks med_staff_id for equality then narrows on appointment_time.
 -- ============================================================
 
 -- DDL: one composite index serving Q-T2.
-CREATE INDEX idx_appt_staff_time
-ON Appointment (staff_id, appointment_time);
+CREATE INDEX idx_appt_medstaff_time
+ON Appointment (med_staff_id, appointment_time);
 
 
 -- ============================================================
@@ -81,23 +84,29 @@ ON Appointment (staff_id, appointment_time);
 
 START TRANSACTION;
 
+-- patient_id 1 and med_staff_id 1 come from 02_data.sql; the demo
+-- needs those parent rows the same way the old staff_id = 1 did.
 INSERT INTO Consultation (
     consultation_id,
-    staff_id,
+    patient_id,
+    med_staff_id,
     consultation_date,
     symptoms,
     diagnosis,
     notes
 ) VALUES (
-    9001, 1, '2026-11-02',
+    9001, 1, 1, '2026-11-02',
     'Persistent cough',
     'Acute bronchitis',
     'T18 rollback demo'
 );
 
--- staff_id 999999 has no matching MedicalStaff row, so this fails
--- on the Prescription -> MedicalStaff foreign key (constraint
--- fk_presc_staff). The expected error is:
+-- consultation_id 999999 has no matching Consultation row, so this
+-- fails on the Prescription -> Consultation foreign key (constraint
+-- fk_presc_consult). The Prescription carries no doctor column by
+-- design (ADR-17): the prescriber is read through the visit, so a
+-- wrong-doctor failure is inexpressible and the trip-wire is the
+-- diagram's own 1:1 constraint. The expected error is:
 --   ERROR 1452 (23000): Cannot add or update a child row: a
 --   foreign key constraint fails
 -- That failure is the point of the demo: the statement is
@@ -106,10 +115,9 @@ INSERT INTO Consultation (
 INSERT INTO Prescription (
     prescription_id,
     consultation_id,
-    staff_id,
     issue_date
 ) VALUES (
-    9002, 9001, 999999, '2026-11-02'
+    9002, 999999, '2026-11-02'
 );
 
 ROLLBACK;  -- consultation_id 9001 is gone; the two tables moved together
@@ -123,13 +131,14 @@ START TRANSACTION;
 
 INSERT INTO Consultation (
     consultation_id,
-    staff_id,
+    patient_id,
+    med_staff_id,
     consultation_date,
     symptoms,
     diagnosis,
     notes
 ) VALUES (
-    9003, 1, '2026-11-02',
+    9003, 1, 1, '2026-11-02',
     'Headache, photophobia',
     'Migraine',
     'T18 commit demo'
@@ -138,10 +147,9 @@ INSERT INTO Consultation (
 INSERT INTO Prescription (
     prescription_id,
     consultation_id,
-    staff_id,
     issue_date
 ) VALUES (
-    9004, 9003, 1, '2026-11-02'
+    9004, 9003, '2026-11-02'
 );
 
 COMMIT;

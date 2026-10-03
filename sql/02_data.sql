@@ -2,7 +2,7 @@
 -- enough for all 12 queries to return non-empty results.
 -- Insert order: parents before children.
 -- (Building -> Patient -> Student/Staff -> Allergy
--- -> PatientAllergy -> MedicalStaff -> Appointment
+-- -> PatientAllergy -> MedicalStaff -> ConsultSlot -> Appointment
 -- -> Consultation -> Medicine -> Prescription
 -- -> PrescriptionLine -> VaccinationCourse
 -- -> VaccinationRecord -> NotifiableCase -> ContactTrace).

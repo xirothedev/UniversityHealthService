@@ -4,7 +4,7 @@
 The brief asks for the doctors with free appointment slots this week. A text field like "Mon AM" cannot answer that; free time must be computed as planned hours minus booked appointments.
 
 ## 2. Decision
-Consulting hours live in a ConsultSlot entity: one row per MedicalStaff member per weekday window (weekday + start + end + slot length). Free slots are template slots with no overlapping Appointment in scheduled or completed status.
+Consulting hours live in a ConsultSlot entity: one row per MedicalStaff member per weekday window (weekday + start + end + booking unit). The booking unit is the bookable increment inside the window, not the window's length. Free slots are template slots with no overlapping Appointment in scheduled or completed status.
 
 ## 3. Dropped
 Dropped free-text consulting hours (simple but unqueryable, fails the required query).

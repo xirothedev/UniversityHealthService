@@ -24,7 +24,7 @@ CREATE TABLE Building (
     building_type VARCHAR(20) NOT NULL,
     CONSTRAINT uq_building_name UNIQUE (building_name),
     CONSTRAINT ck_building_type CHECK (
-        building_type IN ('hall', 'dorm', 'clinic')
+        building_type IN ('hall', 'dorm', 'clinic', 'lab', 'pharmacy', 'admin')
     )
 ) ENGINE = InnoDB;
 
@@ -214,7 +214,6 @@ CREATE TABLE NotifiableCase (
     disease_name VARCHAR(100) NOT NULL,
     date_reported DATE NOT NULL,
     building_id INT NOT NULL,
-    CONSTRAINT uq_case_consultation UNIQUE (consultation_id),
     CONSTRAINT fk_case_consult FOREIGN KEY (consultation_id)
     REFERENCES Consultation (consultation_id)
     ON DELETE RESTRICT ON UPDATE RESTRICT,

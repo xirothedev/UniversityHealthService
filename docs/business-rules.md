@@ -39,7 +39,7 @@ Each rule is one numbered plain-English sentence. Every rule maps to at least on
 - **BR-15.** A NotifiableCase is always derived from exactly one Consultation; external lab reports enter via a walk-in Consultation first.
 - **BR-16.** Each NotifiableCase records disease (free text, consistent spelling), report date, and exactly one exposure/report Building; this building — not the patient's dorm — drives the 14-day cluster query.
 - **BR-17.** ContactTrace links Patient to Patient with roles source / contact plus contact date and optional source case; a source cannot trace to itself.
-- **BR-18.** A Building is a hall, dorm, or clinic location; Students point at one dorm Building for admin, cases point at one Building for outbreak detection.
+- **BR-18.** A Building is a hall, dorm, clinic, lab, pharmacy, or admin location; Students point at one dorm Building for admin, cases point at one Building for outbreak detection.
 
 ## Coverage check (data modeller)
 

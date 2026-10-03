@@ -69,7 +69,40 @@ three participation minima with no BR (`attending` ≥1 Consultation per Medical
 `exposure site` ≥1 case per Building, BR-04 "one or more" slots vs the `0..n` edge) and
 the missing per-element BR tags on the diagram (`ER-checklist.md` last box stays unticked).
 
-## 5. Related
+## 5. Post-review decisions (grill-with-docs, 3/10/2026)
+A review of this PR against real-life domain knowledge and the assignment
+produced 14 settled decisions. The fixes are applied to the schema and ERD;
+the new work is tracked as tasks.
+
+**Applied fixes:**
+- **NotifiableCase 1:1 → 1:N.** Dropped `UNIQUE(consultation_id)`; kept NOT
+  NULL. BR-15 says "exactly one Consultation" per case — that is many-to-one,
+  not one-to-one. The UNIQUE over-constrained it.
+- **Building type CHECK widened.** Added `lab`, `pharmacy`, `admin` to the
+  CHECK. The original three values were arbitrarily narrow for a university
+  campus.
+
+**Accepted simplifications (no change):**
+- Prescription 1:1 with Consultation (BR-08). Real life allows multiple
+  prescriptions per visit; the assignment does not require it. Keep for D2,
+  revisit at D3 if time permits.
+- Single doctor per consultation. Referrals and teams are out of scope.
+- No emergency contact on Patient. Not an assignment requirement.
+
+**New work (tracked as tasks):**
+- Draft FD set + minimal cover + candidate keys before D2 (12/10). R2 leads.
+- Fill `02_data.sql` (≥15 rows/table) once the schema freezes. R4 leads.
+- Run `01_schema.sql` on MySQL 8.4 and verify it executes twice. R4 leads.
+- Write relational algebra for 4 queries (Q-T1, Q-T3, Q-T4, Q-T5). R5 leads.
+- R2 drafts the D2 document skeleton (Updated Info, TOC, ERD, schema,
+  mapping rules, initial FDs).
+
+**Verification done:**
+- Edge count: 21 edges in the ERD, all 21 map to schema FKs. No orphans.
+- Column audit: all 17 tables match the schema column-for-column (name,
+  type, nullability, constraints). No drift.
+
+## 6. Related
 Tables MedicalStaff, ConsultSlot, Appointment, Consultation, Prescription,
 PrescriptionLine, Student, Staff. Rules BR-02, BR-03, BR-04, BR-08, BR-20. Amends ADR-12
 (wording) and ADR-16 (column names, rollback trip-wire); depends on ADR-03, ADR-04,

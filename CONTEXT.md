@@ -19,7 +19,7 @@ Newcomers read this file first. Use each term as defined, do not invent new ones
 - **VaccinationCourse / VaccinationRecord**: course (how many doses needed) + log of doses given. One record holds patient + course + dose number + date given; uniqueness on (patient + course + dose number). Completion means distinct dose-number count >= required doses, with no interval check.
 - **NotifiableCase**: reportable case (dengue...). Always derived from exactly one Consultation; records disease + report date + exposure/report building + source consultation. External reports enter via a walk-in Consultation first.
 - **ContactTrace**: who contacted whom. Patient-to-Patient link with roles source / contact + contact date + optional source case. Meaningful even before the contact becomes sick.
-- **Building**: hall/dorm/clinic location. A NotifiableCase points at exactly one Building; a Student dorm points at one Building for admin.
+- **Building**: hall/dorm/clinic/lab/pharmacy/admin location. A NotifiableCase points at exactly one Building; a Student dorm points at one Building for admin.
 
 ## Reading rules
 

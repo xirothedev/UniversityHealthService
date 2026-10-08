@@ -1,269 +1,298 @@
-# Functional Dependencies — Topic 14 University Health Service (D2 draft)
+# TASK 2: FUNCTIONAL DEPENDENCIES & CANDIDATE KEYS 
 
-Source: `sql/01_schema.sql` (17 tables). Every FD is derived from the schema's
-PK, FK, UNIQUE, and CHECK constraints. Minimal cover is computed per table.
-Candidate keys are derived and justified.
+## I. Attribute Classification Methodology
 
-## 1. Building
+- SA (Source Attributes): Attributes appearing only on the Left-Hand Side HS of FDs, or not appearing in any FD. These attributes *must* be included in every candidate key.
 
-**FDs:**
-- building_id → building_name, building_type
-- building_name → building_id, building_type
+- IA (Intermediate Attributes): Attributes appearing on both Left-Hand Side and Right-Hand Side of FDs.
 
-**Minimal cover:** Already minimal. Both FDs are necessary; neither can be
-derived from the other.
+- TA (Target Attributes): Attributes appearing only on the Right-Hand Side of FDs. These attributes can *never* belong to any candidate key.
 
-**Candidate keys:** {building_id}, {building_name}
-- building_id is the PK.
-- building_name is UQ, so it determines all other attributes.
+## II. Functional Dependencies & Candidate Key Identification
 
-**Normal form:** BCNF. Every FD's LHS is a candidate key.
+### 1. Building
 
----
+- Attribute Set: U = {building_id, building_name, building_type}
 
-## 2. Patient
+- Functional Dependencies (FDs):
+  - FD₁: building_id → {building_name, building_type}
+  - FD₂: building_name → {building_id, building_type}
 
-**FDs:**
-- patient_id → full_name, date_of_birth, gender, phone_number
+- Candidate Key Identification:
+  - SA = ∅
+  - IA = {building_id, building_name}
+  - TA = {building_type}
 
-**Minimal cover:** Already minimal.
+- Candidate Keys: {building_id}, {building_name}
 
-**Candidate keys:** {patient_id}
-- patient_id is the PK. No other attribute is UQ.
+- Normal Form: BCNF
 
-**Normal form:** BCNF.
+### 2. Patient
 
----
+- Attribute Set: U = {patient_id, full_name, date_of_birth, gender, phone_number}
 
-## 3. Allergy
+- Functional Dependencies (FDs):
+  - FD₁: patient_id → {full_name, date_of_birth, gender, phone_number}
 
-**FDs:**
-- allergy_id → allergen_name
-- allergen_name → allergy_id
+- Candidate Key Identification:
+  - SA = {patient_id}
+  - IA = ∅
+  - TA = {full_name, date_of_birth, gender, phone_number}
 
-**Minimal cover:** Already minimal.
+- Candidate Keys: {patient_id}
 
-**Candidate keys:** {allergy_id}, {allergen_name}
-- allergy_id is the PK.
-- allergen_name is UQ.
+- Normal Form: BCNF
 
-**Normal form:** BCNF.
+### 3. Allergy
 
----
+- Attribute Set: U = {allergy_id, allergen_name}
 
-## 4. MedicalStaff
+- Functional Dependencies (FDs):
+  - FD₁: allergy_id → allergen_name
+  - FD₂: allergen_name → allergy_id
 
-**FDs:**
-- med_staff_id → full_name, specialty, phone_number
+- Candidate Key Identification:
+  - SA = ∅
+  - IA = {allergy_id, allergen_name}
+  - TA = ∅
 
-**Minimal cover:** Already minimal.
+- Candidate Keys: {allergy_id}, {allergen_name}
 
-**Candidate keys:** {med_staff_id}
-- med_staff_id is the PK. No other attribute is UQ.
+- Normal Form: BCNF
 
-**Normal form:** BCNF.
+### 4. MedicalStaff
 
----
+- Attribute Set: U = {med_staff_id, full_name, specialty, phone_number}
 
-## 5. Medicine
+- Functional Dependencies (FDs):
+  - FD₁: med_staff_id → {full_name, specialty, phone_number}
 
-**FDs:**
-- medicine_id → medicine_name, stock_quantity, unit_price
-- medicine_name → medicine_id, stock_quantity, unit_price
+- Candidate Key Identification:
+  - SA = {med_staff_id}
+  - IA = ∅
+  - TA = {full_name, specialty, phone_number}
 
-**Minimal cover:** Already minimal.
+- Candidate Keys: {med_staff_id}
 
-**Candidate keys:** {medicine_id}, {medicine_name}
-- medicine_id is the PK.
-- medicine_name is UQ.
+- Normal Form: BCNF
 
-**Normal form:** BCNF.
+### 5. Medicine
 
----
+- Attribute Set: U = {medicine_id, medicine_name, stock_quantity, unit_price}
 
-## 6. VaccinationCourse
+- Functional Dependencies (FDs):
+  - FD₁: medicine_id → {medicine_name, stock_quantity, unit_price}
+  - FD₂: medicine_name → {medicine_id, stock_quantity, unit_price}
 
-**FDs:**
-- course_id → course_name, target_disease, required_doses
-- course_name → course_id, target_disease, required_doses
+- Candidate Key Identification:
+  - SA = ∅
+  - IA = {medicine_id, medicine_name}
+  - TA = {stock_quantity, unit_price}
 
-**Minimal cover:** Already minimal.
+- Candidate Keys: {medicine_id}, {medicine_name}
 
-**Candidate keys:** {course_id}, {course_name}
-- course_id is the PK.
-- course_name is UQ.
+- Normal Form: BCNF
 
-**Normal form:** BCNF.
+### 6. VaccinationCourse
 
----
+- Attribute Set: U = {course_id, course_name, target_disease, required_doses}
 
-## 7. Student
+- Functional Dependencies (FDs):
+  - FD₁: course_id → {course_name, target_disease, required_doses}
+  - FD₂: course_name → {course_id, target_disease, required_doses}
 
-**FDs:**
-- patient_id → student_code, faculty, dorm_building_id
-- student_code → patient_id, faculty, dorm_building_id
+- Candidate Key Identification:
+  - SA = ∅
+  - IA = {course_id, course_name}
+  - TA = {target_disease, required_doses}
 
-**Minimal cover:** Already minimal.
+- Candidate Keys: {course_id}, {course_name}
 
-**Candidate keys:** {patient_id}, {student_code}
-- patient_id is the PK (and FK to Patient).
-- student_code is UQ.
+- Normal Form: BCNF
 
-**Normal form:** BCNF.
+### 7. Student
 
----
+- Attribute Set: U = {patient_id, student_code, faculty, dorm_building_id}
 
-## 8. Staff
+- Functional Dependencies (FDs):
+  - FD₁: patient_id → {student_code, faculty, dorm_building_id}
+  - FD₂: student_code → {patient_id, faculty, dorm_building_id}
 
-**FDs:**
-- patient_id → uni_staff_code, faculty, office_room
-- uni_staff_code → patient_id, faculty, office_room
+- Candidate Key Identification:
+  - SA = ∅
+  - IA = {patient_id, student_code}
+  - TA = {faculty, dorm_building_id}
 
-**Minimal cover:** Already minimal.
+- Candidate Keys: {patient_id}, {student_code}
 
-**Candidate keys:** {patient_id}, {uni_staff_code}
-- patient_id is the PK (and FK to Patient).
-- uni_staff_code is UQ.
+- Normal Form: BCNF
 
-**Normal form:** BCNF.
+### 8. Staff
 
----
+- Attribute Set: U = {patient_id, uni_staff_code, faculty, office_room}
 
-## 9. PatientAllergy
+- Functional Dependencies (FDs):
+  - FD₁: patient_id → {uni_staff_code, faculty, office_room}
+  - FD₂: uni_staff_code → {patient_id, faculty, office_room}
 
-**FDs:**
-- (patient_id, allergy_id) → severity, onset_date, note
+- Candidate Key Identification:
+  - SA = ∅
+  - IA = {patient_id, uni_staff_code}
+  - TA = {faculty, office_room}
 
-**Minimal cover:** Already minimal.
+- Candidate Keys: {patient_id}, {uni_staff_code}
 
-**Candidate keys:** {patient_id, allergy_id}
-- Composite PK. No single attribute determines the others.
+- Normal Form: BCNF
 
-**Normal form:** BCNF.
+### 9. PatientAllergy
 
----
+- Attribute Set: U = {patient_id, allergy_id, severity, onset_date, note}
 
-## 10. ConsultSlot
+- Functional Dependencies (FDs):
+  - FD₁: {patient_id, allergy_id} → {severity, onset_date, note}
 
-**FDs:**
-- slot_id → med_staff_id, weekday, start_time, end_time, booking_unit_min
+- Candidate Key Identification:
+  - SA = {patient_id, allergy_id}
+  - IA = ∅
+  - TA = {severity, onset_date, note}
 
-**Minimal cover:** Already minimal.
+- Candidate Keys: {patient_id, allergy_id}
 
-**Candidate keys:** {slot_id}
-- slot_id is the PK. No other attribute is UQ.
+- Normal Form: BCNF
 
-**Normal form:** BCNF.
+### 10. ConsultSlot
 
----
+- Attribute Set: U = {slot_id, med_staff_id, weekday, start_time, end_time, booking_unit_min}
 
-## 11. Appointment
+- Functional Dependencies (FDs):
+  - FD₁: slot_id → {med_staff_id, weekday, start_time, end_time, booking_unit_min}
 
-**FDs:**
-- appointment_id → patient_id, med_staff_id, appointment_time, status
+- Candidate Key Identification:
+  - SA = {slot_id}
+  - IA = ∅
+  - TA = {med_staff_id, weekday, start_time, end_time, booking_unit_min}
 
-**Minimal cover:** Already minimal.
+- Candidate Keys: {slot_id}
 
-**Candidate keys:** {appointment_id}
-- appointment_id is the PK. No other attribute is UQ.
+- Normal Form: BCNF
 
-**Normal form:** BCNF.
+### 11. Appointment
 
----
+- Attribute Set: U = {appointment_id, patient_id, med_staff_id, appointment_time, status}
 
-## 12. Consultation
+- Functional Dependencies (FDs):
+  - FD₁: appointment_id → {patient_id, med_staff_id, appointment_time, status}
 
-**FDs:**
-- consultation_id → patient_id, med_staff_id, appointment_id, consultation_date, symptoms, diagnosis, notes
-- appointment_id → consultation_id, patient_id, med_staff_id, consultation_date, symptoms, diagnosis, notes
+- Candidate Key Identification:
+  - SA = {appointment_id}
+  - IA = ∅
+  - TA = {patient_id, med_staff_id, appointment_time, status}
 
-**Minimal cover:** Already minimal.
+- Candidate Keys: {appointment_id}
 
-**Candidate keys:** {consultation_id}, {appointment_id}
-- consultation_id is the PK.
-- appointment_id is UQ (at most one consultation per appointment).
+- Normal Form: BCNF
 
-**Normal form:** BCNF.
+### 12. Consultation
 
----
+- Attribute Set: U = {consultation_id, patient_id, med_staff_id, appointment_id, consultation_date, symptoms, diagnosis, notes}
 
-## 13. VaccinationRecord
+- Functional Dependencies (FDs):
+  - FD₁: consultation_id → {patient_id, med_staff_id, appointment_id, consultation_date, symptoms, diagnosis, notes}
 
-**FDs:**
-- record_id → patient_id, course_id, dose_number, date_given
-- (patient_id, course_id, dose_number) → record_id, date_given
+- Candidate Key Identification:
+  - SA = {consultation_id}
+  - IA = ∅
+  - TA = {patient_id, med_staff_id, appointment_id, consultation_date, symptoms, diagnosis, notes}
 
-**Minimal cover:** Already minimal.
+- Candidate Keys: {consultation_id}
 
-**Candidate keys:** {record_id}, {patient_id, course_id, dose_number}
-- record_id is the PK (surrogate).
-- (patient_id, course_id, dose_number) is UQ (the real candidate key).
+- Normal Form: BCNF
 
-**Normal form:** BCNF.
+### 13. VaccinationRecord
 
----
+- Attribute Set: U = {record_id, patient_id, course_id, dose_number, date_given}
 
-## 14. Prescription
+- Functional Dependencies (FDs):
+  - FD₁: record_id → {patient_id, course_id, dose_number, date_given}
+  - FD₂: {patient_id, course_id, dose_number} → {record_id, date_given}
 
-**FDs:**
-- prescription_id → consultation_id, issue_date
-- consultation_id → prescription_id, issue_date
+- Candidate Key Identification:
+  - SA = ∅
+  - IA = {record_id, patient_id, course_id, dose_number}
+  - TA = {date_given}
 
-**Minimal cover:** Already minimal.
+- Candidate Keys: {record_id}, {patient_id, course_id, dose_number}
 
-**Candidate keys:** {prescription_id}, {consultation_id}
-- prescription_id is the PK.
-- consultation_id is UQ (1:1 with Consultation, BR-08).
+- Normal Form: BCNF
 
-**Normal form:** BCNF.
+### 14. Prescription
 
----
+- Attribute Set: U = {prescription_id, consultation_id, issue_date}
 
-## 15. NotifiableCase
+- Functional Dependencies (FDs):
+  - FD₁: prescription_id → {consultation_id, issue_date}
+  - FD₂: consultation_id → {prescription_id, issue_date}
 
-**FDs:**
-- case_id → consultation_id, disease_name, date_reported, building_id
+- Candidate Key Identification:
+  - SA = ∅
+  - IA = {prescription_id, consultation_id}
+  - TA = {issue_date}
 
-**Minimal cover:** Already minimal.
+- Candidate Keys: {prescription_id}, {consultation_id}
 
-**Candidate keys:** {case_id}
-- case_id is the PK. No other attribute is UQ.
+- Normal Form: BCNF
 
-**Normal form:** BCNF.
+### 15. NotifiableCase
 
----
+- Attribute Set: U = {case_id, consultation_id, disease_name, date_reported, building_id}
 
-## 16. PrescriptionLine
+- Functional Dependencies (FDs):
+  - FD₁: case_id → {consultation_id, disease_name, date_reported, building_id}
 
-**FDs:**
-- (prescription_id, line_no) → medicine_id, dosage, frequency, duration_days, quantity, unit_price
+- Candidate Key Identification:
+  - SA = {case_id}
+  - IA = ∅
+  - TA = {consultation_id, disease_name, date_reported, building_id}
 
-**Minimal cover:** Already minimal.
+- Candidate Keys: {case_id}
 
-**Candidate keys:** {prescription_id, line_no}
-- Composite PK (weak entity, ADR-04). No single attribute determines the others.
+- Normal Form: BCNF
 
-**Normal form:** BCNF.
+### 16. PrescriptionLine
 
----
+- Attribute Set: U = {prescription_id, line_no, medicine_id, dosage, frequency, duration_days, quantity, unit_price}
 
-## 17. ContactTrace
+- Functional Dependencies (FDs):
+  - FD₁: {prescription_id, line_no} → {medicine_id, dosage, frequency, duration_days, quantity, unit_price}
 
-**FDs:**
-- trace_id → source_patient_id, contact_patient_id, contact_date, source_case_id
+- Candidate Key Identification:
+  - SA = {prescription_id, line_no}
+  - IA = ∅
+  - TA = {medicine_id, dosage, frequency, duration_days, quantity, unit_price}
 
-**Minimal cover:** Already minimal.
+- Candidate Keys: {prescription_id, line_no}
 
-**Candidate keys:** {trace_id}
-- trace_id is the PK. No other attribute is UQ.
+- Normal Form: BCNF
 
-**Normal form:** BCNF.
+### 17. ContactTrace
 
----
+- Attribute Set: U = {trace_id, source_patient_id, contact_patient_id, contact_date, source_case_id}
 
-## Summary
+- Functional Dependencies (FDs):
+  - FD₁: trace_id → {source_patient_id, contact_patient_id, contact_date, source_case_id}
 
-| Table | Candidate keys | Normal form |
+- Candidate Key Identification:
+  - SA = {trace_id}
+  - IA = ∅
+  - TA = {source_patient_id, contact_patient_id, contact_date, source_case_id}
+
+- Candidate Keys: {trace_id}
+
+- Normal Form: BCNF
+
+## III. Summary Table
+
+| Table | Candidate Keys | Normal Form |
 |---|---|---|
 | Building | {building_id}, {building_name} | BCNF |
 | Patient | {patient_id} | BCNF |
@@ -276,26 +305,25 @@ derived from the other.
 | PatientAllergy | {patient_id, allergy_id} | BCNF |
 | ConsultSlot | {slot_id} | BCNF |
 | Appointment | {appointment_id} | BCNF |
-| Consultation | {consultation_id}, {appointment_id} | BCNF |
+| Consultation | {consultation_id} | BCNF |
 | VaccinationRecord | {record_id}, {patient_id, course_id, dose_number} | BCNF |
 | Prescription | {prescription_id}, {consultation_id} | BCNF |
 | NotifiableCase | {case_id} | BCNF |
 | PrescriptionLine | {prescription_id, line_no} | BCNF |
 | ContactTrace | {trace_id} | BCNF |
 
-**All 17 relations are in BCNF.** No decomposition is needed. Every FD's LHS
-is a candidate key, so no dependency would become unenforceable.
+## IV. Justification
 
-## Justification
+- Surrogate PKs (Primary Key): System-generated IDs (patient_id, med_staff_id, etc.) form singleton candidate keys determining all non-key attributes.
 
-- **Surrogate keys** (patient_id, med_staff_id, etc.) are assigned by the
-  system and determine all other attributes in their table.
-- **UNIQUE constraints** (building_name, allergen_name, medicine_name,
-  course_name, student_code, uni_staff_code, appointment_id on Consultation,
-  consultation_id on Prescription) create additional candidate keys.
-- **Composite keys** (PatientAllergy, VaccinationRecord, PrescriptionLine)
-  are the minimal sets of attributes that determine all other attributes.
-- **No transitive dependencies** exist because every non-key attribute
-  depends directly on the candidate key, not on another non-key attribute.
-- **No partial dependencies** exist because every non-key attribute depends
-  on the full candidate key, not on a subset of it.
+- Natural UNIQUE Constraints:
+  - NOT NULL UNIQUE columns (building_name, allergen_name, medicine_name, course_name, student_code, uni_staff_code) create alternative natural candidate keys.
+  - consultation_id in Prescription is a candidate key due to the 1:1 constraint with Consultation (BR-08).
+  - Correction: appointment_id in Consultation is NULLABLE UNIQUE (for walk-in visits), so it acts as a partial constraint, not a candidate key.
+
+- Composite Constraints:
+  - PatientAllergy: Composite PK (patient_id, allergy_id) determines M:N attributes.
+  - VaccinationRecord: Composite UNIQUE (patient_id, course_id, dose_number) serves as the natural key alongside surrogate record_id.
+  - PrescriptionLine: Composite PK (prescription_id, line_no) determines weak-entity details.
+
+- Normal Form Conclusion: Every FD's Left-Hand Side (LHS) across all 17 tables is a Superkey. Thus, all relations satisfy BCNF without needing decomposition.

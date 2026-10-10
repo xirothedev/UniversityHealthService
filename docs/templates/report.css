@@ -1,0 +1,33 @@
+/* IU report print style — A4, 0.5in margins, Times New Roman 9pt body / 7.5pt tables.
+   Used via: pandoc <report>.md -f markdown-implicit_figures -t html5 -s -c report.css -o <report>.html && weasyprint <report>.html <report>.pdf
+   Cover centering comes from the inline-styled <div> in the Markdown (author inline style always wins); body text is plain left.
+   Page breaks come from the <div style="break-after: page"> markers already in the Markdown. */
+@page { size: A4; margin: 0.5in; }
+body { font-family: "Times New Roman", serif; font-size: 9pt; line-height: 1.35; margin: 0; }
+h1, h2, h3 { font-family: "Times New Roman", serif; }
+h1 { font-size: 14pt; margin: 6pt 0 2pt; }
+h2 { font-size: 11.5pt; margin: 7pt 0 2pt; }
+h3 { font-size: 10pt; margin: 5pt 0 2pt; }
+p, li { orphans: 2; widows: 2; margin: 2.5pt 0; }
+table { border-collapse: collapse; font-size: 7.5pt; width: 100%; page-break-inside: auto; margin: 4pt 0; }
+th, td { border: 0.5pt solid #444; padding: 1.5pt 3pt; vertical-align: top; text-align: left; }
+th { background: #efefef; }
+tr { page-break-inside: avoid; }
+img { max-width: 100%; }
+
+/* Centering of the cover comes from the inline-styled <div> in the Markdown + these body-level rules */
+/* Center only the university header + logo paragraphs (first two direct-body <p>; pandoc's cover <section> wraps the rest of the cover) */
+body > p:nth-of-type(-n+2) { text-align: center; white-space: pre-line; }
+body > p:nth-of-type(1) { line-height: 1.9; }
+body > figure { text-align: center; margin: 6pt 0; }
+body > figure img, body > p img { width: 1.45in; height: auto; }
+figure { margin: 0; text-align: center; }
+figcaption { display: none; }
+
+/* Page numbers, not on the cover */
+@page { @bottom-center { content: counter(page); font-family: "Times New Roman", serif; font-size: 9pt; } }
+@page :first { @bottom-center { content: none; } }
+
+/* ER figure: center it and keep it inside one page */
+#er-diagram + p { text-align: center; }
+#er-diagram + p img { max-height: 3.9in; width: auto; }

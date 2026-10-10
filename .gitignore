@@ -21,3 +21,5 @@ db.properties
 # Local-only source documents and sensitive group data
 .firecrawl/
 .private/
+
+docs/_*.html

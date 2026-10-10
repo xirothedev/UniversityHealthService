@@ -14,7 +14,7 @@ Deadlines count from Week 1 = 8/9/2026. Late submission only for a pre-reported 
 | Guideline stage | Repo deliverable | Due (resolved) | Length |
 |---|---|---|---|
 | Proposal Report (week 2) | D1 — Proposal | 27/9/2026, 22:30 (instructor announcement) | 1–3 pages |
-| Midterm Report (week 5) | D2 — Progress report | 12/10 (W5, both agree) | 3–5 pages |
+| Midterm Report (week 5) | D2 — Progress report | 11/10/2026, 22:30 (instructor announcement 4/10, overrides the 12/10 W5 date) | 3–5 pages |
 | Final Report (week 11) | D3 + D5 + D6, D3 due 16/11 (W10, earlier of W10 vs guideline W11); D4 demo W13–15 | see below | 25+ pages + code + SQL + slides |
 
 ## Cover rule (every submission)
@@ -50,7 +50,7 @@ Section order: guideline sections first, then assignment sections (both checklis
 - Leads: Team lead + Data modeler. Scores Motivation (10) + Requirements (15).
 - Detail: `docs/D1-outline.md`.
 
-## D2 — Progress report (= guideline Midterm Report), 3–5 pages, due 12/10 (W5)
+## D2 — Progress report (= guideline Midterm Report), 3–5 pages, due 11/10/2026 at 22:30 (announcement 4/10)
 
 Section order:
 

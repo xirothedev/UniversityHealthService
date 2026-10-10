@@ -17,12 +17,13 @@ governs packaging/format. Detail: `docs/deliverables-detail.md`.
 - [ ] Tools: pinned stack named (JDK 25 LTS + MySQL 8.4 LTS + Connector/J 8.4.x + Maven 3.9.x + Swing + draw.io).
 - [ ] 15–20 numbered business rules; 17-table entity list with weak / M-M / ISA / self-rel marked.
 
-## Midterm = D2 (3–5 pages, due 12/10 W5)
+## Midterm = D2 (3–5 pages, due 11/10/2026 at 22:30 — instructor announcement 4/10)
 
 - [ ] Order: Cover → Updated Information → Table of Contents → Database Design.
 - [ ] Updated Information lists every revision to proposal/tools/languages.
 - [ ] ER meets §2.2 minima: ≥8 entities, ≥8 relationships, weak + partial key, attribute-carrying M-M, ISA (disjoint/total) or multivalued/ternary, self-rel with 2 role names, cardinality + participation everywhere.
 - [ ] Draft schema + mapping rule per table group.
+- [ ] TA-flagged Proposal errors must not repeat (heavier deduction this round): member list on the Cover Page; topic/instructor name spelled right; task allocation per week with named owners and roles, work split fine-grained; one consistent font + heading hierarchy.
 
 ## Final = D3 + D5 + D6 (+ D4 slides/demo)
 

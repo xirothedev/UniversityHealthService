@@ -1,9 +1,12 @@
 package com.uhs;
 
+import com.uhs.ui.MainFrame;
 import com.uhs.util.DBConnection;
 import java.util.Properties;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 
-// Shared skeleton: no hard-coded DB here. R6 continues with the UI in com.uhs.ui.
+/** Entry point. Reads the connection settings from outside the code, then opens the main menu. */
 public class App {
   public static void main(String[] args) throws Exception {
     Properties p;
@@ -17,8 +20,13 @@ public class App {
       System.out.println("Missing db.user/DB_USERNAME. Copy .env.example to .env and edit it.");
       return;
     }
-    String url = DBConnection.buildUrl(p);
-    System.out.println("DB target: " + url + " user=" + p.getProperty("db.user"));
-    System.out.println("Skeleton runs OK. R6 continues with F0-F5 in com.uhs.ui.");
+    String info = MainFrame.describeConnection(p);
+    System.out.println("DB target: " + info);
+    try {
+      UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+    } catch (Exception e) {
+      // keep the default look and feel
+    }
+    SwingUtilities.invokeLater(() -> new MainFrame(info).setVisible(true));
   }
 }

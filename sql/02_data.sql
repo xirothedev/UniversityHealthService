@@ -7,6 +7,29 @@
 -- ============================================================
 USE uhs_db;
 
+-- Run-twice safe: disable FK checks, clear child-to-parent order, re-enable.
+SET FOREIGN_KEY_CHECKS = 0;
+
+TRUNCATE TABLE ContactTrace;
+TRUNCATE TABLE NotifiableCase;
+TRUNCATE TABLE PrescriptionLine;
+TRUNCATE TABLE Prescription;
+TRUNCATE TABLE VaccinationRecord;
+TRUNCATE TABLE VaccinationCourse;
+TRUNCATE TABLE Medicine;
+TRUNCATE TABLE Consultation;
+TRUNCATE TABLE Appointment;
+TRUNCATE TABLE ConsultSlot;
+TRUNCATE TABLE PatientAllergy;
+TRUNCATE TABLE Staff;
+TRUNCATE TABLE Student;
+TRUNCATE TABLE MedicalStaff;
+TRUNCATE TABLE Allergy;
+TRUNCATE TABLE Patient;
+TRUNCATE TABLE Building;
+
+SET FOREIGN_KEY_CHECKS = 1;
+
 -- ============================================================
 -- Building (16 rows >= 15 rows)
 -- Allowed building_type: 'hall', 'dorm', 'clinic', 'lab', 'pharmacy', 'admin'

@@ -2,8 +2,8 @@
 
 **Task:** T19 — Kiểm tra 12/12 query đều non-empty (D5, owner Lê Thành Trung).
 **Result:** **12/12 non-empty.**
-**Run date:** 2026-11-04.
-**Branch:** `t19/query-nonempty-check` (base `main` at `3ccd45d`).
+**Run date:** 2026-11-04 (TiDB); re-run 2026-11-04 on MySQL 8.4.11 after the T15 dataset update.
+**Branch:** `t19/query-nonempty-check` (base `main` at `3ccd45d`); re-run on `02_data.sql->=15-dòng-thật/bảng` (PR #35).
 
 ## Environment
 
@@ -45,7 +45,7 @@ appear.
 | Query | Question | Rows |
 |---|---|---:|
 | Q01 | Consultation history of one patient, including clinician and prescribed medicines | 2 |
-| Q02 | Clinicians with unbooked appointment intervals in the reference week | 118 |
+| Q02 | Clinicians with unbooked appointment intervals in the reference week | 154 |
 | Q03 | Five most frequent diagnoses in the selected semester | 5 |
 | Q04 | Patients who completed the selected vaccination course | 1 |
 | Q05 | Same disease in the same building within fourteen days | 4 |
@@ -58,6 +58,10 @@ appear.
 | Q12 | Medicines currently out of stock | 1 |
 
 Every count above is a row count returned by the query itself on the run date.
+
+**Re-run after PR #35 (T15):** the larger appointment set raises Q02 from 118 to
+154. Q05 stays at 4 because both data files use the same `Dengue` spelling.
+All other counts are unchanged. The 12/12 non-emptiness result still holds.
 
 ## Notes
 

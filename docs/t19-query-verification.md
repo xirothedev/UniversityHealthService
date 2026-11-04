@@ -81,3 +81,6 @@ All other counts are unchanged. The 12/12 non-emptiness result still holds.
 
 The final D5 submission must still run the same stack on MySQL 8.4 LTS. This
 record is TiDB v8.5.3 evidence only.
+
+Related evidence: `docs/UHS_T16_T17_Report.docx` records a native MySQL 8.4.13
+run (376 statements, 75 checks).

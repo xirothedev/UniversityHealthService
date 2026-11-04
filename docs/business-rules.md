@@ -4,7 +4,7 @@ Source: `docs/assignment.md` Topic 14 + `CONTEXT.md` + ADR-03/04/05/06/12/13/14/
 BR-01..BR-18 ship in D1 as submitted. BR-19 was added afterwards (D2 revision) to justify the
 Patient demographic columns; BR-20 was added in D2 to justify the frozen order-line price.
 Log both in the D2 "Updated Information" section.
-Each rule is one numbered plain-English sentence. Every rule maps to at least one ER element (see `docs/ER-checklist.md`).
+Each rule is one numbered plain-English sentence. Every rule maps to at least one ER element (see `docs/er/UHS-ERD.drawio` and ADR-17).
 
 ## A. Who-is-who
 

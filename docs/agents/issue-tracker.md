@@ -13,7 +13,7 @@ Issues and specs for this repo live as GitHub issues. Use the `gh` CLI for all o
 
 Infer the repo from `git remote -v`; `gh` does this automatically when run inside a clone.
 
-> The repo currently has no GitHub remote attached. Run `git remote add origin <url>` + `gh auth login` first. Without a remote, track work temporarily under `.scratch/<task-name>/`.
+> The repo has an `origin` remote; `gh` infers it from the clone. If a fresh clone has no remote, run `git remote add origin <url>` + `gh auth login` first, and track work temporarily under `.scratch/<task-name>/` until then.
 
 ## Pull requests as a triage surface
 

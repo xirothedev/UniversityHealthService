@@ -1,6 +1,6 @@
 # CONTRIBUTING — Rules for maximum-score PRs
 
-SSOT is `docs/assignment.md` (original brief, do not edit). Packaging/format follows `Project Submittion Guideline.pdf` via the mapping in `docs/deliverables-detail.md` + ADR-15. Every rule below traces back to one of those two files.
+SSOT is `docs/assignment.md` (original brief, do not edit). Packaging/format follows the course submission guideline (kept in `.private/`, not tracked) via the mapping in `docs/deliverables-detail.md` + ADR-15. Every rule below traces back to one of those two sources.
 
 ## 1. Branches & PRs
 

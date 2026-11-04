@@ -1,3 +1,5 @@
+<!-- SUBMITTED — frozen. D1 was submitted on 27/9/2026 at 22:30. Current facts live in CONTEXT.md, docs/business-rules.md, and docs/deliverables-detail.md. Do not edit this snapshot. -->
+
 <!-- GOOGLE DOCS CONVERSION INSTRUCTION: Format this exact content as a three-page-or-fewer A4 proposal, including the cover. The final output must not spill onto a fourth page. Use 0.5-inch margins, 9-point body text, 7.5-point table text, compact paragraph spacing, and a real page break after Section 1. Keep Sections 7–9 together on the final page when possible. Do not add, remove, or substantively rewrite content. -->
 
 # Project Proposal

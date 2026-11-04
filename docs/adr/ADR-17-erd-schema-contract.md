@@ -67,7 +67,7 @@ T18 live verification (ADR-16) predates the renames and must be rerun on MySQL 8
 D3 — stated in ADR-16, not assumed. Known gaps left for the follow-up PR before 12/10:
 three participation minima with no BR (`attending` ≥1 Consultation per MedicalStaff,
 `exposure site` ≥1 case per Building, BR-04 "one or more" slots vs the `0..n` edge) and
-the missing per-element BR tags on the diagram (`ER-checklist.md` last box stays unticked).
+the missing per-element BR tags on the diagram (the D2 ER checklist's last box stayed unticked).
 
 ## 5. Post-review decisions (grill-with-docs, 3/10/2026)
 A review of this PR against real-life domain knowledge and the assignment

@@ -34,13 +34,17 @@ To point the app at another server, edit `.env` and start it again. Never commit
 
 ## Build and run
 
-1. **Create the database.** Run the three scripts in order (the first one drops and recreates `uhs_db`):
+1. **Create the database.** Run the scripts in order (the first one drops and recreates `uhs_db`):
 
    ```bash
    mysql -u root -p < sql/01_schema.sql
    mysql -u root -p < sql/02_data.sql
-   mysql -u root -p uhs_db < sql/03_queries.sql   # optional: view, index, transaction demo
+   mysql -u root -p < sql/02b_query_demo_supplement.sql   # demo rows for Q02, Q05, Q12
+   mysql -u root -p uhs_db < sql/03_queries_completed.sql # the 12 submission queries
+   mysql -u root -p uhs_db < sql/03_queries.sql           # T18 view, index, transaction demo
    ```
+
+   `02b_query_demo_supplement.sql` is required for the 12-query demonstration; omit it for the base seed only. `03_queries.sql` is the separate T18 demonstration, not the 12-query file.
 
 2. **Create a login** (skip if you use root). Example for local MySQL 8.4:
 
@@ -101,13 +105,21 @@ the database is touched, and database errors turned into plain-language messages
 | `Public Key Retrieval is not allowed` | Add `allowPublicKeyRetrieval=true` to `DB_PARAMS` (local MySQL 8.x with `caching_sha2_password`). |
 | Q-T2 shows no rows | The chosen date falls on a weekday with no `ConsultSlot` rows (the sample data has slots Monday to Friday only). |
 
-Grading details: `CONTEXT.md`, `docs/adr/`, `docs/D1-outline.md`.
-
 ## Submission format
 
 Proposal = D1, Midterm = D2, Final = D3+D5+D6 (+ D4 slides/demo). Mapping + cover rule: `docs/deliverables-detail.md` (ADR-15). Pre-submit tick list: `docs/submission-checklist.md`. Templates: `docs/templates/cover.md`, `docs/templates/task-allocation.md`.
 
-## Team (12 members, fill in)
+## Docs map
+
+- Domain terms: `CONTEXT.md`.
+- Decisions: `docs/adr/`.
+- Deliverables, deadlines, package layout: `docs/deliverables-detail.md`; pre-submit ticks: `docs/submission-checklist.md`.
+- 17-table column contract (D1 record): `docs/D1-outline.md`.
+- Functional dependencies, minimal cover, lossless decomposition: `docs/functional-dependencies.md`.
+- Relational algebra: `docs/relational-algebra.md`.
+- Query evidence: `docs/t19-query-verification.md` and `docs/UHS_T16_T17_Report.docx`.
+
+## Team (12 members)
 
 | # | Name | Student ID | Phone | Claimed role |
 |---|------|------------|-------|--------------|

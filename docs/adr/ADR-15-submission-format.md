@@ -16,6 +16,8 @@ copy-paste covers/tables in `docs/templates/`. A dated instructor announcement
 overrides the earlier planning dates: D1 is due 27/9/2026 at 22:30 and is submitted as
 one PDF through Blackboard; D2 is due 12/10/2026 (W5); D3 is due 16/11/2026 (W10).
 
+Update 2026-10-04: the instructor moved D2 to 11/10/2026 at 22:30. The mapping decision is unchanged; see `docs/deliverables-detail.md` for the live dates.
+
 ## 3. Dropped
 Dropped editing `docs/assignment.md` to match the guideline (blocked by CI, destroys SSOT).
 Dropped guideline-order-only reports (would fail the assignment's D1 content and D3

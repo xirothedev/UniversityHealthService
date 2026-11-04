@@ -57,7 +57,7 @@ Both checklists pass only in this order. Source: `docs/deliverables-detail.md`.
 | Milestone | Timeline / Deadline | Deliverables | Key Responsibilities |
 | :--- | :---: | :--- | :--- |
 | **D1. Proposal Report** | **27/09/2026, 22:30** (submitted) | 1–3 pages: Cover, Abstract, Task Allocation Table, Pinned Stack, 18 BRs, Entity list, Plan, References & AI disclosure | Lead (R1) + Data Modeller (R2) + Writer |
-| **D2. Progress Report** | **W5 (12/10/2026)** | 3–5 pages: Updated Info, TOC, full ERD (draw.io) + draft schema + mapping rules + initial FDs | Data Modeller (R2) + Normalization (R3) |
+| **D2. Progress Report** | **W5 (11/10/2026, 22:30)** (instructor announcement 4/10) | 3–5 pages: Updated Info, TOC, full ERD (draw.io) + draft schema + mapping rules + initial FDs | Data Modeller (R2) + Normalization (R3) |
 | **D3. Final Report** | **W10 (16/11/2026)** | 25+ pages (exact 12 sections in order), lossless proofs, normalization to 3NF/BCNF | Tester & Writer (R7) assembles; all roles write their sections |
 | **D5. SQL Scripts** | **W10 (16/11/2026)** | `01_schema.sql`, `02_data.sql` (≥15 rows/table), `03_queries.sql` (12/12 queries non-empty), transaction + index | DB Developer (R4) + Query Developer (R5) |
 | **D6. Java Desktop App** | **W10 (16/11/2026)** | Java Swing project (`src/`), Maven, `db.properties`, 6 screens (F0–F5), `README.md` build/run instructions | Java Developer (R6) + Tester (R7) |

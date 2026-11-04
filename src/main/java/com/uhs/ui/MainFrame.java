@@ -24,6 +24,10 @@ import javax.swing.WindowConstants;
 public final class MainFrame extends JFrame {
   private static final long serialVersionUID = 1L;
 
+  private JFrame f0;
+  private JFrame f1;
+  private JFrame f2;
+  private JFrame f3;
   private JFrame f4;
   private JFrame f5;
 
@@ -70,7 +74,11 @@ public final class MainFrame extends JFrame {
 
   private JMenu buildFormsMenu() {
     JMenu forms = new JMenu("Forms");
-    // F0-F3 are built by the other Java developer; register them here the same way.
+    forms.add(item("F0 - Database connection", () -> f0 = show(f0, F0Connection::new)));
+    forms.add(item("F1 - Browse tables", () -> f1 = show(f1, F1Browse::new)));
+    forms.add(item("F2 - Search history and free slots", () -> f2 = show(f2, F2Search::new)));
+    forms.add(
+        item("F3 - Consultation and prescription lines", () -> f3 = show(f3, F3MasterDetail::new)));
     forms.add(item("F4 - Edit consultations", () -> f4 = show(f4, ConsultationForm::new)));
     forms.add(item("F5 - Report: Top-5 diagnoses", () -> f5 = show(f5, Top5ReportForm::new)));
     return forms;

@@ -2,7 +2,7 @@
 
 - **Role:** R2 - Data Modeller
 - **Deliverable:** D2 - Midterm Progress Report
-- **Reference:** `docs/ER-checklist.md` and ADR-17 (§4, §5)
+- **Reference:** `docs/Group02_UniversityHealthService_Midterm_Report.md` §6 and ADR-17 (§4, §5)
 
 ---
 

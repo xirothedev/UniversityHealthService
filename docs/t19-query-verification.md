@@ -74,13 +74,14 @@ All other counts are unchanged. The 12/12 non-emptiness result still holds.
 - Results are tied to the fixed demonstration variables at the top of
   `03_queries_completed.sql` (`@as_of_datetime`, semester bounds, selected
   patient, course, medicine, disease, and thresholds).
-- This check covers non-emptiness only. T14's run-twice test and the final
-  MySQL 8.4 LTS rerun remain separate tasks.
+- This check covers non-emptiness only. T14 is covered by the transactional
+  reset in `02_data.sql`; the script runs twice without manual repair.
 
-## Open item
+## Re-run environment
 
-The final D5 submission must still run the same stack on MySQL 8.4 LTS. This
-record is TiDB v8.5.3 evidence only.
+The original record is TiDB v8.5.3 evidence. The re-run above uses MySQL 8.4.11
+(Docker) with the same scripts and the transactional reset. The final D5
+submission must still use the pinned MySQL 8.4 LTS stack.
 
 Related evidence: `docs/UHS_T16_T17_Report.docx` records a native MySQL 8.4.13
 run (376 statements, 75 checks).

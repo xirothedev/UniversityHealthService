@@ -10,7 +10,7 @@ JDK 25 LTS + MySQL 8.4 LTS + Connector/J 8.4.x + Maven 3.9.x + Swing + draw.io.
 
 | Item | Version | Notes |
 |------|---------|-------|
-| JDK | 25 LTS (`java -version` must say 25) | `pom.xml` compiles with `maven.compiler.source/target = 25` |
+| JDK | 25 LTS (`java -version` must say 25) | Use Temurin **25.0.5+**: 25.0.2 crashes google-java-format in `mvn spotless:apply`. `pom.xml` compiles with `maven.compiler.source/target = 25`. |
 | Maven | 3.9.x | downloads the dependencies below on first build (needs internet once) |
 | JDBC driver | MySQL Connector/J 8.4.0 (`com.mysql:mysql-connector-j`) | already declared in `pom.xml`, no manual download |
 | Database | MySQL 8.4 LTS (local) or the temporary TiDB Cloud dev DB | the app only needs the `uhs_db` schema to exist |
@@ -78,6 +78,10 @@ To point the app at another server, edit `.env` and start it again. Never commit
 
 | Where in the menu | Screen | What it does |
 |-------------------|--------|--------------|
+| Forms > F0 | Database connection | Shows the connection URL and user read from `.env` / `db.properties`; tests the connection, then opens F1. |
+| Forms > F1 | Browse tables | Table picker, read-only grid and row count; buttons to F2 and F3. |
+| Forms > F2 | Search | Patient consultation history (escaped `LIKE`) and free slots for a doctor and date. |
+| Forms > F3 | Consultation -> prescription lines | Master-detail grid: select a consultation to see its prescription lines. |
 | Forms > F4 | Edit consultations | Grid of all consultations; New / Save / Delete / Refresh. Insert and update validate patient, doctor, date (`yyyy-MM-dd HH:mm`) and diagnosis first. Delete asks for confirmation and warns when a prescription or notifiable case still depends on the row. |
 | Forms > F5 | Report: Top-5 diagnoses | Aggregate report (`GROUP BY` / `HAVING` / `LIMIT 5`) with optional From / To dates, a minimum count, a table and a bar chart. |
 | Queries > Q-T1 | Consultation history of one patient | Multi-table join, patient chosen from a list. |
@@ -104,6 +108,7 @@ the database is touched, and database errors turned into plain-language messages
 | "The database name was not found" / "A table is missing" | Run `sql/01_schema.sql` and `sql/02_data.sql` first. |
 | `Public Key Retrieval is not allowed` | Add `allowPublicKeyRetrieval=true` to `DB_PARAMS` (local MySQL 8.x with `caching_sha2_password`). |
 | Q-T2 shows no rows | The chosen date falls on a weekday with no `ConsultSlot` rows (the sample data has slots Monday to Friday only). |
+| `NoSuchFieldError: ... endPositions` during Spotless | JDK 25.0.2 bug in google-java-format. Use Temurin 25.0.5+ (CI uses 25.0.5). |
 
 ## Submission format
 

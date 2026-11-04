@@ -7,28 +7,28 @@
 -- ============================================================
 USE uhs_db;
 
--- Run-twice safe: disable FK checks, clear child-to-parent order, re-enable.
-SET FOREIGN_KEY_CHECKS = 0;
+-- DESTRUCTIVE: this script clears all 17 tables before seeding.
+-- Development seed only. The transaction restores the previous data if an
+-- INSERT fails.
+START TRANSACTION;
 
-TRUNCATE TABLE ContactTrace;
-TRUNCATE TABLE NotifiableCase;
-TRUNCATE TABLE PrescriptionLine;
-TRUNCATE TABLE Prescription;
-TRUNCATE TABLE VaccinationRecord;
-TRUNCATE TABLE VaccinationCourse;
-TRUNCATE TABLE Medicine;
-TRUNCATE TABLE Consultation;
-TRUNCATE TABLE Appointment;
-TRUNCATE TABLE ConsultSlot;
-TRUNCATE TABLE PatientAllergy;
-TRUNCATE TABLE Staff;
-TRUNCATE TABLE Student;
-TRUNCATE TABLE MedicalStaff;
-TRUNCATE TABLE Allergy;
-TRUNCATE TABLE Patient;
-TRUNCATE TABLE Building;
-
-SET FOREIGN_KEY_CHECKS = 1;
+DELETE FROM ContactTrace;
+DELETE FROM NotifiableCase;
+DELETE FROM PrescriptionLine;
+DELETE FROM Prescription;
+DELETE FROM VaccinationRecord;
+DELETE FROM VaccinationCourse;
+DELETE FROM Medicine;
+DELETE FROM Consultation;
+DELETE FROM Appointment;
+DELETE FROM ConsultSlot;
+DELETE FROM PatientAllergy;
+DELETE FROM Staff;
+DELETE FROM Student;
+DELETE FROM MedicalStaff;
+DELETE FROM Allergy;
+DELETE FROM Patient;
+DELETE FROM Building;
 
 -- ============================================================
 -- Building (16 rows >= 15 rows)
@@ -1193,3 +1193,5 @@ VALUES
     (13, 2, 5, '2026-09-30', 14),
     (14, 4, 16, '2026-10-01', 15),
     (15, 11, 17, '2026-10-05', NULL);
+
+COMMIT;

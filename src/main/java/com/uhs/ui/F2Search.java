@@ -1,6 +1,7 @@
 package com.uhs.ui;
 
 import com.uhs.dao.UhsDao;
+import com.uhs.util.DbErrors;
 import java.awt.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
@@ -65,7 +66,7 @@ public class F2Search extends JFrame {
             new Doc(((Number) m.getValueAt(i, 0)).intValue(), String.valueOf(m.getValueAt(i, 1))));
       }
     } catch (Exception ex) {
-      JOptionPane.showMessageDialog(this, ex.getMessage());
+      Tables.error(this, DbErrors.explain(ex));
     }
   }
 
@@ -73,7 +74,7 @@ public class F2Search extends JFrame {
     try {
       tblHistory.setModel(UhsDao.patientHistory(txtPatient.getText().trim()));
     } catch (Exception ex) {
-      JOptionPane.showMessageDialog(this, ex.getMessage());
+      Tables.error(this, DbErrors.explain(ex));
     }
   }
 
@@ -97,7 +98,7 @@ public class F2Search extends JFrame {
     } catch (DateTimeParseException ex) {
       JOptionPane.showMessageDialog(this, "Date must be yyyy-MM-dd, e.g. 2026-11-02");
     } catch (Exception ex) {
-      JOptionPane.showMessageDialog(this, ex.getMessage());
+      Tables.error(this, DbErrors.explain(ex));
     }
   }
 }

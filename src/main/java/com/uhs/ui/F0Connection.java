@@ -1,6 +1,7 @@
 package com.uhs.ui;
 
 import com.uhs.util.DBConnection;
+import com.uhs.util.DbErrors;
 import java.awt.*;
 import java.sql.Connection;
 import java.util.Properties;
@@ -18,7 +19,7 @@ public class F0Connection extends JFrame {
       Properties p = DBConnection.loadSettings();
       info.setText("URL:  " + DBConnection.buildUrl(p) + "\nUser: " + p.getProperty("db.user"));
     } catch (Exception ex) {
-      info.setText("Cannot read settings: " + ex.getMessage());
+      info.setText("Cannot read settings: " + DbErrors.explain(ex));
     }
     info.setMargin(new Insets(10, 10, 10, 10));
     add(info, BorderLayout.CENTER);
@@ -31,7 +32,7 @@ public class F0Connection extends JFrame {
             new F1Browse().setVisible(true);
             dispose();
           } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "Connection failed: " + ex.getMessage());
+            Tables.error(this, "Connection failed. " + DbErrors.explain(ex));
           }
         });
     JPanel south = new JPanel();

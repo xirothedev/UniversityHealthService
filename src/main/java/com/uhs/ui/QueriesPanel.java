@@ -8,6 +8,7 @@ import com.uhs.util.Dates;
 import com.uhs.util.ValidationException;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.time.LocalDate;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -25,7 +26,7 @@ public final class QueriesPanel extends ScreenPanel {
   private final AppShell shell;
   private final JComboBox<TopicQuery> queries = new JComboBox<>();
   private final JComboBox<Option> patients = new JComboBox<>();
-  private final JTextField date = new JTextField(Dates.formatDate(java.time.LocalDate.now()), 12);
+  private final JTextField date = new JTextField(Dates.formatDate(nextWeekday()), 12);
   private final JPanel inputs = new JPanel(new CardLayout());
   private final JLabel question = UiComponents.muted("Select a query.");
   private final TableCard results = new TableCard();
@@ -37,6 +38,7 @@ public final class QueriesPanel extends ScreenPanel {
         "The required database questions, with their SQL shown beside the result.");
     this.shell = shell;
     results.setRetry(this::runSelected);
+    results.setEmptyMessage("Choose an input, then run the query to see the rows.");
     sql.setEditable(false);
     sql.setLineWrap(true);
     sql.setWrapStyleWord(true);
@@ -147,11 +149,21 @@ public final class QueriesPanel extends ScreenPanel {
       results.showError(error);
       return;
     }
+    results.setEmptyMessage("No rows matched this question. Try a different input.");
     results.showLoading();
     Background.run(
         () -> Tables.fromResult(TopicQueries.run(query.sql(), params)),
         results::setModel,
         results::showError);
+  }
+
+  /** Monday to Friday: the weekly slot template has no weekend rows. */
+  private static LocalDate nextWeekday() {
+    LocalDate day = LocalDate.now();
+    while (day.getDayOfWeek().getValue() > 5) {
+      day = day.plusDays(1);
+    }
+    return day;
   }
 
   private Object[] parameters(TopicQuery query) throws ValidationException {

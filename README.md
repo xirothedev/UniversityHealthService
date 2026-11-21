@@ -79,6 +79,29 @@ To point the app at another server, edit `.env` and start it again. Never commit
    The console prints the database target (never the password) and the main window opens.
    If you see `Missing DB config` the `.env` file or `DB_USERNAME` is missing.
 
+### Clickable scripts
+
+Three folders contain launchers. Each one checks Java 25, Maven and the
+database config first. It stops with a clear message if something is missing.
+
+| Command | macOS | Linux | Windows |
+|---------|-------|-------|---------|
+| Start the app | `scripts/macos/start.command` | `scripts/linux/start.sh` | `scripts/windows/start.bat` |
+| Quick build, no tests | `scripts/macos/build.command` | `scripts/linux/build.sh` | `scripts/windows/build.bat` |
+| Full build, tests + format + style | `scripts/macos/verify.command` | `scripts/linux/verify.sh` | `scripts/windows/verify.bat` |
+| Check the setup only | `scripts/macos/check.command` | `scripts/linux/check.sh` | `scripts/windows/check.bat` |
+
+macOS: double-click the `.command` file in Finder. Terminal opens, sets
+`JAVA_HOME` to JDK 25 and runs the command.
+Windows: double-click the `.bat` file in File Explorer. PowerShell opens, sets
+`JAVA_HOME` to JDK 25 and runs the command. The window stays open so you can
+read the output.
+Linux: run `scripts/linux/install-launchers.sh` once. It registers four launchers
+in `~/.local/share/applications`. Search for "UHS" in your applications menu and
+click one. You can also run the `.sh` files in a terminal.
+Every script finds the project folder on its own. The folder you start from does
+not matter. The password is never printed.
+
 ## Screens
 
 The app has one window with a left navigation rail. Every screen opens in one click.

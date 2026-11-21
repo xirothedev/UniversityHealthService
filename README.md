@@ -4,7 +4,7 @@ University Health Service: consultation records and early outbreak detection.
 
 ## Pinned stack
 
-JDK 25 LTS + MySQL 8.4 LTS + Connector/J 8.4.x + Maven 3.9.x + Swing + draw.io.
+JDK 25 LTS + MySQL 8.4 LTS + Connector/J 8.4.x + Maven 3.9.x + Swing + FlatLaf 3.8 + draw.io.
 
 ## Requirements
 
@@ -81,21 +81,24 @@ To point the app at another server, edit `.env` and start it again. Never commit
 
 ## Screens
 
-| Where in the menu | Screen | What it does |
-|-------------------|--------|--------------|
-| Forms > F0 | Database connection | Shows the connection URL and user read from `.env` / `db.properties`; tests the connection, then opens F1. |
-| Forms > F1 | Browse tables | Table picker, read-only grid and row count; buttons to F2 and F3. |
-| Forms > F2 | Search | Patient consultation history (escaped `LIKE`) and free slots for a doctor and date. |
-| Forms > F3 | Consultation -> prescription lines | Master-detail grid: select a consultation to see its prescription lines. |
-| Forms > F4 | Edit consultations | Grid of all consultations; New / Save / Delete / Refresh. Insert and update validate patient, doctor, date (`yyyy-MM-dd HH:mm`) and diagnosis first. Delete asks for confirmation and warns when a prescription or notifiable case still depends on the row. |
-| Forms > F5 | Report: Top-5 diagnoses | Aggregate report (`GROUP BY` / `HAVING` / `LIMIT 5`) with optional From / To dates, a minimum count, a table and a bar chart. |
-| Queries > Q-T1 | Consultation history of one patient | Multi-table join, patient chosen from a list. |
-| Queries > Q-T2 | Free consultation slots | Outer join; slots of the weekly template on a chosen date that no scheduled/completed appointment covers. |
-| Queries > Q-T3 | Top-5 diagnoses | Opens form F5. |
-| Queries > Q-T4 | Patients who received every required dose | `NOT EXISTS` for-all pattern. |
-| Queries > Q-T5 | Same disease in one building within 14 days | Self-join on `NotifiableCase`. |
+The app has one window with a left navigation rail. Every screen opens in one click.
 
-Every query screen shows the SQL behind it at the bottom, so it can be copied into the report.
+| Rail item | Screen | What it does |
+|-----------|--------|--------------|
+| Overview | Dashboard | Live counts for patients, consultations, appointments and notifiable cases, plus recent activity and top diagnoses. |
+| Patients | Patient directory | Name filter, subtype (Student / Staff) and allergy detail. Allergy severity and onset date live on the link. |
+| Appointments | Appointment desk | Free slots from the weekly `ConsultSlot` template for a doctor and date, plus all booked appointments. |
+| Consultations | Consultation history | Master-detail view of consultations and prescription lines, with New / Edit / Delete / Refresh. Insert and update validate patient, doctor, date (`yyyy-MM-dd HH:mm`) and diagnosis. Delete asks for confirmation and warns when a prescription or notifiable case still depends on the row. |
+| Prescriptions | Prescription lines | Consultation master rows and the lines of the selected prescription (line number is local to one prescription). |
+| Vaccinations | Vaccination records | All dose records and the patients who received every required dose (Q-T4). |
+| Outbreaks | Fourteen-day clusters | Notifiable cases and same-disease, same-building clusters within fourteen days (Q-T5). |
+| Reports | Top-5 diagnoses | Aggregate report (`GROUP BY` / `HAVING` / `LIMIT 5`) with optional From / To dates, a minimum count, a table and a bar chart. |
+| Topic queries | Query runner | Q-T1 consultation history, Q-T2 free slots, Q-T4 full vaccination and Q-T5 outbreak clusters. Each result sits beside its exact SQL. Q-T3 is the Reports screen. |
+| Connection | Connection details | Read-only database target and a live connection test. No password is shown. |
+
+Look and feel: FlatLaf 3.8 with a dark theme and teal accents. The layout follows the Astryx
+`Side Nav`, `Executive Summary Dashboard`, `Searchable Table` and `Order Detail` templates.
+See `docs/adr/ADR-18-modern-swing-shell.md`.
 
 Code rules followed everywhere: `PreparedStatement` for every user value (an apostrophe in a text
 field is safe), `try-with-resources` for connections, statements and result sets, validation before
@@ -110,7 +113,7 @@ the database is touched, and database errors turned into plain-language messages
 | `Missing DB config` | No `.env` / `db.properties` in the folder you started from, or `DB_USERNAME` is empty. |
 | "Cannot reach the database..." | Server is not running, or wrong `DB_HOST` / `DB_PORT`. For TiDB Cloud also check `DB_PARAMS`. |
 | "The database refused the user name or password" | Wrong `DB_USERNAME` / `DB_PASSWORD`. |
-| "The database name was not found" / "A table is missing" | Run `sql/00_setup.sql` first. |
+| "The database name was not found" / "A table is missing" | Check `DB_DATABASE=uhs_db` in `.env` (the SQL scripts create `uhs_db`, not `test`), then run `sql/00_setup.sql` against that server. |
 | `Public Key Retrieval is not allowed` | Add `allowPublicKeyRetrieval=true` to `DB_PARAMS` (local MySQL 8.x with `caching_sha2_password`). |
 | Q-T2 shows no rows | The chosen date falls on a weekday with no `ConsultSlot` rows (the sample data has slots Monday to Friday only). |
 | `NoSuchFieldError: ... endPositions` during Spotless | JDK 25.0.2 bug in google-java-format. Use Temurin 25.0.5+ (CI uses 25.0.5). |

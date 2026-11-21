@@ -24,20 +24,16 @@ public final class OutbreaksPanel extends ScreenPanel {
     addActions(refresh);
 
     JSplitPane lower =
-        new JSplitPane(
-            JSplitPane.HORIZONTAL_SPLIT,
+        UiComponents.splitHorizontal(
             UiComponents.card("Notifiable cases", "Disease, report date and building", cases),
-            UiComponents.card("Contact traces", "Source patient to contact, with case", traces));
-    lower.setResizeWeight(0.5);
-    lower.setBorder(null);
+            UiComponents.card("Contact traces", "Source patient to contact, with case", traces),
+            0.5);
     JSplitPane split =
-        new JSplitPane(
-            JSplitPane.VERTICAL_SPLIT,
+        UiComponents.split(
             UiComponents.card(
                 "Fourteen-day clusters", "Same disease, same building (Q-T5)", clusters),
-            lower);
-    split.setResizeWeight(0.45);
-    split.setBorder(null);
+            lower,
+            0.45);
     body().add(split, BorderLayout.CENTER);
   }
 
@@ -49,9 +45,33 @@ public final class OutbreaksPanel extends ScreenPanel {
   private void load() {
     Background.run(
         () -> Tables.fromResult(TopicQueries.run(TopicQueries.OUTBREAK.sql())),
-        clusters::setModel,
+        model -> {
+          clusters.setModel(model);
+          UiComponents.columns(
+              clusters.table(),
+              new String[] {"Disease", "Building", "Cases", "First report", "Last report"},
+              new int[] {200, 180, 70, 120, 120});
+        },
         shell::showError);
-    Background.run(() -> UhsDao.browse("NotifiableCase"), cases::setModel, shell::showError);
-    Background.run(() -> UhsDao.browse("ContactTrace"), traces::setModel, shell::showError);
+    Background.run(
+        () -> UhsDao.browse("NotifiableCase"),
+        model -> {
+          cases.setModel(model);
+          UiComponents.columns(
+              cases.table(),
+              new String[] {"ID", "Consult", "Disease", "Reported", "Building"},
+              new int[] {60, 80, 200, 120, 80});
+        },
+        shell::showError);
+    Background.run(
+        () -> UhsDao.browse("ContactTrace"),
+        model -> {
+          traces.setModel(model);
+          UiComponents.columns(
+              traces.table(),
+              new String[] {"ID", "Source", "Contact", "Date", "Case"},
+              new int[] {60, 80, 80, 120, 70});
+        },
+        shell::showError);
   }
 }

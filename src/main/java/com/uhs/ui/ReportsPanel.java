@@ -5,7 +5,6 @@ import com.uhs.model.DiagnosisCount;
 import com.uhs.model.TopDiagnosesReport;
 import com.uhs.util.Dates;
 import java.awt.BorderLayout;
-import java.awt.FlowLayout;
 import java.time.LocalDate;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -38,25 +37,20 @@ public final class ReportsPanel extends ScreenPanel {
     JPanel controls = new JPanel();
     controls.setOpaque(false);
     controls.setLayout(new BoxLayout(controls, BoxLayout.Y_AXIS));
-    JPanel row = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
-    row.setOpaque(false);
-    row.add(UiComponents.muted("From"));
-    row.add(from);
-    row.add(UiComponents.muted("To"));
-    row.add(to);
-    row.add(UiComponents.muted("Minimum visits"));
-    row.add(minimum);
-    row.add(run);
-    controls.add(row);
+    controls.add(
+        UiComponents.controlBar(
+            UiComponents.field("From (optional)", from),
+            UiComponents.field("To (optional)", to),
+            UiComponents.field("Minimum visits", minimum),
+            UiComponents.field("Action", run)));
+    controls.add(javax.swing.Box.createVerticalStrut(12));
     controls.add(summary);
 
     JSplitPane split =
-        new JSplitPane(
-            JSplitPane.VERTICAL_SPLIT,
+        UiComponents.split(
             UiComponents.card("Ranked diagnoses", "Count grouped by diagnosis", table),
-            UiComponents.card("Share of the period", "Bar length scales with visit count", chart));
-    split.setResizeWeight(0.5);
-    split.setBorder(null);
+            UiComponents.card("Share of the period", "Bar length scales with visit count", chart),
+            0.5);
 
     body()
         .add(
@@ -101,6 +95,10 @@ public final class ReportsPanel extends ScreenPanel {
     table.setModel(
         UiComponents.model(
             new String[] {"Rank", "Diagnosis", "Consultations", "Share of period"}, rows));
+    UiComponents.columns(
+        table.table(),
+        new String[] {"Rank", "Diagnosis", "Consultations", "Share of period"},
+        new int[] {60, 240, 120, 130});
     summary.setText("Total consultations in period: " + report.totalConsultations());
     chart.setRows(report.rows());
   }

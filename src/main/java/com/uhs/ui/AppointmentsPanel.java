@@ -5,9 +5,7 @@ import com.uhs.dao.UhsDao;
 import com.uhs.model.Option;
 import com.uhs.util.Dates;
 import java.awt.BorderLayout;
-import java.awt.FlowLayout;
 import java.time.LocalDate;
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
@@ -32,26 +30,17 @@ public final class AppointmentsPanel extends ScreenPanel {
     find.addActionListener(event -> findSlots());
     date.addActionListener(event -> findSlots());
 
-    JPanel controls = new JPanel();
-    controls.setOpaque(false);
-    controls.setLayout(new BoxLayout(controls, BoxLayout.Y_AXIS));
-    JPanel row = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
-    row.setOpaque(false);
-    row.add(UiComponents.muted("Doctor"));
-    row.add(medicalStaffOptions);
-    row.add(UiComponents.muted("Date"));
-    row.add(date);
-    row.add(find);
-    controls.add(row);
+    JPanel controls =
+        UiComponents.controlBar(
+            UiComponents.field("Staff", medicalStaffOptions),
+            UiComponents.field("Date", date),
+            UiComponents.field("Action", find));
 
     JSplitPane split =
-        new JSplitPane(
-            JSplitPane.VERTICAL_SPLIT,
-            UiComponents.card("Open slots", "Split from the weekly consulting template", slots),
-            UiComponents.card(
-                "Booked appointments", "All appointments in the database", appointments));
-    split.setResizeWeight(0.55);
-    split.setBorder(null);
+        UiComponents.split(
+            UiComponents.card("Open slots", "Free units from the weekly template", slots),
+            UiComponents.card("Booked appointments", "All appointments on record", appointments),
+            0.55);
 
     body().add(UiComponents.card("Find a slot", null, controls), BorderLayout.NORTH);
     body().add(split, BorderLayout.CENTER);
@@ -71,7 +60,16 @@ public final class AppointmentsPanel extends ScreenPanel {
           }
         },
         shell::showError);
-    Background.run(() -> UhsDao.browse("Appointment"), appointments::setModel, shell::showError);
+    Background.run(
+        () -> UhsDao.browse("Appointment"),
+        model -> {
+          appointments.setModel(model);
+          UiComponents.columns(
+              appointments.table(),
+              new String[] {"ID", "Patient", "Staff", "When", "Status"},
+              new int[] {60, 80, 90, 170, 100});
+        },
+        shell::showError);
   }
 
   private void findSlots() {
@@ -88,7 +86,13 @@ public final class AppointmentsPanel extends ScreenPanel {
           }
           return UhsDao.freeSlots(medicalStaff.id(), medicalStaff.toString(), chosen);
         },
-        slots::setModel,
+        model -> {
+          slots.setModel(model);
+          UiComponents.columns(
+              slots.table(),
+              new String[] {"Date", "Doctor", "Start", "End"},
+              new int[] {120, 220, 90, 90});
+        },
         shell::showError);
   }
 }

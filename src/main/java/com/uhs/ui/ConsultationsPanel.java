@@ -7,10 +7,8 @@ import com.uhs.model.Consultation;
 import com.uhs.model.Option;
 import com.uhs.util.Dates;
 import java.awt.BorderLayout;
-import java.awt.FlowLayout;
 import java.util.List;
 import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.JTextField;
@@ -40,23 +38,16 @@ public final class ConsultationsPanel extends ScreenPanel {
     delete.addActionListener(event -> removeSelected());
     addActions(refresh, edit, delete, create);
 
-    JPanel bar = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
-    bar.setOpaque(false);
-    JLabel searchLabel = UiComponents.muted("Filter by patient");
-    searchLabel.setLabelFor(search);
-    bar.add(searchLabel);
-    bar.add(search);
     search.addActionListener(event -> applyFilter());
+    JPanel bar = UiComponents.controlBar(UiComponents.field("Patient name", search));
 
     JSplitPane split =
-        new JSplitPane(
-            JSplitPane.VERTICAL_SPLIT,
+        UiComponents.split(
             UiComponents.card(
                 "Consultation history", "Select a row to see its prescription", history),
             UiComponents.card(
-                "Prescription lines", "Weak entity: line number within one prescription", lines));
-    split.setResizeWeight(0.55);
-    split.setBorder(null);
+                "Prescription lines", "Line number is local to one prescription", lines),
+            0.55);
 
     body().add(UiComponents.card("Find a consultation", null, bar), BorderLayout.NORTH);
     body().add(split, BorderLayout.CENTER);
@@ -82,6 +73,7 @@ public final class ConsultationsPanel extends ScreenPanel {
         loaded -> {
           consultations = loaded;
           history.setModel(toModel(loaded));
+          formatHistory();
         },
         shell::showError);
   }
@@ -101,24 +93,51 @@ public final class ConsultationsPanel extends ScreenPanel {
           };
     }
     return UiComponents.model(
-        new String[] {"consultation_id", "Patient", "Doctor", "Date", "Diagnosis", "Appointment"},
-        data);
+        new String[] {"ID", "Patient", "Doctor", "Date", "Diagnosis", "Appointment"}, data);
+  }
+
+  private void formatHistory() {
+    UiComponents.columns(
+        history.table(),
+        new String[] {"ID", "Patient", "Doctor", "Date", "Diagnosis", "Appointment"},
+        new int[] {60, 160, 160, 150, 170, 90});
   }
 
   private void applyFilter() {
     if (search.getText().isBlank()) {
       history.setModel(toModel(consultations));
+      formatHistory();
       return;
     }
     Background.run(
-        () -> UhsDao.patientHistory(search.getText()), history::setModel, shell::showError);
+        () -> {
+          DefaultTableModel source = UhsDao.patientHistory(search.getText());
+          Object[][] rows = new Object[source.getRowCount()][6];
+          for (int row = 0; row < source.getRowCount(); row++) {
+            rows[row] =
+                new Object[] {
+                  source.getValueAt(row, 2),
+                  source.getValueAt(row, 1),
+                  source.getValueAt(row, 4),
+                  source.getValueAt(row, 3),
+                  source.getValueAt(row, 6),
+                  "-"
+                };
+          }
+          return UiComponents.model(
+              new String[] {"ID", "Patient", "Doctor", "Date", "Diagnosis", "Appointment"}, rows);
+        },
+        model -> {
+          history.setModel(model);
+          formatHistory();
+        },
+        shell::showError);
   }
 
   private int idColumn() {
     return history
         .table()
-        .convertColumnIndexToModel(
-            history.table().getColumnModel().getColumnIndex("consultation_id"));
+        .convertColumnIndexToModel(history.table().getColumnModel().getColumnIndex("ID"));
   }
 
   private void showLines() {
@@ -129,7 +148,18 @@ public final class ConsultationsPanel extends ScreenPanel {
     }
     int row = history.table().convertRowIndexToModel(viewRow);
     int id = ((Number) history.table().getValueAt(row, idColumn())).intValue();
-    Background.run(() -> UhsDao.prescriptionLines(id), lines::setModel, shell::showError);
+    Background.run(
+        () -> UhsDao.prescriptionLines(id),
+        model -> {
+          lines.setModel(model);
+          UiComponents.columns(
+              lines.table(),
+              new String[] {
+                "Line", "Medicine", "Dose", "Frequency", "Days", "Qty", "Price", "Total"
+              },
+              new int[] {55, 170, 120, 120, 70, 70, 90, 90});
+        },
+        shell::showError);
   }
 
   private Consultation selected() {

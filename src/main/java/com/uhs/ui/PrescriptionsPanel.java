@@ -3,7 +3,6 @@ package com.uhs.ui;
 import com.uhs.dao.UhsDao;
 import java.awt.BorderLayout;
 import javax.swing.JSplitPane;
-import javax.swing.table.DefaultTableModel;
 
 /** Prescription browser: consultation master rows and their prescription lines. */
 public final class PrescriptionsPanel extends ScreenPanel {
@@ -18,14 +17,11 @@ public final class PrescriptionsPanel extends ScreenPanel {
     this.shell = shell;
 
     JSplitPane split =
-        new JSplitPane(
-            JSplitPane.VERTICAL_SPLIT,
+        UiComponents.split(
+            UiComponents.card("Consultations", "Choose a consultation", masters),
             UiComponents.card(
-                "Consultations with a prescription", "Choose a consultation", masters),
-            UiComponents.card(
-                "Prescription lines", "Line numbers are local to one prescription", lines));
-    split.setResizeWeight(0.5);
-    split.setBorder(null);
+                "Prescription lines", "Line numbers are local to one prescription", lines),
+            0.5);
     body().add(split, BorderLayout.CENTER);
 
     javax.swing.JButton refresh = UiComponents.ghostButton("Refresh");
@@ -51,11 +47,15 @@ public final class PrescriptionsPanel extends ScreenPanel {
   private void load() {
     Background.run(
         () -> {
-          DefaultTableModel rows = UhsDao.consultations();
-          rows.setColumnIdentifiers(new String[] {"ID", "Date", "Patient", "Doctor", "Diagnosis"});
-          return rows;
+          return UhsDao.consultations();
         },
-        masters::setModel,
+        model -> {
+          masters.setModel(model);
+          UiComponents.columns(
+              masters.table(),
+              new String[] {"ID", "Date", "Patient", "Doctor", "Diagnosis"},
+              new int[] {60, 150, 160, 160, 180});
+        },
         shell::showError);
   }
 
@@ -67,6 +67,17 @@ public final class PrescriptionsPanel extends ScreenPanel {
     }
     int row = masters.table().convertRowIndexToModel(viewRow);
     int id = ((Number) masters.table().getValueAt(row, 0)).intValue();
-    Background.run(() -> UhsDao.prescriptionLines(id), lines::setModel, shell::showError);
+    Background.run(
+        () -> UhsDao.prescriptionLines(id),
+        model -> {
+          lines.setModel(model);
+          UiComponents.columns(
+              lines.table(),
+              new String[] {
+                "Line", "Medicine", "Dose", "Frequency", "Days", "Qty", "Price", "Total"
+              },
+              new int[] {55, 170, 120, 120, 70, 70, 90, 90});
+        },
+        shell::showError);
   }
 }

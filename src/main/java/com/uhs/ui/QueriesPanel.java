@@ -63,15 +63,14 @@ public final class QueriesPanel extends ScreenPanel {
     JPanel controls = new JPanel();
     controls.setOpaque(false);
     controls.setLayout(new BoxLayout(controls, BoxLayout.Y_AXIS));
-    JPanel row = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
-    row.setOpaque(false);
-    row.add(UiComponents.muted("Question"));
-    row.add(queries);
-    row.add(run);
-    row.add(topFive);
-    controls.add(row);
-    controls.add(javax.swing.Box.createVerticalStrut(8));
+    controls.add(
+        UiComponents.controlBar(
+            UiComponents.field("Question", queries),
+            UiComponents.field("Action", run),
+            UiComponents.field("Aggregate query", topFive)));
+    controls.add(javax.swing.Box.createVerticalStrut(12));
     controls.add(question);
+    controls.add(javax.swing.Box.createVerticalStrut(10));
     controls.add(inputs);
 
     sql.setFont(new java.awt.Font(java.awt.Font.MONOSPACED, java.awt.Font.PLAIN, 12));
@@ -79,13 +78,11 @@ public final class QueriesPanel extends ScreenPanel {
     sql.setForeground(UiTheme.TEXT);
 
     JSplitPane split =
-        new JSplitPane(
-            JSplitPane.VERTICAL_SPLIT,
+        UiComponents.split(
             UiComponents.card("Result", "Rows returned by the query", results),
             UiComponents.card(
-                "SQL behind this screen", "The exact statement that ran", new JScrollPane(sql)));
-    split.setResizeWeight(0.6);
-    split.setBorder(null);
+                "SQL behind this screen", "The exact statement that ran", new JScrollPane(sql)),
+            0.6);
 
     body().add(UiComponents.card("Choose a question", null, controls), BorderLayout.NORTH);
     body().add(split, BorderLayout.CENTER);

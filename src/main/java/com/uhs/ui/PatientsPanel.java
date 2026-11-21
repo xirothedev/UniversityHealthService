@@ -2,7 +2,7 @@ package com.uhs.ui;
 
 import com.uhs.dao.UhsDao;
 import java.awt.BorderLayout;
-import java.awt.FlowLayout;
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -18,11 +18,11 @@ public final class PatientsPanel extends ScreenPanel {
   private static final long serialVersionUID = 1L;
 
   private final AppShell shell;
-  private final JTextField search = new JTextField(22);
+  private final JTextField search = new JTextField(24);
   private final TableCard directory = new TableCard();
   private final TableCard allergies = new TableCard();
-  private final JLabel identity = UiComponents.label("Select a patient", 16);
-  private final JLabel subtype = UiComponents.muted("Subtype and record details appear here.");
+  private final JLabel identity = UiComponents.label("Select a patient", 20);
+  private final JLabel subtype = UiComponents.muted("Choose a row above to see the full record.");
 
   private record PatientData(
       DefaultTableModel people,
@@ -39,30 +39,27 @@ public final class PatientsPanel extends ScreenPanel {
     JButton searchButton = UiComponents.ghostButton("Search");
     searchButton.addActionListener(event -> applyFilter());
     search.addActionListener(event -> applyFilter());
-    JPanel bar = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
-    bar.setOpaque(false);
-    JLabel searchLabel = UiComponents.muted("Search by name");
-    searchLabel.setLabelFor(search);
-    bar.add(searchLabel);
-    bar.add(search);
-    bar.add(searchButton);
+    JPanel bar =
+        UiComponents.controlBar(
+            UiComponents.field("Patient name", search), UiComponents.field("Action", searchButton));
 
-    JPanel detail = new JPanel();
+    JPanel detail = new JPanel(new BorderLayout());
     detail.setOpaque(false);
-    detail.setLayout(new BoxLayout(detail, BoxLayout.Y_AXIS));
-    detail.add(identity);
-    detail.add(Box.createVerticalStrut(6));
-    detail.add(subtype);
-    detail.add(Box.createVerticalStrut(12));
-    detail.add(allergies);
+    JPanel heading = new JPanel();
+    heading.setOpaque(false);
+    heading.setLayout(new BoxLayout(heading, BoxLayout.Y_AXIS));
+    heading.setBorder(BorderFactory.createEmptyBorder(0, 0, 16, 0));
+    heading.add(identity);
+    heading.add(Box.createVerticalStrut(6));
+    heading.add(subtype);
+    detail.add(heading, BorderLayout.NORTH);
+    detail.add(allergies, BorderLayout.CENTER);
 
     JSplitPane split =
-        new JSplitPane(
-            JSplitPane.VERTICAL_SPLIT,
+        UiComponents.split(
             UiComponents.card("Directory", "Choose a row to see its detail", directory),
-            UiComponents.card("Detail", "Allergy links carry severity and onset date", detail));
-    split.setResizeWeight(0.6);
-    split.setBorder(null);
+            UiComponents.card("Patient record", "Allergies carry severity and onset date", detail),
+            0.55);
 
     body().add(UiComponents.card("Find a patient", null, bar), BorderLayout.NORTH);
     body().add(split, BorderLayout.CENTER);
@@ -85,8 +82,16 @@ public final class PatientsPanel extends ScreenPanel {
         loaded -> {
           data = loaded;
           directory.setModel(loaded.people());
+          formatDirectory();
         },
         shell::showError);
+  }
+
+  private void formatDirectory() {
+    UiComponents.columns(
+        directory.table(),
+        new String[] {"ID", "Name", "Date of birth", "Gender", "Phone"},
+        new int[] {60, 180, 120, 80, 140});
   }
 
   private void applyFilter() {
@@ -95,6 +100,7 @@ public final class PatientsPanel extends ScreenPanel {
     }
     if (search.getText().isBlank()) {
       directory.setModel(data.people());
+      formatDirectory();
       return;
     }
     String term =
@@ -106,7 +112,10 @@ public final class PatientsPanel extends ScreenPanel {
             UhsDao.query(
                 "SELECT * FROM Patient WHERE full_name LIKE ? ESCAPE '\\' ORDER BY full_name",
                 term),
-        directory::setModel,
+        model -> {
+          directory.setModel(model);
+          formatDirectory();
+        },
         shell::showError);
   }
 
@@ -117,19 +126,22 @@ public final class PatientsPanel extends ScreenPanel {
     int viewRow = directory.table().getSelectedRow();
     if (viewRow < 0) {
       identity.setText("Select a patient");
-      subtype.setText("Subtype and record details appear here.");
+      subtype.setText("Choose a row above to see the full record.");
       allergies.setModel(UiComponents.model(new String[] {"Information"}, new Object[0][]));
       return;
     }
     int row = directory.table().convertRowIndexToModel(viewRow);
-    Object id = data.people().getValueAt(row, data.people().findColumn("patient_id"));
-    String name =
-        String.valueOf(data.people().getValueAt(row, data.people().findColumn("full_name")));
+    Object id = directory.table().getValueAt(row, 0);
+    String name = String.valueOf(directory.table().getValueAt(row, 1));
     identity.setText(name);
     boolean student = UiComponents.filter(data.students(), "patient_id", id).getRowCount() > 0;
     boolean staff = UiComponents.filter(data.staff(), "patient_id", id).getRowCount() > 0;
     subtype.setText(
         "Patient #" + id + "  ·  " + (student ? "Student" : staff ? "Staff" : "Unclassified"));
     allergies.setModel(UiComponents.filter(data.allergyLinks(), "patient_id", id));
+    UiComponents.columns(
+        allergies.table(),
+        new String[] {"Patient", "Allergy", "Severity", "Onset", "Note"},
+        new int[] {70, 90, 100, 120, 200});
   }
 }

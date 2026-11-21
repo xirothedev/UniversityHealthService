@@ -24,20 +24,16 @@ public final class VaccinationsPanel extends ScreenPanel {
     addActions(refresh);
 
     JSplitPane lower =
-        new JSplitPane(
-            JSplitPane.HORIZONTAL_SPLIT,
+        UiComponents.splitHorizontal(
             UiComponents.card("All dose records", "One row per dose given", records),
-            UiComponents.card("Courses", "Required doses per course", courses));
-    lower.setResizeWeight(0.6);
-    lower.setBorder(null);
+            UiComponents.card("Courses", "Required doses per course", courses),
+            0.6);
     JSplitPane split =
-        new JSplitPane(
-            JSplitPane.VERTICAL_SPLIT,
+        UiComponents.split(
             UiComponents.card(
                 "Fully vaccinated", "Patients with every dose of a course (Q-T4)", complete),
-            lower);
-    split.setResizeWeight(0.45);
-    split.setBorder(null);
+            lower,
+            0.45);
     body().add(split, BorderLayout.CENTER);
   }
 
@@ -49,9 +45,33 @@ public final class VaccinationsPanel extends ScreenPanel {
   private void load() {
     Background.run(
         () -> Tables.fromResult(TopicQueries.run(TopicQueries.FULL_DOSE.sql())),
-        complete::setModel,
+        model -> {
+          complete.setModel(model);
+          UiComponents.columns(
+              complete.table(),
+              new String[] {"ID", "Patient", "Course", "Doses", "Completed"},
+              new int[] {60, 160, 240, 70, 120});
+        },
         shell::showError);
-    Background.run(() -> UhsDao.browse("VaccinationRecord"), records::setModel, shell::showError);
-    Background.run(() -> UhsDao.browse("VaccinationCourse"), courses::setModel, shell::showError);
+    Background.run(
+        () -> UhsDao.browse("VaccinationRecord"),
+        model -> {
+          records.setModel(model);
+          UiComponents.columns(
+              records.table(),
+              new String[] {"ID", "Patient", "Course", "Dose", "Given"},
+              new int[] {60, 80, 80, 70, 120});
+        },
+        shell::showError);
+    Background.run(
+        () -> UhsDao.browse("VaccinationCourse"),
+        model -> {
+          courses.setModel(model);
+          UiComponents.columns(
+              courses.table(),
+              new String[] {"ID", "Course", "Disease", "Doses"},
+              new int[] {60, 220, 180, 70});
+        },
+        shell::showError);
   }
 }

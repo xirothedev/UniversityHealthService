@@ -14,6 +14,7 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JSplitPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
@@ -107,6 +108,69 @@ public final class UiComponents {
     button.setForeground(UiTheme.TEXT);
     button.setBorder(BorderFactory.createEmptyBorder(9, 14, 9, 14));
     return button;
+  }
+
+  /** A caption above a control, used to build even form rows. */
+  public static JPanel field(String caption, JComponent control) {
+    if (control instanceof JTextField || control instanceof javax.swing.JComboBox<?>) {
+      captionLabelFor(caption, control);
+    }
+    JPanel field = new JPanel();
+    field.setOpaque(false);
+    field.setLayout(new BoxLayout(field, BoxLayout.Y_AXIS));
+    field.add(muted(caption));
+    field.add(Box.createVerticalStrut(6));
+    field.add(control);
+    field.setMaximumSize(field.getPreferredSize());
+    return field;
+  }
+
+  private static void captionLabelFor(String caption, JComponent control) {
+    if (control instanceof JTextField) {
+      // Swing has no HTML label association; keep the caption adjacent for screen readers.
+      control.getAccessibleContext().setAccessibleName(caption);
+    }
+  }
+
+  /** A horizontal row of labelled controls with even gaps. */
+  public static JPanel controlBar(JPanel... fields) {
+    JPanel bar = new JPanel();
+    bar.setOpaque(false);
+    bar.setLayout(new BoxLayout(bar, BoxLayout.X_AXIS));
+    for (int index = 0; index < fields.length; index++) {
+      if (index > 0) {
+        bar.add(Box.createHorizontalStrut(18));
+      }
+      bar.add(fields[index]);
+    }
+    return bar;
+  }
+
+  /** A clean vertical split without the large divider grip. */
+  public static JSplitPane split(JComponent top, JComponent bottom, double ratio) {
+    JSplitPane split = new JSplitPane(JSplitPane.VERTICAL_SPLIT, top, bottom);
+    split.setResizeWeight(ratio);
+    split.setDividerSize(0);
+    split.setBorder(null);
+    return split;
+  }
+
+  /** A side-by-side split without the large divider grip. */
+  public static JSplitPane splitHorizontal(JComponent left, JComponent right, double ratio) {
+    JSplitPane split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, left, right);
+    split.setResizeWeight(ratio);
+    split.setDividerSize(0);
+    split.setBorder(null);
+    return split;
+  }
+
+  /** Replaces raw column names with display names and sets readable widths. */
+  public static void columns(JTable table, String[] headers, int[] widths) {
+    DefaultTableModel model = (DefaultTableModel) table.getModel();
+    model.setColumnIdentifiers(headers);
+    for (int column = 0; column < widths.length; column++) {
+      table.getColumnModel().getColumn(column).setPreferredWidth(widths[column]);
+    }
   }
 
   /** Returns the rows of a model whose named column equals the given value. */

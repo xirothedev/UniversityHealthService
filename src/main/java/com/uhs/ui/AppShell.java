@@ -4,6 +4,7 @@ import com.uhs.util.DBConnection;
 import com.uhs.util.DbErrors;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -98,72 +99,85 @@ public final class AppShell extends JFrame {
   private JPanel buildRail() {
     JPanel rail = new JPanel();
     rail.setBackground(UiTheme.SURFACE);
-    rail.setPreferredSize(new Dimension(248, 0));
+    rail.setPreferredSize(new Dimension(196, 0));
     rail.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 1, UiTheme.BORDER));
     rail.setLayout(new BoxLayout(rail, BoxLayout.Y_AXIS));
 
     JPanel brand = new JPanel();
     brand.setOpaque(false);
     brand.setLayout(new BoxLayout(brand, BoxLayout.X_AXIS));
-    brand.setBorder(BorderFactory.createEmptyBorder(28, 20, 24, 20));
+    brand.setBorder(BorderFactory.createEmptyBorder(20, 12, 16, 12));
     JLabel mark = new JLabel("U+");
     mark.setOpaque(true);
-    mark.setBackground(UiTheme.ACCENT_DARK);
-    mark.setForeground(UiTheme.TEXT);
+    mark.setBackground(UiTheme.DATA_TEAL);
+    mark.setForeground(UiTheme.ON_ACCENT);
     mark.setHorizontalAlignment(SwingConstants.CENTER);
-    mark.setFont(UiTheme.bold(mark.getFont(), 16f));
-    mark.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
+    mark.setFont(UiTheme.bold(mark.getFont(), 13f));
+    mark.setBorder(BorderFactory.createEmptyBorder(6, 6, 6, 6));
     brand.add(mark);
-    brand.add(Box.createHorizontalStrut(12));
+    brand.add(Box.createHorizontalStrut(9));
     JPanel names = new JPanel();
     names.setOpaque(false);
     names.setLayout(new BoxLayout(names, BoxLayout.Y_AXIS));
-    names.add(UiComponents.label("Health Service", 15));
+    names.add(UiComponents.label("Health Service", 13));
     names.add(UiComponents.muted("University clinic"));
     brand.add(names);
     rail.add(brand);
 
     rail.add(groupLabel("WORKSPACE"));
-    rail.add(navButton("overview", "Overview", "O", UiTheme.ACCENT));
+    rail.add(railItem(navButton("overview", "Overview", "O", UiTheme.ACCENT)));
 
     rail.add(groupLabel("CLINICAL CARE"));
-    rail.add(navButton("patients", "Patients", "P", UiTheme.SUCCESS));
-    rail.add(navButton("appointments", "Appointments", "A", UiTheme.WARNING));
-    rail.add(navButton("consultations", "Consultations", "C", UiTheme.ACCENT));
-    rail.add(navButton("prescriptions", "Prescriptions", "R", UiTheme.SUCCESS));
-    rail.add(navButton("vaccinations", "Vaccinations", "V", UiTheme.WARNING));
+    rail.add(railItem(navButton("patients", "Patients", "P", UiTheme.SUCCESS)));
+    rail.add(railItem(navButton("appointments", "Appointments", "A", UiTheme.WARNING)));
+    rail.add(railItem(navButton("consultations", "Consultations", "C", UiTheme.ACCENT)));
+    rail.add(railItem(navButton("prescriptions", "Prescriptions", "R", UiTheme.SUCCESS)));
+    rail.add(railItem(navButton("vaccinations", "Vaccinations", "V", UiTheme.WARNING)));
 
     rail.add(groupLabel("INSIGHT"));
-    rail.add(navButton("outbreaks", "Outbreaks", "!", UiTheme.DANGER));
-    rail.add(navButton("reports", "Reports", "T", UiTheme.ACCENT));
-    rail.add(navButton("queries", "Topic queries", "Q", UiTheme.SUCCESS));
+    rail.add(railItem(navButton("outbreaks", "Outbreaks", "!", UiTheme.DANGER)));
+    rail.add(railItem(navButton("reports", "Reports", "T", UiTheme.ACCENT)));
+    rail.add(railItem(navButton("queries", "Topic queries", "Q", UiTheme.SUCCESS)));
 
     rail.add(Box.createVerticalGlue());
     rail.add(groupLabel("SYSTEM"));
-    rail.add(navButton("settings", "Connection", "S", UiTheme.TEXT_MUTED));
-    rail.add(Box.createVerticalStrut(18));
+    rail.add(railItem(navButton("settings", "Connection", "S", UiTheme.TEXT_MUTED)));
+    rail.add(Box.createVerticalStrut(12));
     return rail;
   }
 
-  private JLabel groupLabel(String text) {
+  private JPanel groupLabel(String text) {
     JLabel label = UiComponents.muted(text);
-    label.setFont(UiTheme.bold(label.getFont(), 10f));
-    label.setBorder(BorderFactory.createEmptyBorder(10, 22, 8, 0));
-    return label;
+    label.setFont(UiTheme.bold(label.getFont(), 9f));
+    JPanel item = new JPanel(new BorderLayout());
+    item.setOpaque(false);
+    item.setBorder(BorderFactory.createEmptyBorder(8, 14, 4, 0));
+    item.add(label, BorderLayout.WEST);
+    return item;
   }
 
-  private JButton navButton(String key, String text, String glyph, java.awt.Color color) {
+  /** Keeps every rail item on the same left and right inset. */
+  private JPanel railItem(java.awt.Component component) {
+    JPanel item = new JPanel(new BorderLayout());
+    item.setOpaque(false);
+    item.setBorder(BorderFactory.createEmptyBorder(0, 10, 2, 10));
+    item.add(component, BorderLayout.CENTER);
+    return item;
+  }
+
+  private JButton navButton(String key, String text, String glyph, Color color) {
     JButton button = new JButton(text, UiComponents.glyphIcon(glyph, color));
     button.setHorizontalAlignment(SwingConstants.LEFT);
-    button.setIconTextGap(12);
+    button.setIconTextGap(10);
     button.setFocusPainted(false);
     button.setOpaque(true);
     button.setBackground(UiTheme.SURFACE);
     button.setForeground(UiTheme.TEXT_MUTED);
-    button.setBorder(BorderFactory.createEmptyBorder(10, 16, 10, 16));
+    button.setBorder(BorderFactory.createEmptyBorder(7, 10, 7, 10));
+    button.setFont(button.getFont().deriveFont(12f));
     button.addActionListener(event -> navigate(key));
     navigation.put(key, button);
-    button.setMaximumSize(new Dimension(Integer.MAX_VALUE, 46));
+    button.setMaximumSize(new Dimension(Integer.MAX_VALUE, 36));
     return button;
   }
 }

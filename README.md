@@ -96,9 +96,10 @@ The app has one window with a left navigation rail. Every screen opens in one cl
 | Topic queries | Query runner | Q-T1 consultation history, Q-T2 free slots, Q-T4 full vaccination and Q-T5 outbreak clusters. Each result sits beside its exact SQL. Q-T3 is the Reports screen. |
 | Connection | Connection details | Read-only database target and a live connection test. No password is shown. |
 
-Look and feel: FlatLaf 3.8 with a dark theme and teal accents. The layout follows the Astryx
-`Side Nav`, `Executive Summary Dashboard`, `Searchable Table` and `Order Detail` templates.
-See `docs/adr/ADR-18-modern-swing-shell.md`.
+Look and feel: FlatLaf 3.8 with the Astryx core dark-mode colour tokens from
+`astryx.atmeta.com/docs/tokens`. `UiTheme` maps each Swing colour to one Astryx token. The layout
+follows the Astryx `Side Nav`, `Executive Summary Dashboard`, `Searchable Table` and `Order Detail`
+templates. See `docs/adr/ADR-18-modern-swing-shell.md`.
 
 Code rules followed everywhere: `PreparedStatement` for every user value (an apostrophe in a text
 field is safe), `try-with-resources` for connections, statements and result sets, validation before

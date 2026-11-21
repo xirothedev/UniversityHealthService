@@ -41,7 +41,7 @@ public final class BarChart extends JPanel {
       graphics.setColor(UiTheme.TEXT_MUTED);
       graphics.drawString(row.diagnosis(), 16, y + 12);
       int barWidth = (int) ((getWidth() - 220) * row.visits() / Math.max(1, peak));
-      graphics.setColor(UiTheme.ACCENT_DARK);
+      graphics.setColor(UiTheme.DATA_TEAL);
       graphics.fillRoundRect(160, y, Math.max(4, barWidth), 20, 8, 8);
       graphics.setColor(UiTheme.TEXT);
       graphics.drawString(String.valueOf(row.visits()), 168 + Math.max(4, barWidth), y + 15);

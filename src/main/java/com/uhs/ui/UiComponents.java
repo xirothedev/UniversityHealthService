@@ -85,8 +85,8 @@ public final class UiComponents {
   /** A filled button for the main action on a screen. */
   public static JButton primaryButton(String text) {
     JButton button = new JButton(text);
-    button.setBackground(UiTheme.ACCENT_DARK);
-    button.setForeground(UiTheme.TEXT);
+    button.setBackground(UiTheme.ACCENT);
+    button.setForeground(UiTheme.ON_ACCENT);
     button.setFocusPainted(false);
     button.setBorder(BorderFactory.createEmptyBorder(9, 16, 9, 16));
     return button;

@@ -45,11 +45,11 @@ To point the app at another server, edit `.env` and start it again. Never commit
 
    ```bash
    mysql -u root -p uhs_db < sql/02b_query_demo_supplement.sql          # extra demo rows
-   mysql -u root -p uhs_db < sql/04_t18-view-index-transactions.sql     # T18 view and transactions
+   mysql -u root -p uhs_db < sql/04_view-and-transactions-demo.sql     # T18 view and transactions
    mysql -u root -p uhs_db < sql/05_crud_statements.sql                 # UPDATEs and two-table transactions
    ```
 
-   `00_setup.sql` is generated from `01_schema.sql` + `02_data.sql`; edit the split files, then regenerate it. The base seed now includes a zero-stock medicine (id 17), so all 12 queries return a result without the supplement. `04_t18-view-index-transactions.sql` is the separate demonstration file, not the 12-query file. The index is created by `01_schema.sql`.
+   `00_setup.sql` is generated from `01_schema.sql` + `02_data.sql`; edit the split files, then regenerate it. The base seed now includes a zero-stock medicine (id 17), so all 12 queries return a result without the supplement. `04_view-and-transactions-demo.sql` is the separate demonstration file, not the 12-query file. The index is created by `01_schema.sql`.
 
 2. **Create a login** (skip if you use root). Example for local MySQL 8.4:
 

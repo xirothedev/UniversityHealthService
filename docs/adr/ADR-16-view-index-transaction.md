@@ -3,7 +3,7 @@
 Supersedes ADR-08, now kept in `docs/adr/superseded/ADR-08-index-transaction.md`.
 
 **Update 2026-11-21:** the index now lives in `01_schema.sql` so every build has
-it; the view and transactions live in `sql/04_t18-view-index-transactions.sql`.
+it; the view and transactions live in `sql/04_view-and-transactions-demo.sql`.
 The twelve-query script is `sql/03_queries.sql`.
 
 ## 1. Context
@@ -49,7 +49,7 @@ written and the cleanup is unambiguous. Both use ids in the 9000 block to stay c
 `02_data.sql`.
 
 **Where the artefacts live.** The view and the two transactions live in
-`sql/04_t18-view-index-transactions.sql`. The index lives in `sql/01_schema.sql`, directly
+`sql/04_view-and-transactions-demo.sql`. The index lives in `sql/01_schema.sql`, directly
 after the Appointment table. This keeps the index with the schema that creates the table,
 so a marker who builds the database always gets the index. The earlier choice to keep it in
 the demonstration file is reversed below.
@@ -94,7 +94,7 @@ present; and the file runs twice over a fresh database with no unexpected failur
 Re-verification owed after ADR-17 renamed the columns (`staff_id` → `med_staff_id`,
 `staff_code` → `uni_staff_code`, `slot_length_min` → `booking_unit_min`) and moved the
 rollback trip-wire from `fk_presc_staff` to `fk_presc_consult`: R5/T18 must rerun the
-`00_setup.sql` + `04_t18-view-index-transactions.sql` sequence on MySQL 8.4 and confirm the
+`00_setup.sql` + `04_view-and-transactions-demo.sql` sequence on MySQL 8.4 and confirm the
 single intended `ERROR 1452` (now on `fk_presc_consult`) before D3. What CI can check
 (sqlfluff parse, guards) is green on this branch; what it cannot (live execution) is
 explicitly deferred, not assumed.

@@ -104,7 +104,7 @@ COMMIT;
 -- MySQL rejects it with ERROR 1452. ROLLBACK then discards the
 -- first UPDATE, so neither table keeps a change.
 -- A batch client must continue after the expected error for the
--- ROLLBACK to run; 04_t18-view-index-transactions.sql uses the
+-- ROLLBACK to run; 04_view-and-transactions-demo.sql uses the
 -- same technique with INSERT statements.
 -- ============================================================
 

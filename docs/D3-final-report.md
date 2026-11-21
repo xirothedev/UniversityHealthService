@@ -314,7 +314,7 @@ and `02_data.sql`, which remain the development sources.
 | `02_data.sql` | Seed data: 17 tables, at least 15 rows each; source of the setup script |
 | `02b_query_demo_supplement.sql` | Optional extra demonstration rows in a reserved id range |
 | `03_queries.sql` | The 12 submission queries, each preceded by its English question |
-| `04_t18-view-index-transactions.sql` | View and transaction demonstration |
+| `04_view-and-transactions-demo.sql` | View and transaction demonstration |
 | `05_crud_statements.sql` | One UPDATE per table and two two-table transactions |
 
 ## 7.3 Constraints and sample data
@@ -328,7 +328,7 @@ foreign key and a CHECK violation are part of the verification record.
 
 ## 7.4 Transaction and index
 
-`04_t18-view-index-transactions.sql` has two transactions over Consultation and
+`04_view-and-transactions-demo.sql` has two transactions over Consultation and
 Prescription. The first inserts a visit, then fails the Prescription insert on
 a missing `consultation_id` (ERROR 1452 on `fk_presc_consult`), then rolls back
 so the visit disappears. The second inserts both rows and commits, then deletes

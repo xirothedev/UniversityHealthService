@@ -27,7 +27,7 @@ file.
    three queries.
 4. `sql/03_queries.sql` — 12 result sets, Q01–Q12.
 
-`sql/04_t18-view-index-transactions.sql` was not used for this check. It is
+`sql/04_view-and-transactions-demo.sql` was not used for this check. It is
 T18's separate view, index and transaction demonstration, not the twelve-query
 file.
 

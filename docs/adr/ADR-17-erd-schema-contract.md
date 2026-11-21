@@ -4,7 +4,7 @@
 The D2 deliverable (due 12/10/2026, W5) is the ERD plus a draft schema plus one mapping
 rule per table group. The ERD (`docs/er/UHS-ERD.drawio`, 17 tables) calls itself the schema
 contract for `sql/01_schema.sql`, but a line-by-line check against `docs/D1-outline.md`,
-`CONTEXT.md`, and `sql/04_t18-view-index-transactions.sql` (T18 view + transactions) found
+`CONTEXT.md`, and `sql/04_view-and-transactions-demo.sql` (T18 view + transactions) found
 the contract and its consumers disagreeing on column names, one column's meaning, one
 column's nullability, and one missing price column — plus a legend that documents only
 half the referential actions the brief requires.
@@ -12,7 +12,7 @@ half the referential actions the brief requires.
 ## 2. Decision
 - **ERD names win.** The diagram uses `med_staff_id` (MedicalStaff PK and every FK to it)
   and `STAFF.uni_staff_code`; `CONTEXT.md`, `docs/D1-outline.md`, ADR-16, and
-  `sql/04_t18-view-index-transactions.sql` used `staff_id` / `staff_code`. The diagram is the lone outlier
+  `sql/04_view-and-transactions-demo.sql` used `staff_id` / `staff_code`. The diagram is the lone outlier
   numerically but the only D2 artefact the marker reads first, so everything else is
   rewritten to it. `CONTEXT.md` now states the rule as: `med_staff_id` always means
   MedicalStaff; the Patient subtype is identified only by `STAFF.uni_staff_code`.

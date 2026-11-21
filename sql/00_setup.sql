@@ -6,7 +6,7 @@
 -- Runs twice in a row without manual repair.
 -- This file is generated from 01_schema.sql + 02_data.sql. Keep the
 -- split files for development; edit them, then regenerate this file.
--- Query scripts: 03_queries.sql (12 queries), 04_t18-*.sql (demo),
+-- Query scripts: 03_queries.sql (12 queries), 04_view-and-transactions-demo.sql (demo),
 -- 05_crud_statements.sql (UPDATE and two-table transactions).
 -- ============================================================
 

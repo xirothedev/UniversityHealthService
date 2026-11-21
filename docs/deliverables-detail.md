@@ -81,7 +81,7 @@ submit/final/
     ├── 01_schema.sql                       # DDL and the index; source of 00_setup.sql
     ├── 02_data.sql                         # seed data; source of 00_setup.sql
     ├── 03_queries.sql                      # 12 queries, each preceded by its English question
-    ├── 04_t18-view-index-transactions.sql  # view and transaction demonstration
+    ├── 04_view-and-transactions-demo.sql  # view and transaction demonstration
     └── 05_crud_statements.sql              # UPDATEs and two-table transactions
 ```
 
@@ -98,7 +98,7 @@ submit/final/
 - `sql/00_setup.sql` is the one script. It runs top to bottom twice with no manual repair: drop → create (parents before children) → insert.
 - All constraints in the script: PK, FK + ON DELETE/UPDATE, NOT NULL, UNIQUE, CHECK, DEFAULT. Constraints enforced only in Java score nothing.
 - ≥15 realistic rows/table, 12/12 queries non-empty. Separate query file: each statement preceded by its English question comment.
-- Also: INSERT/DELETE in `02_data.sql`; one UPDATE per table in `05_crud_statements.sql`; two-table transactions with COMMIT and ROLLBACK in `04_t18-view-index-transactions.sql` and `05_crud_statements.sql`; one index in `01_schema.sql`. Test first: duplicate keys, bad FKs, CHECK violations must all be rejected.
+- Also: INSERT/DELETE in `02_data.sql`; one UPDATE per table in `05_crud_statements.sql`; two-table transactions with COMMIT and ROLLBACK in `04_view-and-transactions-demo.sql` and `05_crud_statements.sql`; one index in `01_schema.sql`. Test first: duplicate keys, bad FKs, CHECK violations must all be rejected.
 - Leads: DB developer + Query developer. Largest weight (Technical 45).
 
 ## D6 — Java app, submitted with D3

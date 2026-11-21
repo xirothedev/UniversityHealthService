@@ -161,12 +161,7 @@ public final class ConsultationsPanel extends ScreenPanel {
         () -> UhsDao.prescriptionLines(id),
         model -> {
           lines.setModel(model);
-          UiComponents.columns(
-              lines.table(),
-              new String[] {
-                "Line", "Medicine", "Dose", "Frequency", "Days", "Qty", "Price", "Total"
-              },
-              new int[] {55, 170, 120, 120, 70, 70, 90, 90});
+          UiComponents.formatPrescriptionLines(lines.table());
         },
         lines::showError);
   }

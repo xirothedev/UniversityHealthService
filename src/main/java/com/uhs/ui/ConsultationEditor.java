@@ -264,8 +264,9 @@ public final class ConsultationEditor extends JDialog {
             ConsultationDao dao = new ConsultationDao();
             if (original == null) {
               dao.insert(value);
-            } else {
-              dao.update(value);
+            } else if (!dao.update(value)) {
+              throw new ValidationException(
+                  "This consultation no longer exists. Refresh the list and try again.");
             }
             return null;
           },

@@ -112,8 +112,9 @@ public final class UiComponents {
 
   /** A caption above a control, used to build even form rows. */
   public static JPanel field(String caption, JComponent control) {
-    if (control instanceof JTextField || control instanceof javax.swing.JComboBox<?>) {
-      captionLabelFor(caption, control);
+    if (control instanceof JTextField text) {
+      // Swing has no HTML label association; keep the caption adjacent for screen readers.
+      text.getAccessibleContext().setAccessibleName(caption);
     }
     JPanel field = new JPanel();
     field.setOpaque(false);
@@ -121,27 +122,15 @@ public final class UiComponents {
     field.add(muted(caption));
     field.add(Box.createVerticalStrut(6));
     field.add(control);
-    field.setMaximumSize(field.getPreferredSize());
     return field;
-  }
-
-  private static void captionLabelFor(String caption, JComponent control) {
-    if (control instanceof JTextField) {
-      // Swing has no HTML label association; keep the caption adjacent for screen readers.
-      control.getAccessibleContext().setAccessibleName(caption);
-    }
   }
 
   /** A horizontal row of labelled controls with even gaps. */
   public static JPanel controlBar(JPanel... fields) {
-    JPanel bar = new JPanel();
+    JPanel bar = new JPanel(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 18, 0));
     bar.setOpaque(false);
-    bar.setLayout(new BoxLayout(bar, BoxLayout.X_AXIS));
-    for (int index = 0; index < fields.length; index++) {
-      if (index > 0) {
-        bar.add(Box.createHorizontalStrut(18));
-      }
-      bar.add(fields[index]);
+    for (JPanel field : fields) {
+      bar.add(field);
     }
     return bar;
   }
@@ -171,6 +160,14 @@ public final class UiComponents {
     for (int column = 0; column < widths.length; column++) {
       table.getColumnModel().getColumn(column).setPreferredWidth(widths[column]);
     }
+  }
+
+  /** Applies the shared column names and widths for prescription lines. */
+  public static void formatPrescriptionLines(JTable table) {
+    columns(
+        table,
+        new String[] {"Line", "Medicine", "Dose", "Frequency", "Days", "Qty", "Price", "Total"},
+        new int[] {55, 170, 120, 120, 70, 70, 90, 90});
   }
 
   /** Returns the rows of a model whose named column equals the given value. */

@@ -8,6 +8,7 @@ import java.sql.ResultSetMetaData;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import javax.swing.table.DefaultTableModel;
 
@@ -16,6 +17,26 @@ import javax.swing.table.DefaultTableModel;
  */
 public final class UhsDao {
   private UhsDao() {}
+
+  public static final List<String> TABLES =
+      List.of(
+          "Allergy",
+          "Appointment",
+          "Building",
+          "Consultation",
+          "ConsultSlot",
+          "ContactTrace",
+          "MedicalStaff",
+          "Medicine",
+          "NotifiableCase",
+          "Patient",
+          "PatientAllergy",
+          "Prescription",
+          "PrescriptionLine",
+          "Staff",
+          "Student",
+          "VaccinationCourse",
+          "VaccinationRecord");
 
   /** Generic query -> table model. */
   public static DefaultTableModel query(String sql, Object... params) throws Exception {

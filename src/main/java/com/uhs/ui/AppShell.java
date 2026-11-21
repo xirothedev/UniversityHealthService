@@ -45,6 +45,7 @@ public final class AppShell extends JFrame {
     add(status, BorderLayout.NORTH);
 
     register("overview", new DashboardPanel(this));
+    register("browse", new BrowsePanel());
     register("patients", new PatientsPanel(this));
     register("appointments", new AppointmentsPanel(this));
     register("consultations", new ConsultationsPanel(this));
@@ -134,6 +135,7 @@ public final class AppShell extends JFrame {
 
     rail.add(groupLabel("WORKSPACE"));
     rail.add(railItem(navButton("overview", "Overview", "O", UiTheme.ACCENT)));
+    rail.add(railItem(navButton("browse", "Browse", "B", UiTheme.DATA_TEAL)));
 
     rail.add(groupLabel("CLINICAL CARE"));
     rail.add(railItem(navButton("patients", "Patients", "P", UiTheme.SUCCESS)));

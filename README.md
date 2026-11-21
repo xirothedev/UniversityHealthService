@@ -86,9 +86,10 @@ The app has one window with a left navigation rail. Every screen opens in one cl
 | Rail item | Screen | What it does |
 |-----------|--------|--------------|
 | Overview | Dashboard | Live counts for patients, consultations, appointments and notifiable cases, plus recent activity and top diagnoses. |
+| Browse | Table browser | Choose any table from the schema and load every row into a grid with a live row count. |
 | Patients | Patient directory | Name filter, subtype (Student / Staff) and allergy detail. Allergy severity and onset date live on the link. |
 | Appointments | Appointment desk | Free slots from the weekly `ConsultSlot` template for a doctor and date, plus all booked appointments. |
-| Consultations | Consultation history | Master-detail view of consultations and prescription lines, with New / Edit / Delete / Refresh. Insert and update validate patient, doctor, date (`yyyy-MM-dd HH:mm`) and diagnosis. Delete asks for confirmation and warns when a prescription or notifiable case still depends on the row. |
+| Consultations | Consultation history | Master-detail view of consultations and prescription lines, with New / Edit / Delete / Refresh. Insert and update validate patient, doctor, date (`yyyy-MM-dd HH:mm`) and diagnosis. Delete asks for confirmation; a row blocked by a dependent prescription or notifiable case shows a plain-language error. |
 | Prescriptions | Prescription lines | Consultation master rows and the lines of the selected prescription (line number is local to one prescription). |
 | Vaccinations | Vaccination records | All dose records and the patients who received every required dose (Q-T4). |
 | Outbreaks | Fourteen-day clusters | Notifiable cases and same-disease, same-building clusters within fourteen days (Q-T5). |

@@ -14,3 +14,11 @@ Gain: one coherent application, modern look, every feature one click away, no ex
 
 ## 5. Related
 Reopens the consequence in ADR-02. Keeps ADR-07 (external DB settings, PreparedStatement, try-with-resources). Touches forms F0-F5 and queries Q-T1-Q-T5 from README.md. Does not touch `sql/` or the ERD.
+
+## 6. Amendment (D8): dead DAO helpers
+The "keep the DAO unchanged" rule in §2 covered the UI rewrite, which must not alter how the
+application reaches the database. At the user's request to remove dead code, D8 deleted two unused
+DAO helpers: `ConsultationDao.describeDependents()` and `UhsDao.doctors()`. No SQL statement, schema,
+table or runtime behaviour changed; the delete confirmation now uses the database error for blocked
+rows. The `UhsDao.TABLES` list was restored for the Browse screen required by assignment §2.4.
+This narrow exception is recorded here rather than silently overriding §2.

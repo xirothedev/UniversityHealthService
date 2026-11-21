@@ -99,7 +99,15 @@ public final class DashboardPanel extends ScreenPanel {
   }
 
   private static int count(String table) throws Exception {
-    DefaultTableModel model = UhsDao.query("SELECT COUNT(*) FROM " + table);
+    String sql =
+        switch (table) {
+          case "Patient" -> "SELECT COUNT(*) FROM Patient";
+          case "Consultation" -> "SELECT COUNT(*) FROM Consultation";
+          case "Appointment" -> "SELECT COUNT(*) FROM Appointment";
+          case "NotifiableCase" -> "SELECT COUNT(*) FROM NotifiableCase";
+          default -> throw new IllegalArgumentException("Unknown count table: " + table);
+        };
+    DefaultTableModel model = UhsDao.query(sql);
     return ((Number) model.getValueAt(0, 0)).intValue();
   }
 

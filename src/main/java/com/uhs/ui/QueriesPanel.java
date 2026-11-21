@@ -5,9 +5,9 @@ import com.uhs.dao.TopicQueries;
 import com.uhs.dao.TopicQuery;
 import com.uhs.model.Option;
 import com.uhs.util.Dates;
+import com.uhs.util.ValidationException;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
-import java.awt.FlowLayout;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -41,20 +41,25 @@ public final class QueriesPanel extends ScreenPanel {
     sql.setLineWrap(true);
     sql.setWrapStyleWord(true);
 
+    queries.setRenderer(
+        new javax.swing.DefaultListCellRenderer() {
+          @Override
+          public java.awt.Component getListCellRendererComponent(
+              javax.swing.JList<?> list, Object value, int index, boolean selected, boolean focus) {
+            super.getListCellRendererComponent(list, value, index, selected, focus);
+            if (value instanceof TopicQuery query) {
+              setText(query.code() + "  ·  " + query.title());
+            }
+            return this;
+          }
+        });
+
     JPanel none = new JPanel();
     none.setOpaque(false);
     none.add(UiComponents.muted("No input needed."));
-    JPanel patientPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 0));
-    patientPanel.setOpaque(false);
-    patientPanel.add(UiComponents.muted("Patient"));
-    patientPanel.add(patients);
-    JPanel datePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 0));
-    datePanel.setOpaque(false);
-    datePanel.add(UiComponents.muted("Date"));
-    datePanel.add(date);
     inputs.add(none, "NONE");
-    inputs.add(patientPanel, "PATIENT");
-    inputs.add(datePanel, "DATE");
+    inputs.add(UiComponents.field("Patient", patients), "PATIENT");
+    inputs.add(UiComponents.field("Date", date), "DATE");
 
     JButton run = UiComponents.primaryButton("Run query");
     run.addActionListener(event -> runSelected());
@@ -135,32 +140,31 @@ public final class QueriesPanel extends ScreenPanel {
     if (query == null) {
       return;
     }
+    Object[] params;
+    try {
+      params = parameters(query);
+    } catch (Exception error) {
+      results.showError(error);
+      return;
+    }
     results.showLoading();
     Background.run(
-        () -> Tables.fromResult(TopicQueries.run(query.sql(), parameters(query))),
+        () -> Tables.fromResult(TopicQueries.run(query.sql(), params)),
         results::setModel,
         results::showError);
   }
 
-  private Object[] parameters(TopicQuery query) {
+  private Object[] parameters(TopicQuery query) throws ValidationException {
     return switch (query.input()) {
       case NONE -> new Object[0];
       case PATIENT -> {
         Option option = (Option) patients.getSelectedItem();
         if (option == null || option.id() == null) {
-          shell.showMessage("Choose a patient first.");
-          yield new Object[] {-1};
+          throw new ValidationException("Choose a patient first.");
         }
         yield new Object[] {option.id()};
       }
-      case DATE -> {
-        try {
-          yield new Object[] {java.sql.Date.valueOf(Dates.parseDate(date.getText(), "Date"))};
-        } catch (Exception error) {
-          shell.showError(error);
-          yield new Object[0];
-        }
-      }
+      case DATE -> new Object[] {java.sql.Date.valueOf(Dates.parseDate(date.getText(), "Date"))};
     };
   }
 }

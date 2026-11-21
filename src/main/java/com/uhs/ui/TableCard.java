@@ -19,6 +19,7 @@ public final class TableCard extends JPanel {
   private final JTable table = UiComponents.styleTable(new JTable());
   private final JLabel count = UiComponents.muted("0 rows");
   private final StatePanel views = new StatePanel(new JScrollPane(table));
+  private String emptyMessage = EMPTY_MESSAGE;
   private Runnable retry;
 
   public TableCard() {
@@ -36,6 +37,11 @@ public final class TableCard extends JPanel {
   /** Sets the action used by the empty and error states. */
   public void setRetry(Runnable action) {
     retry = action;
+  }
+
+  /** Replaces the default empty message with one that explains this table's filter. */
+  public void setEmptyMessage(String message) {
+    emptyMessage = message;
   }
 
   /** Returns the underlying table for selection handling. */
@@ -60,7 +66,7 @@ public final class TableCard extends JPanel {
     table.setModel(model);
     count.setText(model.getRowCount() + " rows");
     if (model.getRowCount() == 0) {
-      views.showEmpty(EMPTY_MESSAGE, retry);
+      views.showEmpty(emptyMessage, retry);
     } else {
       views.showContent();
     }

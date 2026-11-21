@@ -54,8 +54,7 @@ public final class DashboardPanel extends ScreenPanel {
     lower.setOpaque(false);
     lower.add(
         UiComponents.card("Recent consultations", "Newest first, across all clinics", recent));
-    lower.add(
-        UiComponents.card("Top diagnoses", "Most frequent diagnoses in the data", diagnoses));
+    lower.add(UiComponents.card("Top diagnoses", "Most frequent diagnoses in the data", diagnoses));
     lower.add(UiComponents.card("Visit mix", "Consultations per diagnosis", chart));
 
     body().add(strip, BorderLayout.NORTH);
@@ -82,7 +81,12 @@ public final class DashboardPanel extends ScreenPanel {
                       .map(row -> new Object[] {row.diagnosis(), row.visits()})
                       .toArray(Object[][]::new));
           return new DashboardData(
-              patients, consultations.getRowCount(), appointments, cases, consultations, top,
+              patients,
+              consultations.getRowCount(),
+              appointments,
+              cases,
+              consultations,
+              top,
               report.rows());
         },
         this::render,
@@ -106,10 +110,25 @@ public final class DashboardPanel extends ScreenPanel {
             "Appointments", String.valueOf(data.appointments()), UiTheme.WARNING));
     tiles.add(
         UiComponents.statTile("Notifiable cases", String.valueOf(data.cases()), UiTheme.DANGER));
-    DefaultTableModel recentRows = data.recentRows();
-    recentRows.setColumnIdentifiers(new String[] {"ID", "Date", "Patient", "Doctor", "Diagnosis"});
+    DefaultTableModel source = data.recentRows();
+    Object[][] recentData = new Object[source.getRowCount()][3];
+    for (int row = 0; row < source.getRowCount(); row++) {
+      recentData[row] =
+          new Object[] {
+            String.valueOf(source.getValueAt(row, 1)).substring(0, 10),
+            source.getValueAt(row, 2),
+            source.getValueAt(row, 4)
+          };
+    }
+    DefaultTableModel recentRows =
+        UiComponents.model(new String[] {"Date", "Patient", "Diagnosis"}, recentData);
     recent.setModel(recentRows);
+    recent.table().getColumnModel().getColumn(0).setPreferredWidth(100);
+    recent.table().getColumnModel().getColumn(1).setPreferredWidth(140);
+    recent.table().getColumnModel().getColumn(2).setPreferredWidth(140);
     diagnoses.setModel(data.topRows());
+    diagnoses.table().getColumnModel().getColumn(0).setPreferredWidth(210);
+    diagnoses.table().getColumnModel().getColumn(1).setPreferredWidth(80);
     chart.setRows(data.topDiagnoses());
     tiles.revalidate();
     tiles.repaint();

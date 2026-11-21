@@ -41,7 +41,9 @@ public final class PatientsPanel extends ScreenPanel {
     search.addActionListener(event -> applyFilter());
     JPanel bar = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
     bar.setOpaque(false);
-    bar.add(UiComponents.muted("Search by name"));
+    JLabel searchLabel = UiComponents.muted("Search by name");
+    searchLabel.setLabelFor(search);
+    bar.add(searchLabel);
     bar.add(search);
     bar.add(searchButton);
 
@@ -96,11 +98,14 @@ public final class PatientsPanel extends ScreenPanel {
       return;
     }
     String term =
-        "%" + search.getText().trim().replace("\\", "\\\\").replace("%", "\\%")
-            .replace("_", "\\_") + "%";
+        "%"
+            + search.getText().trim().replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_")
+            + "%";
     Background.run(
-        () -> UhsDao.query(
-            "SELECT * FROM Patient WHERE full_name LIKE ? ESCAPE '\\' ORDER BY full_name", term),
+        () ->
+            UhsDao.query(
+                "SELECT * FROM Patient WHERE full_name LIKE ? ESCAPE '\\' ORDER BY full_name",
+                term),
         directory::setModel,
         shell::showError);
   }

@@ -169,7 +169,6 @@ public final class AppShell extends JFrame {
     JButton button = new JButton(text, UiComponents.glyphIcon(glyph, color));
     button.setHorizontalAlignment(SwingConstants.LEFT);
     button.setIconTextGap(10);
-    button.setFocusPainted(false);
     button.setOpaque(true);
     button.setBackground(UiTheme.SURFACE);
     button.setForeground(UiTheme.TEXT_MUTED);

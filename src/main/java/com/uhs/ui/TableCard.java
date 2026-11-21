@@ -6,6 +6,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.OverlayLayout;
+import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 
 /** A titled table surface with a live row count. */
@@ -14,6 +16,8 @@ public final class TableCard extends JPanel {
 
   private final JTable table = UiComponents.styleTable(new JTable());
   private final JLabel count = UiComponents.muted("0 rows");
+  private final JLabel empty =
+      UiComponents.muted("No data yet. Refresh or check the database connection.");
 
   public TableCard() {
     setLayout(new BorderLayout());
@@ -24,7 +28,15 @@ public final class TableCard extends JPanel {
     head.add(UiComponents.label("Results", 14), BorderLayout.WEST);
     head.add(count, BorderLayout.EAST);
     add(head, BorderLayout.NORTH);
-    add(new JScrollPane(table), BorderLayout.CENTER);
+
+    JPanel stack = new JPanel();
+    stack.setLayout(new OverlayLayout(stack));
+    stack.setOpaque(false);
+    stack.add(new JScrollPane(table));
+    empty.setHorizontalAlignment(SwingConstants.CENTER);
+    empty.setVisible(false);
+    stack.add(empty);
+    add(stack, BorderLayout.CENTER);
   }
 
   /** Returns the underlying table for selection handling. */
@@ -36,5 +48,6 @@ public final class TableCard extends JPanel {
   public void setModel(DefaultTableModel model) {
     table.setModel(model);
     count.setText(model.getRowCount() + " rows");
+    empty.setVisible(model.getRowCount() == 0);
   }
 }

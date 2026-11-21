@@ -15,6 +15,7 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.border.Border;
 import javax.swing.table.DefaultTableModel;
 
@@ -82,12 +83,19 @@ public final class UiComponents {
     return result;
   }
 
+  /** A date field with an empty value and a format hint shown as a placeholder. */
+  public static JTextField dateField(String placeholder) {
+    JTextField field = new JTextField(12);
+    field.putClientProperty("JTextField.placeholderText", placeholder);
+    field.setToolTipText("Format: " + placeholder);
+    return field;
+  }
+
   /** A filled button for the main action on a screen. */
   public static JButton primaryButton(String text) {
     JButton button = new JButton(text);
     button.setBackground(UiTheme.ACCENT);
     button.setForeground(UiTheme.ON_ACCENT);
-    button.setFocusPainted(false);
     button.setBorder(BorderFactory.createEmptyBorder(9, 16, 9, 16));
     return button;
   }
@@ -97,7 +105,6 @@ public final class UiComponents {
     JButton button = new JButton(text);
     button.setBackground(UiTheme.SURFACE_RAISED);
     button.setForeground(UiTheme.TEXT);
-    button.setFocusPainted(false);
     button.setBorder(BorderFactory.createEmptyBorder(9, 14, 9, 14));
     return button;
   }

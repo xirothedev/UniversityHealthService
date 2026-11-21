@@ -10,6 +10,7 @@ import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.util.List;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.JTextField;
@@ -41,7 +42,9 @@ public final class ConsultationsPanel extends ScreenPanel {
 
     JPanel bar = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
     bar.setOpaque(false);
-    bar.add(UiComponents.muted("Filter by patient"));
+    JLabel searchLabel = UiComponents.muted("Filter by patient");
+    searchLabel.setLabelFor(search);
+    bar.add(searchLabel);
     bar.add(search);
     search.addActionListener(event -> applyFilter());
 
@@ -112,8 +115,10 @@ public final class ConsultationsPanel extends ScreenPanel {
   }
 
   private int idColumn() {
-    return history.table().convertColumnIndexToModel(
-        history.table().getColumnModel().getColumnIndex("consultation_id"));
+    return history
+        .table()
+        .convertColumnIndexToModel(
+            history.table().getColumnModel().getColumnIndex("consultation_id"));
   }
 
   private void showLines() {

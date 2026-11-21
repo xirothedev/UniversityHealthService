@@ -119,7 +119,11 @@ public final class ConsultationEditor extends JDialog {
     c.gridx = 0;
     c.gridy = row;
     c.weightx = 0;
-    form.add(UiComponents.muted(label), c);
+    JLabel caption = UiComponents.muted(label);
+    if (control instanceof javax.swing.JComponent component) {
+      caption.setLabelFor(component);
+    }
+    form.add(caption, c);
     c.gridx = 1;
     c.weightx = 1;
     form.add(control, c);

@@ -21,8 +21,8 @@ public final class ReportsPanel extends ScreenPanel {
   private static final long serialVersionUID = 1L;
 
   private final AppShell shell;
-  private final JTextField from = new JTextField(Dates.DATE_HINT, 12);
-  private final JTextField to = new JTextField(Dates.DATE_HINT, 12);
+  private final JTextField from = UiComponents.dateField(Dates.DATE_HINT);
+  private final JTextField to = UiComponents.dateField(Dates.DATE_HINT);
   private final JSpinner minimum = new JSpinner(new SpinnerNumberModel(1, 1, 1000, 1));
   private final JLabel summary = UiComponents.muted("Run the report to see the period total.");
   private final TableCard table = new TableCard();

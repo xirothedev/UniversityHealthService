@@ -27,6 +27,7 @@ public final class ConsultationsPanel extends ScreenPanel {
     this.shell = shell;
     history.setRetry(this::load);
     lines.setRetry(this::showLines);
+    lines.setEmptyMessage("Choose a consultation above to see its prescription lines.");
 
     JButton refresh = UiComponents.ghostButton("Refresh");
     JButton edit = UiComponents.ghostButton("Edit");

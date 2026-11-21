@@ -15,6 +15,7 @@ public final class PrescriptionsPanel extends ScreenPanel {
     super("Prescriptions", "Medicines, dose, frequency and duration for each consultation.");
     masters.setRetry(this::load);
     lines.setRetry(this::showLines);
+    lines.setEmptyMessage("Choose a consultation above to see its prescription lines.");
 
     JSplitPane split =
         UiComponents.split(

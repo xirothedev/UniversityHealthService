@@ -1,6 +1,7 @@
 package com.uhs.ui;
 
 import com.uhs.dao.UhsDao;
+import com.uhs.util.DbErrors;
 import java.awt.*;
 import javax.swing.*;
 
@@ -27,7 +28,7 @@ public class F3MasterDetail extends JFrame {
     try {
       tblMaster.setModel(UhsDao.consultations());
     } catch (Exception ex) {
-      JOptionPane.showMessageDialog(this, ex.getMessage());
+      Tables.error(this, DbErrors.explain(ex));
     }
 
     tblMaster
@@ -46,7 +47,7 @@ public class F3MasterDetail extends JFrame {
               try {
                 tblDetail.setModel(UhsDao.prescriptionLines(id));
               } catch (Exception ex) {
-                JOptionPane.showMessageDialog(this, ex.getMessage());
+                Tables.error(this, DbErrors.explain(ex));
               }
             });
 

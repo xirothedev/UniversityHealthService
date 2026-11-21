@@ -1,6 +1,7 @@
 package com.uhs.ui;
 
 import com.uhs.dao.UhsDao;
+import com.uhs.util.DbErrors;
 import java.awt.*;
 import javax.swing.*;
 
@@ -42,7 +43,7 @@ public class F1Browse extends JFrame {
       table.setModel(m);
       lblCount.setText(m.getRowCount() + " rows");
     } catch (Exception ex) {
-      JOptionPane.showMessageDialog(this, ex.getMessage());
+      Tables.error(this, DbErrors.explain(ex));
     }
   }
 }

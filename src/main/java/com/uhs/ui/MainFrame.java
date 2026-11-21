@@ -19,7 +19,7 @@ import javax.swing.WindowConstants;
 
 /**
  * Main window of the University Health Service application. The menu is the single place that opens
- * every screen; add the other forms (F0-F3) to {@link #buildFormsMenu()}.
+ * every screen: forms F0 to F5 and queries Q-T1 to Q-T5.
  */
 public final class MainFrame extends JFrame {
   private static final long serialVersionUID = 1L;

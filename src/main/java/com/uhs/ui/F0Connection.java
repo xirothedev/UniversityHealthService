@@ -43,8 +43,4 @@ public class F0Connection extends JFrame {
     setLocationRelativeTo(null);
     setDefaultCloseOperation(DISPOSE_ON_CLOSE);
   }
-
-  public static void main(String[] args) {
-    SwingUtilities.invokeLater(() -> new F0Connection().setVisible(true));
-  }
 }

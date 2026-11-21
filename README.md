@@ -1,6 +1,6 @@
 # UniversityHealthService (IT079IU — Topic 14)
 
-University health station: visit records + early outbreak detection.
+University Health Service: consultation records and early outbreak detection.
 
 ## Pinned stack
 
@@ -34,17 +34,22 @@ To point the app at another server, edit `.env` and start it again. Never commit
 
 ## Build and run
 
-1. **Create the database.** Run the scripts in order (the first one drops and recreates `uhs_db`):
+1. **Create the database.** One command builds everything from an empty server; it drops and recreates `uhs_db`, then creates all tables and inserts the seed data. It runs twice without repair.
 
    ```bash
-   mysql -u root -p < sql/01_schema.sql
-   mysql -u root -p < sql/02_data.sql
-   mysql -u root -p < sql/02b_query_demo_supplement.sql   # demo rows for Q02, Q05, Q12
-   mysql -u root -p uhs_db < sql/03_queries_completed.sql # the 12 submission queries
-   mysql -u root -p uhs_db < sql/03_queries.sql           # T18 view, index, transaction demo
+   mysql -u root -p < sql/00_setup.sql                    # drop, create, tables, data
+   mysql -u root -p uhs_db < sql/03_queries.sql           # the 12 submission queries
    ```
 
-   `02b_query_demo_supplement.sql` is required for the 12-query demonstration; omit it for the base seed only. `03_queries.sql` is the separate T18 demonstration, not the 12-query file.
+   Optional demonstration files, each with a separate purpose:
+
+   ```bash
+   mysql -u root -p uhs_db < sql/02b_query_demo_supplement.sql          # extra demo rows
+   mysql -u root -p uhs_db < sql/04_view-and-transactions-demo.sql     # T18 view and transactions
+   mysql -u root -p uhs_db < sql/05_crud_statements.sql                 # UPDATEs and two-table transactions
+   ```
+
+   `00_setup.sql` is generated from `01_schema.sql` + `02_data.sql`; edit the split files, then regenerate it. The base seed now includes a zero-stock medicine (id 17), so all 12 queries return a result without the supplement. `04_view-and-transactions-demo.sql` is the separate demonstration file, not the 12-query file. The index is created by `01_schema.sql`.
 
 2. **Create a login** (skip if you use root). Example for local MySQL 8.4:
 
@@ -105,7 +110,7 @@ the database is touched, and database errors turned into plain-language messages
 | `Missing DB config` | No `.env` / `db.properties` in the folder you started from, or `DB_USERNAME` is empty. |
 | "Cannot reach the database..." | Server is not running, or wrong `DB_HOST` / `DB_PORT`. For TiDB Cloud also check `DB_PARAMS`. |
 | "The database refused the user name or password" | Wrong `DB_USERNAME` / `DB_PASSWORD`. |
-| "The database name was not found" / "A table is missing" | Run `sql/01_schema.sql` and `sql/02_data.sql` first. |
+| "The database name was not found" / "A table is missing" | Run `sql/00_setup.sql` first. |
 | `Public Key Retrieval is not allowed` | Add `allowPublicKeyRetrieval=true` to `DB_PARAMS` (local MySQL 8.x with `caching_sha2_password`). |
 | Q-T2 shows no rows | The chosen date falls on a weekday with no `ConsultSlot` rows (the sample data has slots Monday to Friday only). |
 | `NoSuchFieldError: ... endPositions` during Spotless | JDK 25.0.2 bug in google-java-format. Use Temurin 25.0.5+ (CI uses 25.0.5). |
@@ -119,10 +124,11 @@ Proposal = D1, Midterm = D2, Final = D3+D5+D6 (+ D4 slides/demo). Mapping + cove
 - Domain terms: `CONTEXT.md`.
 - Decisions: `docs/adr/`.
 - Deliverables, deadlines, package layout: `docs/deliverables-detail.md`; pre-submit ticks: `docs/submission-checklist.md`.
-- 17-table column contract (D1 record): `docs/D1-outline.md`.
+- Final report (D3): `docs/D3-final-report.md`.
+- 17-table column contract: `docs/er/UHS-relational-schema.md`; D1 record: `docs/D1-outline.md`.
 - Functional dependencies, minimal cover, lossless decomposition: `docs/functional-dependencies.md`.
 - Relational algebra: `docs/relational-algebra.md`.
-- Query evidence: `docs/t19-query-verification.md` and `docs/UHS_T16_T17_Report.docx`.
+- Query evidence: `docs/query-nonemptiness-verification.md` and `docs/query-development-report.docx`.
 
 ## Team (12 members)
 

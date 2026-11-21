@@ -1,9 +1,9 @@
-# T19 — 12/12 query non-emptiness check
+# Query non-emptiness verification — 12 of 12
 
-**Task:** T19 — Kiểm tra 12/12 query đều non-empty (D5, owner Lê Thành Trung).
-**Result:** **12/12 non-empty.**
+**Task:** Check that all 12 queries return a non-empty result (D5, owner Lê Thành Trung).
+**Result:** **12 of 12 non-empty.**
 **Run date:** 2026-11-04 (TiDB); re-run 2026-11-04 on MySQL 8.4.11 after the T15 dataset update.
-**Branch:** `t19/query-nonempty-check` (base `main` at `3ccd45d`); re-run on `02_data.sql->=15-dòng-thật/bảng` (PR #35).
+**Branch:** `t19/query-nonempty-check` (base `main` at `3ccd45d`); re-run after PR #35, which added at least 15 real rows per table.
 
 ## Environment
 
@@ -25,20 +25,23 @@ file.
 2. `sql/02_data.sql` — base sample data, at least 15 rows per table.
 3. `sql/02b_query_demo_supplement.sql` — disclosed synthetic rows required by
    three queries.
-4. `sql/03_queries_completed.sql` — 12 result sets, Q01–Q12.
+4. `sql/03_queries.sql` — 12 result sets, Q01–Q12.
 
-`sql/03_queries.sql` was not used for this check. It is T18's separate
-view/index/transaction demonstration, not the twelve-query file.
+`sql/04_view-and-transactions-demo.sql` was not used for this check. It is
+T18's separate view, index and transaction demonstration, not the twelve-query
+file.
 
-`02b_query_demo_supplement.sql` is required, not optional:
+At verification time, `02b_query_demo_supplement.sql` was required:
 
-- Q02 needs its Monday appointments to demonstrate booked and cancelled slots.
-- Q05 needs its two Dengue reports exactly fourteen days apart.
-- Q12 needs its one genuinely zero-stock medicine; the base seed has none.
+- Q02 needed its Monday appointments to demonstrate booked and cancelled slots.
+- Q05 needed its two Dengue reports exactly fourteen days apart.
+- Q12 needed a zero-stock medicine; the base seed had none.
 
-The supplement only adds rows in the reserved `800001`–`800104` range and never
-overwrites an original row. No query predicate was weakened to make a result
-appear.
+The current base seed now holds a zero-stock row (medicine id 17), so Q12 also
+returns a result without the supplement. The supplement remains useful for a
+richer demonstration. It adds rows only in the reserved `800001`–`800104` range
+and never overwrites an original row. No query predicate was weakened to make a
+result appear.
 
 ## Results
 
@@ -72,7 +75,7 @@ All other counts are unchanged. The 12/12 non-emptiness result still holds.
 - Q11 selects from `v_patient_summary`, created by the same script with
   `CREATE OR REPLACE VIEW`. The view definition is T18's and is reused unchanged.
 - Results are tied to the fixed demonstration variables at the top of
-  `03_queries_completed.sql` (`@as_of_datetime`, semester bounds, selected
+  `03_queries.sql` (`@as_of_datetime`, semester bounds, selected
   patient, course, medicine, disease, and thresholds).
 - This check covers non-emptiness only. T14 is covered by the transactional
   reset in `02_data.sql`; the script runs twice without manual repair.
@@ -83,5 +86,5 @@ The original record is TiDB v8.5.3 evidence. The re-run above uses MySQL 8.4.11
 (Docker) with the same scripts and the transactional reset. The final D5
 submission must still use the pinned MySQL 8.4 LTS stack.
 
-Related evidence: `docs/UHS_T16_T17_Report.docx` records a native MySQL 8.4.13
+Related evidence: `docs/query-development-report.docx` records a native MySQL 8.4.13
 run (376 statements, 75 checks).

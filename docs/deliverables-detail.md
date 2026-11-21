@@ -40,7 +40,7 @@ Section order: guideline sections first, then assignment sections (both checklis
 2. Abstract — brief topic + objectives (guideline).
 3. Task Allocation Table — seven named role groups (R1–R7) with specific shared responsibilities and outputs per week-window (guideline). Ban generic `All`; template `docs/templates/task-allocation.md`.
 4. Tools and Programming Languages — pinned stack: JDK 25 LTS + MySQL 8.4 LTS + Connector/J 8.4.x + Maven 3.9.x + Swing + draw.io (ADR-01, ADR-02).
-5. Objective in 1 sentence: fast record lookup for the health station + early outbreak detection (topic 14 objective).
+5. Objective in 1 sentence: reliable access to student medical records and early outbreak detection (topic 14 objective).
 6. Business rules, 15–20 numbered sentences.
 7. Entity list of 17 tables + where the weak / M-M / ISA / self-rel sit.
 8. Plan W3/W5/W10/W13–15 + roles table.
@@ -77,9 +77,12 @@ submit/final/
 ├── slides/               # presentation slides (D4)
 ├── src/                  # D6 Java source + README (JDK, driver, connection, build/run)
 └── sql/
-    ├── 01_schema.sql
-    ├── 02_data.sql
-    └── 03_queries.sql    # each statement preceded by its English question comment
+    ├── 00_setup.sql                        # the single submission script: drop, create, tables, data
+    ├── 01_schema.sql                       # DDL and the index; source of 00_setup.sql
+    ├── 02_data.sql                         # seed data; source of 00_setup.sql
+    ├── 03_queries.sql                      # 12 queries, each preceded by its English question
+    ├── 04_view-and-transactions-demo.sql  # view and transaction demonstration
+    └── 05_crud_statements.sql              # UPDATEs and two-table transactions
 ```
 
 - `src/` + `README` build/run steps: a project that does not run scores zero for screens.
@@ -92,10 +95,10 @@ submit/final/
 
 ## D5 — `.sql` file, submitted with D3
 
-- 1 script running top to bottom twice with no manual repair: drop → create (parents before children) → insert.
+- `sql/00_setup.sql` is the one script. It runs top to bottom twice with no manual repair: drop → create (parents before children) → insert.
 - All constraints in the script: PK, FK + ON DELETE/UPDATE, NOT NULL, UNIQUE, CHECK, DEFAULT. Constraints enforced only in Java score nothing.
 - ≥15 realistic rows/table, 12/12 queries non-empty. Separate query file: each statement preceded by its English question comment.
-- Also: INSERT/UPDATE/DELETE for the main tables + 1 two-table transaction (COMMIT/ROLLBACK) + 1 index. Test first: duplicate keys, bad FKs, CHECK violations must all be rejected.
+- Also: INSERT/DELETE in `02_data.sql`; one UPDATE per table in `05_crud_statements.sql`; two-table transactions with COMMIT and ROLLBACK in `04_view-and-transactions-demo.sql` and `05_crud_statements.sql`; one index in `01_schema.sql`. Test first: duplicate keys, bad FKs, CHECK violations must all be rejected.
 - Leads: DB developer + Query developer. Largest weight (Technical 45).
 
 ## D6 — Java app, submitted with D3

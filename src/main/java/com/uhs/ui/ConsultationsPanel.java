@@ -27,6 +27,8 @@ public final class ConsultationsPanel extends ScreenPanel {
   public ConsultationsPanel(AppShell shell) {
     super("Consultations", "Symptoms, diagnosis and notes for every consultation.");
     this.shell = shell;
+    history.setRetry(this::load);
+    lines.setRetry(this::showLines);
 
     JButton refresh = UiComponents.ghostButton("Refresh");
     JButton edit = UiComponents.ghostButton("Edit");
@@ -68,14 +70,20 @@ public final class ConsultationsPanel extends ScreenPanel {
   }
 
   private void load() {
+    history.showLoading();
+    lines.showLoading();
     Background.run(
         () -> new ConsultationDao().findAll(),
         loaded -> {
           consultations = loaded;
           history.setModel(toModel(loaded));
           formatHistory();
+          lines.setModel(UiComponents.model(new String[] {"Information"}, new Object[0][]));
         },
-        shell::showError);
+        error -> {
+          history.showError(error);
+          lines.showError(error);
+        });
   }
 
   private static DefaultTableModel toModel(List<Consultation> rows) {
@@ -109,6 +117,7 @@ public final class ConsultationsPanel extends ScreenPanel {
       formatHistory();
       return;
     }
+    history.showLoading();
     Background.run(
         () -> {
           DefaultTableModel source = UhsDao.patientHistory(search.getText());
@@ -131,7 +140,7 @@ public final class ConsultationsPanel extends ScreenPanel {
           history.setModel(model);
           formatHistory();
         },
-        shell::showError);
+        history::showError);
   }
 
   private int idColumn() {
@@ -148,6 +157,7 @@ public final class ConsultationsPanel extends ScreenPanel {
     }
     int row = history.table().convertRowIndexToModel(viewRow);
     int id = ((Number) history.table().getValueAt(row, idColumn())).intValue();
+    lines.showLoading();
     Background.run(
         () -> UhsDao.prescriptionLines(id),
         model -> {
@@ -159,7 +169,7 @@ public final class ConsultationsPanel extends ScreenPanel {
               },
               new int[] {55, 170, 120, 120, 70, 70, 90, 90});
         },
-        shell::showError);
+        lines::showError);
   }
 
   private Consultation selected() {

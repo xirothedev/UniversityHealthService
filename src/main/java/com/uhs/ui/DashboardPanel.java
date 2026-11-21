@@ -37,6 +37,9 @@ public final class DashboardPanel extends ScreenPanel {
     super("Overview", "A live view of the University Health Service.");
     this.shell = shell;
     tiles.setOpaque(false);
+    recent.setRetry(this::refresh);
+    diagnoses.setRetry(this::refresh);
+    chart.setRetry(this::refresh);
 
     JButton refreshButton = UiComponents.ghostButton("Refresh");
     JButton patientsButton = UiComponents.primaryButton("Open patients");
@@ -67,6 +70,12 @@ public final class DashboardPanel extends ScreenPanel {
   }
 
   private void refresh() {
+    showTiles("…", "…", "…", "…");
+    hint.setForeground(UiTheme.TEXT_MUTED);
+    hint.setText("Loading latest activity…");
+    recent.showLoading();
+    diagnoses.showLoading();
+    chart.showLoading();
     Background.run(
         () -> {
           int patients = count("Patient");
@@ -98,18 +107,23 @@ public final class DashboardPanel extends ScreenPanel {
     return ((Number) model.getValueAt(0, 0)).intValue();
   }
 
+  private void showTiles(String patients, String consultations, String appointments, String cases) {
+    tiles.removeAll();
+    tiles.add(UiComponents.statTile("Patients", patients, UiTheme.ACCENT));
+    tiles.add(UiComponents.statTile("Consultations", consultations, UiTheme.SUCCESS));
+    tiles.add(UiComponents.statTile("Appointments", appointments, UiTheme.WARNING));
+    tiles.add(UiComponents.statTile("Notifiable cases", cases, UiTheme.DANGER));
+    tiles.revalidate();
+    tiles.repaint();
+  }
+
   private void render(DashboardData data) {
     hint.setText("");
-    tiles.removeAll();
-    tiles.add(UiComponents.statTile("Patients", String.valueOf(data.patients()), UiTheme.ACCENT));
-    tiles.add(
-        UiComponents.statTile(
-            "Consultations", String.valueOf(data.consultations()), UiTheme.SUCCESS));
-    tiles.add(
-        UiComponents.statTile(
-            "Appointments", String.valueOf(data.appointments()), UiTheme.WARNING));
-    tiles.add(
-        UiComponents.statTile("Notifiable cases", String.valueOf(data.cases()), UiTheme.DANGER));
+    showTiles(
+        String.valueOf(data.patients()),
+        String.valueOf(data.consultations()),
+        String.valueOf(data.appointments()),
+        String.valueOf(data.cases()));
     DefaultTableModel source = data.recentRows();
     Object[][] recentData = new Object[source.getRowCount()][3];
     for (int row = 0; row < source.getRowCount(); row++) {
@@ -130,12 +144,14 @@ public final class DashboardPanel extends ScreenPanel {
     diagnoses.table().getColumnModel().getColumn(0).setPreferredWidth(210);
     diagnoses.table().getColumnModel().getColumn(1).setPreferredWidth(80);
     chart.setRows(data.topDiagnoses());
-    tiles.revalidate();
-    tiles.repaint();
   }
 
   private void showProblem(Exception error) {
-    hint.setText(DbErrors.explain(error));
+    showTiles("—", "—", "—", "—");
+    recent.showError(error);
+    diagnoses.showError(error);
+    chart.showError(error);
     hint.setForeground(UiTheme.WARNING);
+    hint.setText(DbErrors.explain(error));
   }
 }

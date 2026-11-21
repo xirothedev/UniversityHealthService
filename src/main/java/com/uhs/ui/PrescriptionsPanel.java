@@ -8,13 +8,13 @@ import javax.swing.JSplitPane;
 public final class PrescriptionsPanel extends ScreenPanel {
   private static final long serialVersionUID = 1L;
 
-  private final AppShell shell;
   private final TableCard masters = new TableCard();
   private final TableCard lines = new TableCard();
 
   public PrescriptionsPanel(AppShell shell) {
     super("Prescriptions", "Medicines, dose, frequency and duration for each consultation.");
-    this.shell = shell;
+    masters.setRetry(this::load);
+    lines.setRetry(this::showLines);
 
     JSplitPane split =
         UiComponents.split(
@@ -45,10 +45,9 @@ public final class PrescriptionsPanel extends ScreenPanel {
   }
 
   private void load() {
+    masters.showLoading();
     Background.run(
-        () -> {
-          return UhsDao.consultations();
-        },
+        UhsDao::consultations,
         model -> {
           masters.setModel(model);
           UiComponents.columns(
@@ -56,7 +55,7 @@ public final class PrescriptionsPanel extends ScreenPanel {
               new String[] {"ID", "Date", "Patient", "Doctor", "Diagnosis"},
               new int[] {60, 150, 160, 160, 180});
         },
-        shell::showError);
+        masters::showError);
   }
 
   private void showLines() {
@@ -67,6 +66,7 @@ public final class PrescriptionsPanel extends ScreenPanel {
     }
     int row = masters.table().convertRowIndexToModel(viewRow);
     int id = ((Number) masters.table().getValueAt(row, 0)).intValue();
+    lines.showLoading();
     Background.run(
         () -> UhsDao.prescriptionLines(id),
         model -> {
@@ -78,6 +78,6 @@ public final class PrescriptionsPanel extends ScreenPanel {
               },
               new int[] {55, 170, 120, 120, 70, 70, 90, 90});
         },
-        shell::showError);
+        lines::showError);
   }
 }

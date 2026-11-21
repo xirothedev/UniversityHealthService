@@ -36,6 +36,7 @@ public final class QueriesPanel extends ScreenPanel {
         "Topic queries",
         "The required database questions, with their SQL shown beside the result.");
     this.shell = shell;
+    results.setRetry(this::runSelected);
     sql.setEditable(false);
     sql.setLineWrap(true);
     sql.setWrapStyleWord(true);
@@ -102,6 +103,7 @@ public final class QueriesPanel extends ScreenPanel {
 
   @Override
   protected void onShow() {
+    patients.setEnabled(false);
     Background.run(
         () -> new LookupDao().patients(),
         loaded -> {
@@ -110,8 +112,12 @@ public final class QueriesPanel extends ScreenPanel {
           for (Option option : loaded) {
             patients.addItem(option);
           }
+          patients.setEnabled(true);
         },
-        shell::showError);
+        error -> {
+          patients.setEnabled(true);
+          shell.showError(error);
+        });
   }
 
   private void showQuery() {
@@ -129,10 +135,11 @@ public final class QueriesPanel extends ScreenPanel {
     if (query == null) {
       return;
     }
+    results.showLoading();
     Background.run(
         () -> Tables.fromResult(TopicQueries.run(query.sql(), parameters(query))),
         results::setModel,
-        shell::showError);
+        results::showError);
   }
 
   private Object[] parameters(TopicQuery query) {

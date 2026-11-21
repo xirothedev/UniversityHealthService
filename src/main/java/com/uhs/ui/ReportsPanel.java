@@ -19,7 +19,6 @@ import javax.swing.SpinnerNumberModel;
 public final class ReportsPanel extends ScreenPanel {
   private static final long serialVersionUID = 1L;
 
-  private final AppShell shell;
   private final JTextField from = UiComponents.dateField(Dates.DATE_HINT);
   private final JTextField to = UiComponents.dateField(Dates.DATE_HINT);
   private final JSpinner minimum = new JSpinner(new SpinnerNumberModel(1, 1, 1000, 1));
@@ -29,7 +28,8 @@ public final class ReportsPanel extends ScreenPanel {
 
   public ReportsPanel(AppShell shell) {
     super("Reports", "The five most frequent diagnoses, filtered by date.");
-    this.shell = shell;
+    table.setRetry(this::runReport);
+    chart.setRetry(this::runReport);
 
     JButton run = UiComponents.primaryButton("Run report");
     run.addActionListener(event -> runReport());
@@ -65,6 +65,10 @@ public final class ReportsPanel extends ScreenPanel {
   }
 
   private void runReport() {
+    table.showLoading();
+    chart.showLoading();
+    summary.setForeground(UiTheme.TEXT_MUTED);
+    summary.setText("Running report…");
     Background.run(
         () -> {
           LocalDate start =
@@ -76,7 +80,12 @@ public final class ReportsPanel extends ScreenPanel {
           return new ReportDao().topDiagnoses(start, end, (Integer) minimum.getValue());
         },
         this::render,
-        shell::showError);
+        error -> {
+          table.showError(error);
+          chart.showError(error);
+          summary.setForeground(UiTheme.WARNING);
+          summary.setText(com.uhs.util.DbErrors.explain(error));
+        });
   }
 
   private void render(TopDiagnosesReport report) {
@@ -99,6 +108,7 @@ public final class ReportsPanel extends ScreenPanel {
         table.table(),
         new String[] {"Rank", "Diagnosis", "Consultations", "Share of period"},
         new int[] {60, 240, 120, 130});
+    summary.setForeground(UiTheme.TEXT_MUTED);
     summary.setText("Total consultations in period: " + report.totalConsultations());
     chart.setRows(report.rows());
   }

@@ -10,14 +10,15 @@ import javax.swing.JSplitPane;
 public final class VaccinationsPanel extends ScreenPanel {
   private static final long serialVersionUID = 1L;
 
-  private final AppShell shell;
   private final TableCard complete = new TableCard();
   private final TableCard records = new TableCard();
   private final TableCard courses = new TableCard();
 
   public VaccinationsPanel(AppShell shell) {
     super("Vaccinations", "Courses, doses and completion across the student population.");
-    this.shell = shell;
+    complete.setRetry(this::load);
+    records.setRetry(this::load);
+    courses.setRetry(this::load);
 
     JButton refresh = UiComponents.ghostButton("Refresh");
     refresh.addActionListener(event -> load());
@@ -43,6 +44,9 @@ public final class VaccinationsPanel extends ScreenPanel {
   }
 
   private void load() {
+    complete.showLoading();
+    records.showLoading();
+    courses.showLoading();
     Background.run(
         () -> Tables.fromResult(TopicQueries.run(TopicQueries.FULL_DOSE.sql())),
         model -> {
@@ -52,7 +56,7 @@ public final class VaccinationsPanel extends ScreenPanel {
               new String[] {"ID", "Patient", "Course", "Doses", "Completed"},
               new int[] {60, 160, 240, 70, 120});
         },
-        shell::showError);
+        complete::showError);
     Background.run(
         () -> UhsDao.browse("VaccinationRecord"),
         model -> {
@@ -62,7 +66,7 @@ public final class VaccinationsPanel extends ScreenPanel {
               new String[] {"ID", "Patient", "Course", "Dose", "Given"},
               new int[] {60, 80, 80, 70, 120});
         },
-        shell::showError);
+        records::showError);
     Background.run(
         () -> UhsDao.browse("VaccinationCourse"),
         model -> {
@@ -72,6 +76,6 @@ public final class VaccinationsPanel extends ScreenPanel {
               new String[] {"ID", "Course", "Disease", "Doses"},
               new int[] {60, 220, 180, 70});
         },
-        shell::showError);
+        courses::showError);
   }
 }

@@ -10,14 +10,15 @@ import javax.swing.JSplitPane;
 public final class OutbreaksPanel extends ScreenPanel {
   private static final long serialVersionUID = 1L;
 
-  private final AppShell shell;
   private final TableCard clusters = new TableCard();
   private final TableCard cases = new TableCard();
   private final TableCard traces = new TableCard();
 
   public OutbreaksPanel(AppShell shell) {
     super("Outbreaks", "Notifiable cases and the contacts traced around them.");
-    this.shell = shell;
+    clusters.setRetry(this::load);
+    cases.setRetry(this::load);
+    traces.setRetry(this::load);
 
     JButton refresh = UiComponents.ghostButton("Refresh");
     refresh.addActionListener(event -> load());
@@ -43,6 +44,9 @@ public final class OutbreaksPanel extends ScreenPanel {
   }
 
   private void load() {
+    clusters.showLoading();
+    cases.showLoading();
+    traces.showLoading();
     Background.run(
         () -> Tables.fromResult(TopicQueries.run(TopicQueries.OUTBREAK.sql())),
         model -> {
@@ -52,7 +56,7 @@ public final class OutbreaksPanel extends ScreenPanel {
               new String[] {"Disease", "Building", "Cases", "First report", "Last report"},
               new int[] {200, 180, 70, 120, 120});
         },
-        shell::showError);
+        clusters::showError);
     Background.run(
         () -> UhsDao.browse("NotifiableCase"),
         model -> {
@@ -62,7 +66,7 @@ public final class OutbreaksPanel extends ScreenPanel {
               new String[] {"ID", "Consult", "Disease", "Reported", "Building"},
               new int[] {60, 80, 200, 120, 80});
         },
-        shell::showError);
+        cases::showError);
     Background.run(
         () -> UhsDao.browse("ContactTrace"),
         model -> {
@@ -72,6 +76,6 @@ public final class OutbreaksPanel extends ScreenPanel {
               new String[] {"ID", "Source", "Contact", "Date", "Case"},
               new int[] {60, 80, 80, 120, 70});
         },
-        shell::showError);
+        traces::showError);
   }
 }

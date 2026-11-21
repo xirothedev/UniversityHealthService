@@ -1,24 +1,25 @@
 package com.uhs.ui;
 
+import com.uhs.util.DbErrors;
 import java.awt.BorderLayout;
-import java.awt.CardLayout;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 
-/** A titled table surface with a live row count. */
+/** A titled table surface with loading, empty, error and data states. */
 public final class TableCard extends JPanel {
   private static final long serialVersionUID = 1L;
 
+  private static final String EMPTY_MESSAGE =
+      "No data yet. Refresh or check the database connection.";
+
   private final JTable table = UiComponents.styleTable(new JTable());
   private final JLabel count = UiComponents.muted("0 rows");
-  private final JPanel views = new JPanel(new CardLayout());
-  private final JLabel empty =
-      UiComponents.muted("No data yet. Refresh or check the database connection.");
+  private final StatePanel views = new StatePanel(new JScrollPane(table));
+  private Runnable retry;
 
   public TableCard() {
     setLayout(new BorderLayout());
@@ -28,16 +29,13 @@ public final class TableCard extends JPanel {
     head.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
     head.add(count, BorderLayout.EAST);
     add(head, BorderLayout.NORTH);
-
-    views.setOpaque(false);
-    views.add(new JScrollPane(table), "table");
-    JPanel emptyView = new JPanel(new BorderLayout());
-    emptyView.setOpaque(false);
-    empty.setHorizontalAlignment(SwingConstants.CENTER);
-    emptyView.add(empty, BorderLayout.CENTER);
-    views.add(emptyView, "empty");
-    ((CardLayout) views.getLayout()).show(views, "empty");
     add(views, BorderLayout.CENTER);
+    views.showEmpty(EMPTY_MESSAGE, null);
+  }
+
+  /** Sets the action used by the empty and error states. */
+  public void setRetry(Runnable action) {
+    retry = action;
   }
 
   /** Returns the underlying table for selection handling. */
@@ -45,10 +43,26 @@ public final class TableCard extends JPanel {
     return table;
   }
 
+  /** Shows the loading state while the query runs. */
+  public void showLoading() {
+    count.setText("Loading…");
+    views.showLoading();
+  }
+
+  /** Shows an inline error with a retry action. */
+  public void showError(Exception error) {
+    count.setText("Error");
+    views.showError(DbErrors.explain(error), retry);
+  }
+
   /** Replaces the displayed rows and updates the row count. */
   public void setModel(DefaultTableModel model) {
     table.setModel(model);
     count.setText(model.getRowCount() + " rows");
-    ((CardLayout) views.getLayout()).show(views, model.getRowCount() == 0 ? "empty" : "table");
+    if (model.getRowCount() == 0) {
+      views.showEmpty(EMPTY_MESSAGE, retry);
+    } else {
+      views.showContent();
+    }
   }
 }

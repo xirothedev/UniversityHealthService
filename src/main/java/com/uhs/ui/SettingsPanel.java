@@ -14,12 +14,10 @@ import javax.swing.JTextArea;
 public final class SettingsPanel extends ScreenPanel {
   private static final long serialVersionUID = 1L;
 
-  private final AppShell shell;
   private final JLabel outcome = UiComponents.muted("No connection test run yet.");
 
   public SettingsPanel(AppShell shell, String connectionInfo) {
     super("Connection", "Where the application reads its data. No password is shown.");
-    this.shell = shell;
 
     JTextArea details =
         new JTextArea(
@@ -56,9 +54,17 @@ public final class SettingsPanel extends ScreenPanel {
   }
 
   private void testConnection() {
+    outcome.setForeground(UiTheme.TEXT_MUTED);
+    outcome.setText("Testing connection…");
     Background.run(
         () -> DBConnection.open().getCatalog(),
-        catalog -> outcome.setText("Connected to " + catalog + "."),
-        shell::showError);
+        catalog -> {
+          outcome.setForeground(UiTheme.SUCCESS);
+          outcome.setText("Connected to " + catalog + ".");
+        },
+        error -> {
+          outcome.setForeground(UiTheme.DANGER);
+          outcome.setText("Not connected. " + com.uhs.util.DbErrors.explain(error));
+        });
   }
 }

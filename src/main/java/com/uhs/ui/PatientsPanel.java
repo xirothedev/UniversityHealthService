@@ -17,7 +17,6 @@ import javax.swing.table.DefaultTableModel;
 public final class PatientsPanel extends ScreenPanel {
   private static final long serialVersionUID = 1L;
 
-  private final AppShell shell;
   private final JTextField search = new JTextField(24);
   private final TableCard directory = new TableCard();
   private final TableCard allergies = new TableCard();
@@ -34,7 +33,8 @@ public final class PatientsPanel extends ScreenPanel {
 
   public PatientsPanel(AppShell shell) {
     super("Patients", "Registered students and staff, with their allergy records.");
-    this.shell = shell;
+    directory.setRetry(this::load);
+    allergies.setRetry(this::load);
 
     JButton searchButton = UiComponents.ghostButton("Search");
     searchButton.addActionListener(event -> applyFilter());
@@ -72,6 +72,8 @@ public final class PatientsPanel extends ScreenPanel {
   }
 
   private void load() {
+    directory.showLoading();
+    allergies.showLoading();
     Background.run(
         () ->
             new PatientData(
@@ -83,8 +85,12 @@ public final class PatientsPanel extends ScreenPanel {
           data = loaded;
           directory.setModel(loaded.people());
           formatDirectory();
+          clearDetail();
         },
-        shell::showError);
+        error -> {
+          directory.showError(error);
+          allergies.showError(error);
+        });
   }
 
   private void formatDirectory() {
@@ -92,6 +98,12 @@ public final class PatientsPanel extends ScreenPanel {
         directory.table(),
         new String[] {"ID", "Name", "Date of birth", "Gender", "Phone"},
         new int[] {60, 180, 120, 80, 140});
+  }
+
+  private void clearDetail() {
+    identity.setText("Select a patient");
+    subtype.setText("Choose a row above to see the full record.");
+    allergies.setModel(UiComponents.model(new String[] {"Information"}, new Object[0][]));
   }
 
   private void applyFilter() {
@@ -107,6 +119,7 @@ public final class PatientsPanel extends ScreenPanel {
         "%"
             + search.getText().trim().replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_")
             + "%";
+    directory.showLoading();
     Background.run(
         () ->
             UhsDao.query(
@@ -116,7 +129,7 @@ public final class PatientsPanel extends ScreenPanel {
           directory.setModel(model);
           formatDirectory();
         },
-        shell::showError);
+        directory::showError);
   }
 
   private void selected(ListSelectionEvent event) {
@@ -125,9 +138,7 @@ public final class PatientsPanel extends ScreenPanel {
     }
     int viewRow = directory.table().getSelectedRow();
     if (viewRow < 0) {
-      identity.setText("Select a patient");
-      subtype.setText("Choose a row above to see the full record.");
-      allergies.setModel(UiComponents.model(new String[] {"Information"}, new Object[0][]));
+      clearDetail();
       return;
     }
     int row = directory.table().convertRowIndexToModel(viewRow);

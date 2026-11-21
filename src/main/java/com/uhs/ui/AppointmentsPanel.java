@@ -25,6 +25,8 @@ public final class AppointmentsPanel extends ScreenPanel {
   public AppointmentsPanel(AppShell shell) {
     super("Appointments", "Find an open consultation slot in the coming week.");
     this.shell = shell;
+    slots.setRetry(this::findSlots);
+    appointments.setRetry(this::loadAppointments);
 
     JButton find = UiComponents.primaryButton("Find free slots");
     find.addActionListener(event -> findSlots());
@@ -48,6 +50,7 @@ public final class AppointmentsPanel extends ScreenPanel {
 
   @Override
   protected void onShow() {
+    medicalStaffOptions.setEnabled(false);
     Background.run(
         () -> new LookupDao().doctors(),
         loaded -> {
@@ -55,11 +58,20 @@ public final class AppointmentsPanel extends ScreenPanel {
           for (Option medicalStaff : loaded) {
             medicalStaffOptions.addItem(medicalStaff);
           }
+          medicalStaffOptions.setEnabled(true);
           if (!loaded.isEmpty()) {
             findSlots();
           }
         },
-        shell::showError);
+        error -> {
+          medicalStaffOptions.setEnabled(true);
+          shell.showError(error);
+        });
+    loadAppointments();
+  }
+
+  private void loadAppointments() {
+    appointments.showLoading();
     Background.run(
         () -> UhsDao.browse("Appointment"),
         model -> {
@@ -69,7 +81,7 @@ public final class AppointmentsPanel extends ScreenPanel {
               new String[] {"ID", "Patient", "Staff", "When", "Status"},
               new int[] {60, 80, 90, 170, 100});
         },
-        shell::showError);
+        appointments::showError);
   }
 
   private void findSlots() {
@@ -78,6 +90,7 @@ public final class AppointmentsPanel extends ScreenPanel {
       shell.showMessage("Choose a medical staff member first.");
       return;
     }
+    slots.showLoading();
     Background.run(
         () -> {
           LocalDate chosen = Dates.parseDate(date.getText(), "Date");
@@ -93,6 +106,6 @@ public final class AppointmentsPanel extends ScreenPanel {
               new String[] {"Date", "Doctor", "Start", "End"},
               new int[] {120, 220, 90, 90});
         },
-        shell::showError);
+        slots::showError);
   }
 }

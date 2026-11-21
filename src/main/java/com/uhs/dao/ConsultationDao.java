@@ -87,34 +87,6 @@ public final class ConsultationDao {
     }
   }
 
-  /**
-   * Describes the records that would block a delete, for the confirmation dialog. Returns an empty
-   * string when nothing depends on the consultation.
-   */
-  public String describeDependents(int consultationId) throws Exception {
-    String sql =
-        "SELECT (SELECT COUNT(*) FROM Prescription WHERE consultation_id = ?),"
-            + " (SELECT COUNT(*) FROM NotifiableCase WHERE consultation_id = ?)";
-    try (Connection con = DBConnection.open();
-        PreparedStatement ps = con.prepareStatement(sql)) {
-      ps.setInt(1, consultationId);
-      ps.setInt(2, consultationId);
-      try (ResultSet rs = ps.executeQuery()) {
-        rs.next();
-        int prescriptions = rs.getInt(1);
-        int cases = rs.getInt(2);
-        List<String> parts = new ArrayList<>();
-        if (prescriptions > 0) {
-          parts.add(prescriptions + " prescription(s)");
-        }
-        if (cases > 0) {
-          parts.add(cases + " notifiable case(s)");
-        }
-        return String.join(" and ", parts);
-      }
-    }
-  }
-
   private static void bind(PreparedStatement ps, Consultation c) throws Exception {
     ps.setInt(1, c.patientId());
     ps.setInt(2, c.medStaffId());

@@ -1,10 +1,8 @@
 package com.uhs.ui;
 
 import com.uhs.dao.ConsultationDao;
-import com.uhs.dao.LookupDao;
 import com.uhs.dao.UhsDao;
 import com.uhs.model.Consultation;
-import com.uhs.model.Option;
 import com.uhs.util.Dates;
 import java.awt.BorderLayout;
 import java.util.List;
@@ -67,6 +65,7 @@ public final class ConsultationsPanel extends ScreenPanel {
   @Override
   protected void onShow() {
     load();
+    ConsultationEditor.prefetch(shell::showError);
   }
 
   private void load() {
@@ -188,12 +187,7 @@ public final class ConsultationsPanel extends ScreenPanel {
   }
 
   private void openEditor(Consultation value) {
-    Background.run(
-        () -> new EditorOptions(new LookupDao().patients(), new LookupDao().doctors()),
-        options ->
-            new ConsultationEditor(shell, value, options.patients(), options.doctors(), this::load)
-                .setVisible(true),
-        shell::showError);
+    ConsultationEditor.open(shell, value, this::load);
   }
 
   private void removeSelected() {
@@ -202,29 +196,16 @@ public final class ConsultationsPanel extends ScreenPanel {
       shell.showMessage("Choose a consultation first.");
       return;
     }
-    Background.run(
-        () -> new ConsultationDao().describeDependents(value.id()),
-        dependents -> {
-          String suffix = dependents.isBlank() ? "" : " It has " + dependents + ".";
-          int answer =
-              javax.swing.JOptionPane.showConfirmDialog(
-                  this,
-                  "Delete consultation #" + value.id() + "?" + suffix,
-                  "Confirm delete",
-                  javax.swing.JOptionPane.YES_NO_OPTION,
-                  javax.swing.JOptionPane.WARNING_MESSAGE);
-          if (answer == javax.swing.JOptionPane.YES_OPTION) {
-            Background.run(
-                () -> new ConsultationDao().delete(value.id()),
-                ignored -> {
-                  load();
-                  shell.showMessage("Consultation deleted.");
-                },
-                shell::showError);
-          }
-        },
-        shell::showError);
+    int answer =
+        javax.swing.JOptionPane.showConfirmDialog(
+            this,
+            "Delete consultation #" + value.id() + "?",
+            "Confirm delete",
+            javax.swing.JOptionPane.YES_NO_OPTION,
+            javax.swing.JOptionPane.WARNING_MESSAGE);
+    if (answer == javax.swing.JOptionPane.YES_OPTION) {
+      Background.run(
+          () -> new ConsultationDao().delete(value.id()), ignored -> load(), shell::showError);
+    }
   }
-
-  private record EditorOptions(List<Option> patients, List<Option> doctors) {}
 }

@@ -31,8 +31,7 @@ public final class VaccinationsPanel extends ScreenPanel {
             0.6);
     JSplitPane split =
         UiComponents.split(
-            UiComponents.card(
-                "Fully vaccinated", "Patients with every dose of a course (Q-T4)", complete),
+            UiComponents.card("Fully vaccinated", "Patients with every dose of a course", complete),
             lower,
             0.45);
     body().add(split, BorderLayout.CENTER);

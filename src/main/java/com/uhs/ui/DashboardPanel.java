@@ -17,7 +17,6 @@ import javax.swing.table.DefaultTableModel;
 public final class DashboardPanel extends ScreenPanel {
   private static final long serialVersionUID = 1L;
 
-  private final AppShell shell;
   private final JPanel tiles = new JPanel(new GridLayout(1, 4, 16, 0));
   private final JLabel hint = UiComponents.muted("");
   private final TableCard recent = new TableCard();
@@ -35,17 +34,14 @@ public final class DashboardPanel extends ScreenPanel {
 
   public DashboardPanel(AppShell shell) {
     super("Overview", "A live view of the University Health Service.");
-    this.shell = shell;
     tiles.setOpaque(false);
     recent.setRetry(this::refresh);
     diagnoses.setRetry(this::refresh);
     chart.setRetry(this::refresh);
 
     JButton refreshButton = UiComponents.ghostButton("Refresh");
-    JButton patientsButton = UiComponents.primaryButton("Open patients");
     refreshButton.addActionListener(event -> refresh());
-    patientsButton.addActionListener(event -> shell.navigate("patients"));
-    addActions(refreshButton, patientsButton);
+    addActions(refreshButton);
 
     JPanel strip = new JPanel(new BorderLayout());
     strip.setOpaque(false);

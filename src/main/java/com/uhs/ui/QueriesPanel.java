@@ -58,7 +58,7 @@ public final class QueriesPanel extends ScreenPanel {
 
     JButton run = UiComponents.primaryButton("Run query");
     run.addActionListener(event -> runSelected());
-    JButton topFive = UiComponents.ghostButton("Q-T3 Top-5 diagnoses");
+    JButton topFive = UiComponents.ghostButton("Top-5 diagnoses report");
     topFive.addActionListener(event -> shell.navigate("reports"));
 
     JPanel controls = new JPanel();

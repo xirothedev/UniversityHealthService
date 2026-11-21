@@ -39,7 +39,7 @@ public final class AppShell extends JFrame {
     add(buildRail(), BorderLayout.WEST);
     add(pages, BorderLayout.CENTER);
 
-    status = new JLabel("  " + connectionInfo);
+    status = new JLabel("  Connected to " + databaseName(connectionInfo));
     status.setForeground(UiTheme.TEXT_MUTED);
     status.setBorder(BorderFactory.createEmptyBorder(8, 12, 8, 12));
     add(status, BorderLayout.NORTH);
@@ -61,6 +61,14 @@ public final class AppShell extends JFrame {
   /** Returns the connection description without a password. */
   public static String describeConnection(Properties properties) {
     return DBConnection.buildUrl(properties) + "  user=" + properties.getProperty("db.user");
+  }
+
+  /** Extracts the database name from a JDBC URL for the short status label. */
+  private static String databaseName(String connectionInfo) {
+    String url = connectionInfo.split("\\s+user=")[0];
+    String withoutParams = url.split("\\?")[0];
+    int slash = withoutParams.lastIndexOf('/');
+    return slash < 0 ? withoutParams : withoutParams.substring(slash + 1);
   }
 
   /** Shows the named screen and highlights its rail button. */

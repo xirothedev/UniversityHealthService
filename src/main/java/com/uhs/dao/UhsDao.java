@@ -8,7 +8,6 @@ import java.sql.ResultSetMetaData;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import javax.swing.table.DefaultTableModel;
 
@@ -17,26 +16,6 @@ import javax.swing.table.DefaultTableModel;
  */
 public final class UhsDao {
   private UhsDao() {}
-
-  public static final List<String> TABLES =
-      List.of(
-          "Allergy",
-          "Appointment",
-          "Building",
-          "Consultation",
-          "ConsultSlot",
-          "ContactTrace",
-          "MedicalStaff",
-          "Medicine",
-          "NotifiableCase",
-          "Patient",
-          "PatientAllergy",
-          "Prescription",
-          "PrescriptionLine",
-          "Staff",
-          "Student",
-          "VaccinationCourse",
-          "VaccinationRecord");
 
   /** Generic query -> table model. */
   public static DefaultTableModel query(String sql, Object... params) throws Exception {
@@ -97,10 +76,6 @@ public final class UhsDao {
   }
 
   // ---------- F2 ----------
-  public static DefaultTableModel doctors() throws Exception {
-    return query("SELECT med_staff_id, full_name FROM MedicalStaff ORDER BY full_name");
-  }
-
   public static DefaultTableModel patientHistory(String nameLike) throws Exception {
     // escape LIKE wildcards so '%' and '_' typed by the user are matched literally
     String escaped = nameLike.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_");

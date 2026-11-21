@@ -32,7 +32,7 @@ public final class OutbreaksPanel extends ScreenPanel {
     JSplitPane split =
         UiComponents.split(
             UiComponents.card(
-                "Fourteen-day clusters", "Same disease, same building (Q-T5)", clusters),
+                "Fourteen-day clusters", "Same disease in one building within 14 days", clusters),
             lower,
             0.45);
     body().add(split, BorderLayout.CENTER);

@@ -21,7 +21,6 @@ public class App {
       return;
     }
     String info = AppShell.describeConnection(settings);
-    System.out.println("DB target: " + info);
     SwingUtilities.invokeLater(
         () -> {
           UiTheme.install();

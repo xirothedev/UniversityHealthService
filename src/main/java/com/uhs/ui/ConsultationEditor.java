@@ -12,20 +12,23 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.function.Consumer;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-/** Modal editor for one consultation, with insert, update and guarded delete. */
+/** Modal editor for one consultation. The dialog opens before its lists finish loading. */
 public final class ConsultationEditor extends JDialog {
   private static final long serialVersionUID = 1L;
+
+  private static volatile List<Option> cachedPatients;
+  private static volatile List<Option> cachedDoctors;
 
   private final AppShell shell;
   private final Runnable onSaved;
@@ -37,41 +40,44 @@ public final class ConsultationEditor extends JDialog {
   private final JTextField diagnosis = new JTextField(28);
   private final JTextArea symptoms = new JTextArea(3, 28);
   private final JTextArea notes = new JTextArea(3, 28);
-  private final JLabel heading;
-  private final List<Option> patients;
-  private final List<Option> medicalStaffOptions;
 
-  public ConsultationEditor(
-      AppShell shell,
-      Consultation original,
-      List<Option> patients,
-      List<Option> medicalStaffOptions,
-      Runnable onSaved) {
+  private ConsultationEditor(AppShell shell, Consultation original, Runnable onSaved) {
     super(shell, "Consultation", true);
     this.shell = shell;
     this.original = original;
-    this.patients = patients;
-    this.medicalStaffOptions = medicalStaffOptions;
     this.onSaved = onSaved;
-    this.heading =
-        UiComponents.label(original == null ? "New consultation" : "Edit consultation", 18);
 
     build();
-    fill(patients, medicalStaffOptions);
-    if (original != null) {
+    patient.addItem(Option.none("Select a patient"));
+    medicalStaff.addItem(Option.none("Select a medical staff member"));
+    appointment.addItem(Option.none("No appointment"));
+    if (original == null) {
+      date.setText(Dates.formatDateTime(LocalDateTime.now()));
+    } else {
       date.setText(Dates.formatDateTime(original.consultationDate()));
       diagnosis.setText(original.diagnosis());
       symptoms.setText(original.symptoms());
       notes.setText(original.notes());
-      select(patient, original.patientId());
-      select(medicalStaff, original.medStaffId());
-      loadAppointments(original.patientId(), original.appointmentId());
-    } else {
-      date.setText(Dates.formatDateTime(LocalDateTime.now()));
     }
-    patient.addActionListener(event -> loadAppointments(selectedId(patient), null));
     setSize(620, 640);
     setLocationRelativeTo(shell);
+  }
+
+  /** Fills the lookup cache in the background so the first editor opens without a wait. */
+  public static void prefetch(Consumer<Exception> onError) {
+    if (cachedPatients == null) {
+      Background.run(() -> new LookupDao().patients(), loaded -> cachedPatients = loaded, onError);
+    }
+    if (cachedDoctors == null) {
+      Background.run(() -> new LookupDao().doctors(), loaded -> cachedDoctors = loaded, onError);
+    }
+  }
+
+  /** Opens the editor at once, then fills its lists when the cached data is ready. */
+  public static void open(AppShell shell, Consultation value, Runnable onSaved) {
+    ConsultationEditor editor = new ConsultationEditor(shell, value, onSaved);
+    editor.loadLookups();
+    editor.setVisible(true);
   }
 
   private void build() {
@@ -107,7 +113,9 @@ public final class ConsultationEditor extends JDialog {
     JPanel body = new JPanel(new BorderLayout());
     body.setOpaque(false);
     body.setBorder(BorderFactory.createEmptyBorder(24, 28, 24, 28));
-    body.add(heading, BorderLayout.NORTH);
+    body.add(
+        UiComponents.label(original == null ? "New consultation" : "Edit consultation", 18),
+        BorderLayout.NORTH);
     body.add(form, BorderLayout.CENTER);
     body.add(buttons, BorderLayout.SOUTH);
     setContentPane(body);
@@ -129,15 +137,71 @@ public final class ConsultationEditor extends JDialog {
     form.add(control, c);
   }
 
-  private void fill(List<Option> patientOptions, List<Option> medicalStaffOptions) {
-    patient.addItem(Option.none("Select a patient"));
-    medicalStaff.addItem(Option.none("Select a medical staff member"));
-    appointment.addItem(Option.none("No appointment"));
-    for (Option option : patientOptions) {
-      patient.addItem(option);
+  private void loadLookups() {
+    patient.setEnabled(false);
+    medicalStaff.setEnabled(false);
+    if (cachedPatients != null && cachedDoctors != null) {
+      fill(patient, cachedPatients, "Select a patient");
+      fill(medicalStaff, cachedDoctors, "Select a medical staff member");
+      finishLookups();
+      return;
     }
-    for (Option option : medicalStaffOptions) {
-      medicalStaff.addItem(option);
+    if (cachedPatients == null) {
+      Background.run(
+          () -> new LookupDao().patients(),
+          loaded -> {
+            cachedPatients = loaded;
+            fill(patient, loaded, "Select a patient");
+            finishIfReady();
+          },
+          this::lookupFailed);
+    } else {
+      fill(patient, cachedPatients, "Select a patient");
+      finishIfReady();
+    }
+    if (cachedDoctors == null) {
+      Background.run(
+          () -> new LookupDao().doctors(),
+          loaded -> {
+            cachedDoctors = loaded;
+            fill(medicalStaff, loaded, "Select a medical staff member");
+            finishIfReady();
+          },
+          this::lookupFailed);
+    } else {
+      fill(medicalStaff, cachedDoctors, "Select a medical staff member");
+      finishIfReady();
+    }
+  }
+
+  private void finishIfReady() {
+    if (cachedPatients != null && cachedDoctors != null) {
+      finishLookups();
+    }
+  }
+
+  private void finishLookups() {
+    patient.setEnabled(true);
+    medicalStaff.setEnabled(true);
+    if (original != null) {
+      select(patient, original.patientId());
+      select(medicalStaff, original.medStaffId());
+      loadAppointments(original.patientId(), original.appointmentId());
+    }
+    patient.addActionListener(event -> loadAppointments(selectedId(patient), null));
+  }
+
+  private void lookupFailed(Exception error) {
+    patient.setEnabled(true);
+    medicalStaff.setEnabled(true);
+    shell.showError(error);
+  }
+
+  private static void fill(JComboBox<Option> box, List<Option> options, String placeholder) {
+    box.removeAllItems();
+    box.addItem(Option.none(placeholder));
+    for (Option option : options) {
+      box.addItem(option);
     }
   }
 
@@ -147,6 +211,7 @@ public final class ConsultationEditor extends JDialog {
       appointment.addItem(Option.none("No appointment"));
       return;
     }
+    appointment.setEnabled(false);
     Background.run(
         () -> new LookupDao().freeAppointments(patientId, keepId),
         loaded -> {
@@ -159,8 +224,12 @@ public final class ConsultationEditor extends JDialog {
           if (current != null) {
             appointment.setSelectedItem(current);
           }
+          appointment.setEnabled(true);
         },
-        shell::showError);
+        error -> {
+          appointment.setEnabled(true);
+          shell.showError(error);
+        });
   }
 
   private void save() {
@@ -203,7 +272,6 @@ public final class ConsultationEditor extends JDialog {
           ignored -> {
             onSaved.run();
             dispose();
-            shell.showMessage("Consultation saved.");
           },
           shell::showError);
     } catch (Exception error) {
@@ -215,26 +283,21 @@ public final class ConsultationEditor extends JDialog {
     if (original == null || original.id() == null) {
       return;
     }
+    int answer =
+        javax.swing.JOptionPane.showConfirmDialog(
+            this,
+            "Delete this consultation?",
+            "Confirm delete",
+            javax.swing.JOptionPane.YES_NO_OPTION,
+            javax.swing.JOptionPane.WARNING_MESSAGE);
+    if (answer != javax.swing.JOptionPane.YES_OPTION) {
+      return;
+    }
     Background.run(
-        () -> new ConsultationDao().describeDependents(original.id()),
-        dependents -> {
-          String suffix = dependents.isBlank() ? "" : " It has " + dependents + ".";
-          int answer =
-              JOptionPane.showConfirmDialog(
-                  this,
-                  "Delete this consultation?" + suffix,
-                  "Confirm delete",
-                  JOptionPane.YES_NO_OPTION,
-                  JOptionPane.WARNING_MESSAGE);
-          if (answer == JOptionPane.YES_OPTION) {
-            Background.run(
-                () -> new ConsultationDao().delete(original.id()),
-                ignored -> {
-                  onSaved.run();
-                  dispose();
-                },
-                shell::showError);
-          }
+        () -> new ConsultationDao().delete(original.id()),
+        ignored -> {
+          onSaved.run();
+          dispose();
         },
         shell::showError);
   }

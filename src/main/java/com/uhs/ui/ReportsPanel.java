@@ -68,7 +68,7 @@ public final class ReportsPanel extends ScreenPanel {
     table.showLoading();
     chart.showLoading();
     summary.setForeground(UiTheme.TEXT_MUTED);
-    summary.setText("Running report…");
+    summary.setText("");
     Background.run(
         () -> {
           LocalDate start =

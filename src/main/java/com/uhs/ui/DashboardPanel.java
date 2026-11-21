@@ -68,7 +68,7 @@ public final class DashboardPanel extends ScreenPanel {
   private void refresh() {
     showTiles("…", "…", "…", "…");
     hint.setForeground(UiTheme.TEXT_MUTED);
-    hint.setText("Loading latest activity…");
+    hint.setText("");
     recent.showLoading();
     diagnoses.showLoading();
     chart.showLoading();

@@ -45,7 +45,7 @@ public final class TableCard extends JPanel {
 
   /** Shows the loading state while the query runs. */
   public void showLoading() {
-    count.setText("Loading…");
+    count.setText("");
     views.showLoading();
   }
 

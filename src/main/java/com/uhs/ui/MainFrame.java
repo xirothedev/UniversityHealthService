@@ -18,8 +18,8 @@ import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
 
 /**
- * Main window of the University Health Service application. The menu is the single place that
- * opens every screen: forms F0 to F5 and queries Q-T1 to Q-T5.
+ * Main window of the University Health Service application. The menu is the single place that opens
+ * every screen: forms F0 to F5 and queries Q-T1 to Q-T5.
  */
 public final class MainFrame extends JFrame {
   private static final long serialVersionUID = 1L;

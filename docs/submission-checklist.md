@@ -28,7 +28,7 @@ governs packaging/format. Detail: `docs/deliverables-detail.md`.
 ## Final = D3 + D5 + D6 (+ D4 slides/demo)
 
 - [ ] D3 is 25+ pages with the exact 12-section order from assignment §2.5 (no reordering), §11 signed by all members, §12 References + AI appendix.
-- [ ] Package layout matches `docs/deliverables-detail.md` (`report.pdf`, `slides/`, `src/` + README, `sql/01_schema.sql + 02_data.sql + 03_queries.sql` with English-question comments).
+- [ ] Package layout matches `docs/deliverables-detail.md` (`report.pdf`, `slides/`, `src/` + README, `sql/00_setup.sql`, `03_queries.sql` with English-question comments, `04_t18-view-index-transactions.sql`, `05_crud_statements.sql`).
 - [ ] D5: script runs twice with no manual repair; PK/FK + ON DELETE/UPDATE/NOT NULL/UNIQUE/CHECK/DEFAULT all in script; ≥15 realistic rows/table; 12/12 queries non-empty; INSERT/UPDATE/DELETE + 1 two-table transaction + 1 index; duplicate-key / bad-FK / CHECK-violation tests rejected.
 - [ ] D6: 6 screens (connection externalized, browse grid + row count, parameterized search, master–detail Consultation→PrescriptionLine, CRUD + delete confirm, Top-5 diagnoses report); ≥4/5 topic queries on menu; PreparedStatement everywhere; plain-language FK errors; try-with-resources; README builds/runs on a clean machine.
 - [ ] D4: live INSERT/UPDATE/DELETE then show the change in the DB; every member can explain the whole project.

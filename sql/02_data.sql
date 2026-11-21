@@ -4,6 +4,8 @@
 -- Standards: Pinned stack MySQL 8.4 LTS / MariaDB compatible
 -- Constraint verification: All 17 tables populated with >= 15 realistic rows
 -- Fully normalized & validated against business rules (BR-01 to BR-20)
+-- MySQL-specific syntax: ON DUPLICATE KEY UPDATE appears in three seed
+-- INSERT statements. Every other statement is standard SQL.
 -- ============================================================
 USE uhs_db;
 
@@ -789,10 +791,11 @@ VALUES
         'Walk-in clinic visit; oral rehydration therapy given'
     );
 
--- task_05.sql: Sample realistic INSERT data for Medicine, Prescription, and PrescriptionLine.
--- Aligns with schema in sql/01_schema.sql and IDs in sql/02_data.sql.
+-- Sample realistic INSERT data for Medicine, Prescription, and PrescriptionLine.
+-- Aligns with the schema in sql/01_schema.sql.
 -- ============================================================
--- Medicine (16 rows, >= 15 rows)
+-- Medicine (17 rows, >= 15 rows). Row 17 has zero stock so query Q12 returns
+-- a result from this base seed; no supplement is needed for non-emptiness.
 -- ============================================================
 INSERT INTO
     Medicine (
@@ -817,7 +820,8 @@ VALUES
     (13, 'Hydrocortisone cream', 50, 35000.00),
     (14, 'Chlorpheniramine 4mg', 110, 7000.00),
     (15, 'Vitamin C 500mg', 200, 4000.00),
-    (16, 'Oral Rehydration Salts (ORS)', 150, 3500.00);
+    (16, 'Oral Rehydration Salts (ORS)', 150, 3500.00),
+    (17, 'Discontinued Vitamin B12', 0, 5500.00);
 
 -- ============================================================
 -- Prescription (15 rows, >= 15 rows)

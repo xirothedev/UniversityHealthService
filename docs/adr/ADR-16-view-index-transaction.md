@@ -1,23 +1,27 @@
-# ADR-16: T18 — one view, one index, two transactions
+# ADR-16: One view, one index, two transactions
 
-Supersedes ADR-08 (reason below).
+Supersedes ADR-08, now kept in `docs/adr/superseded/ADR-08-index-transaction.md`.
+
+**Update 2026-11-21:** the index now lives in `01_schema.sql` so every build has
+it; the view and transactions live in `sql/04_t18-view-index-transactions.sql`.
+The twelve-query script is `sql/03_queries.sql`.
 
 ## 1. Context
 The brief requires the submitted scripts to include at least one view, at least one index
 justified against a named query, and a two-table transaction demonstrating COMMIT and
-ROLLBACK. Sheet task T18 ("View + index + transaction 2 bảng") owns all three. ADR-08 had
-already claimed index + transaction, but its column names were stale.
+ROLLBACK. One sheet task owns all three. ADR-08 had already claimed index + transaction,
+but its column names were stale.
 
 ADR-08 is superseded, not reversed: it named `Appointment(doctor_id, slot_time)` and
 `Consultation(diagnosis, consult_date)`. None of those three columns exist. `doctor_id`
-predates ADR-14, which split MedicalStaff out of the Patient ISA; the column is `staff_id`
-and `CONTEXT.md` bans `doctor_id` as an identifier. `slot_time` became `appointment_time`
-and `consult_date` became `consultation_date`. The decision to index and to transact stands;
-only the names were wrong.
+predates ADR-14, which split MedicalStaff out of the Patient ISA. ADR-17 fixed the current
+name as `med_staff_id`; both `doctor_id` and `staff_id` are retired spellings. `slot_time`
+became `appointment_time` and `consult_date` became `consultation_date`. The decision to
+index and to transact stands; only the names were wrong.
 
 ## 2. Decision
 
-**One index, not two.** `Appointment(med_staff_id, appointment_time)` serves Q-T2 (doctors with
+**One index, not two.** `Appointment(med_staff_id, appointment_time)` serves Q02 (clinicians with
 free slots this week), the only required query that does a genuine seek — `med_staff_id`
 equality plus a time range. ADR-08's second index, `Consultation(diagnosis, …)`, is dropped:
 `diagnosis` is free text (`CONTEXT.md`), so a B-tree over it is never sought by equality, and
@@ -44,10 +48,11 @@ Ordering matters: the rollback demo runs first so the committed rows are the las
 written and the cleanup is unambiguous. Both use ids in the 9000 block to stay clear of
 `02_data.sql`.
 
-**All three live in `sql/03_queries.sql`.** The file header already assigns it to R5. T16 and
-T18 have different owners, so R5 splits the file by line range internally rather than moving
-the `CREATE INDEX` into R4's `01_schema.sql`. The index is DDL among SELECTs, and its comment
-says so.
+**Where the artefacts live.** The view and the two transactions live in
+`sql/04_t18-view-index-transactions.sql`. The index lives in `sql/01_schema.sql`, directly
+after the Appointment table. This keeps the index with the schema that creates the table,
+so a marker who builds the database always gets the index. The earlier choice to keep it in
+the demonstration file is reversed below.
 
 ## 3. Dropped
 - **Second index on `Consultation`.** An index that exists but that `EXPLAIN` ignores is
@@ -58,9 +63,9 @@ says so.
   Prescription insert fail on a constraint and show the Consultation disappearing.
 - **Rollback-only demo.** Idempotent, but the brief names COMMIT as well as ROLLBACK and a
   script that only ever rolls back never exercises it.
-- **Moving the index into `01_schema.sql`.** Technically tidier, but that file is R4's
-  (T13) and the sheet assigns T18 to R5. Reassigning silently is worse than an odd-looking
-  file.
+- **Keeping the index in the demonstration file.** Reversed on 2026-11-21. Ownership was the
+  only reason to keep it there. The submission script is now the single source of truth, so
+  the index belongs with the DDL.
 - **A second index, kept "just in case".** Verified unnecessary — the single index is chosen
   by the query it was built for.
 - **Widening the rerun caveat to "the whole database must be recreated".** Overstated. Only
@@ -68,13 +73,13 @@ says so.
   and the file header now says the narrow thing.
 
 ## 4. Consequences
-Gain: three brief requirements met by three artefacts a reader can check in one file; the
-rollback is demonstrated rather than asserted; the view is reusable as F1's browse grid and
-shows subtype without the Java layer knowing about the ISA. Loss: `CREATE VIEW` and
-`CREATE INDEX` are DDL inside a query script, and MySQL has no `IF NOT EXISTS` for either, so
-a second run needs the view and index dropped first — the usual `01_schema.sql` run order
-satisfies this without anyone thinking about it. Report cost: the report must name Q-T2 as
-the query the index helps.
+Gain: three brief requirements met by checkable artefacts; the rollback is demonstrated
+rather than asserted; the view is reusable as F1's browse grid and shows subtype without
+the Java layer knowing about the ISA. Loss: `CREATE VIEW` is DDL inside the demonstration
+script, and MySQL has no `IF NOT EXISTS` for it, so a second run needs the view dropped first
+— the usual `01_schema.sql` run order satisfies this. The index has no such problem because
+it is created with the tables. Report cost: the report must name Q02 as the query the index
+helps.
 
 Verified 2026-10-01 against a live server, using the 7 tables these three blocks touch
 (`Patient`, `Student`, `Staff`, `MedicalStaff`, `Appointment`, `Consultation`,
@@ -89,7 +94,7 @@ present; and the file runs twice over a fresh database with no unexpected failur
 Re-verification owed after ADR-17 renamed the columns (`staff_id` → `med_staff_id`,
 `staff_code` → `uni_staff_code`, `slot_length_min` → `booking_unit_min`) and moved the
 rollback trip-wire from `fk_presc_staff` to `fk_presc_consult`: R5/T18 must rerun the
-`01_schema.sql` + `02_data.sql` + `03_queries.sql` sequence on MySQL 8.4 and confirm the
+`00_setup.sql` + `04_t18-view-index-transactions.sql` sequence on MySQL 8.4 and confirm the
 single intended `ERROR 1452` (now on `fk_presc_consult`) before D3. What CI can check
 (sqlfluff parse, guards) is green on this branch; what it cannot (live execution) is
 explicitly deferred, not assumed.
@@ -113,6 +118,6 @@ with lower_case columns, and no `capitalisation_policy` accepts both; the conven
 fixed by D1. Other rules (LT01, LT05, RF06, ...) remain active — verified.
 
 ## 5. Related
-Tables Appointment, Patient, Student, Staff, Consultation, Prescription. Queries Q-T2, Q-T3,
+Tables Appointment, Patient, Student, Staff, Consultation, Prescription. Queries Q02, Q03,
 Q11. Rules BR-02, BR-07, BR-08, BR-19. Supersedes ADR-08; depends on ADR-01, ADR-11, ADR-14;
 column renames and the rollback trip-wire move decided in ADR-17.

@@ -4,7 +4,7 @@ Section order is fixed: guideline sections first, then assignment sections.
 Both checklists pass only in this order. Source: `docs/deliverables-detail.md`.
 
 1. Cover Page — template `docs/templates/cover.md`. Course + topic 14 + instructor + team table (name + student ID + phone + topic).
-2. Abstract — 1 short paragraph: topic + objectives (fast record lookup + early outbreak detection).
+2. Abstract — 1 short paragraph: topic and objectives (reliable access to student medical records and early outbreak detection).
 3. Task Allocation Table — template `docs/templates/task-allocation.md`. Per-member × per-week specific tasks; generic `All` rows score low / are banned by `CONTRIBUTING.md`.
 4. Tools and Programming Languages — pinned stack: JDK 25 LTS + MySQL 8.4 LTS + Connector/J 8.4.x + Maven 3.9.x + Swing + draw.io.
 
@@ -17,7 +17,7 @@ Both checklists pass only in this order. Source: `docs/deliverables-detail.md`.
    - **GUI:** Java Swing (6 screens, F0–F5, see `docs/deliverables-detail.md`).
    - **Tools:** draw.io for ER modeling, Git/GitHub for version control.
 
-5. Objective in 1 sentence: fast record lookup for the health station + early outbreak detection.
+5. Objective in 1 sentence: reliable access to student medical records and early outbreak detection.
 6. Business rules, 15–20 numbered sentences (R2 writes, whole team approves).
 
    Done: BR-01..BR-18 in `docs/business-rules.md`; copy the approved wording here.

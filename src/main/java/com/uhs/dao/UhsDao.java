@@ -97,10 +97,6 @@ public final class UhsDao {
   }
 
   // ---------- F2 ----------
-  public static DefaultTableModel doctors() throws Exception {
-    return query("SELECT med_staff_id, full_name FROM MedicalStaff ORDER BY full_name");
-  }
-
   public static DefaultTableModel patientHistory(String nameLike) throws Exception {
     // escape LIKE wildcards so '%' and '_' typed by the user are matched literally
     String escaped = nameLike.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_");

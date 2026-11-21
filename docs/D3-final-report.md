@@ -841,18 +841,18 @@ Screenshots live in `docs/screenshots/`.
 
 | Screen | Screenshot | SQL behind the screen |
 |---|---|---|
-| Main menu | `Main window.png` | No SQL; opens the forms and queries below |
-| F0 connection | `F0.png` | No SQL; reads settings and opens a JDBC connection |
-| F1 browse | `F1.png` | `SELECT * FROM <table>`; the table name is whitelisted. The form shows the grid row count |
-| F2 search | `F2-1.png`, `F2-2.png` | Patient history: `SELECT ... FROM Patient p JOIN Consultation c ... JOIN MedicalStaff m ... WHERE p.full_name LIKE ? ESCAPE '\'`. Free slots: `SELECT start_time, end_time, booking_unit_min FROM ConsultSlot WHERE med_staff_id = ? AND weekday = ?` plus `SELECT TIME(appointment_time) FROM Appointment WHERE med_staff_id = ? AND DATE(appointment_time) = ?` |
-| F3 master–detail | `F3.png` | Upper grid: `SELECT c.consultation_id, c.consultation_date, p.full_name, m.full_name, c.diagnosis FROM Consultation c JOIN Patient p ... JOIN MedicalStaff m ...`. Lower grid: `SELECT pl.line_no, md.medicine_name, pl.dosage, pl.frequency, pl.duration_days, pl.quantity, pl.unit_price, (pl.quantity * pl.unit_price) AS line_total FROM Prescription pr JOIN PrescriptionLine pl ... JOIN Medicine md ... WHERE pr.consultation_id = ?` |
-| F4 editing | `F4.png`, `F4-Error.png` | `SELECT` with joins to Patient and MedicalStaff; `INSERT INTO Consultation (patient_id, med_staff_id, appointment_id, consultation_date, symptoms, diagnosis, notes) VALUES (?, ?, ?, ?, ?, ?, ?)`; matching UPDATE and DELETE; a dependency check before DELETE and a confirmation dialog |
-| F5 report | `F5.png` | `SELECT diagnosis, COUNT(*) AS visits FROM Consultation WHERE diagnosis IS NOT NULL [AND consultation_date >= ?] [AND consultation_date < ?] GROUP BY diagnosis HAVING COUNT(*) >= ? ORDER BY visits DESC, diagnosis ASC LIMIT 5` |
-| Q-T1 history | `Q-T1.png` | Multi-table join with LEFT JOINs to Prescription, PrescriptionLine and Medicine; GROUP_CONCAT of medicine names; `WHERE p.patient_id = ?` |
-| Q-T2 free slots | `Q-T2.png` | Recursive CTE over ConsultSlot, LEFT JOIN Appointment with `status IN ('scheduled', 'completed')`, `WHERE a.appointment_id IS NULL` |
-| Q-T3 top-5 diagnoses | `Q-T3.png` | Opens F5; aggregate query shown above |
-| Q-T4 full dose | `Q-T4.png` | Recursive dose-number CTE and double NOT EXISTS |
-| Q-T5 fourteen-day cluster | `Q-T5.png` | Self-join on NotifiableCase, `ABS(DATEDIFF(...)) <= 14`, grouped by disease and building |
+| Main menu | `01-Overview.png` | No SQL; opens the forms and queries below |
+| F0 connection | `11-Connection.png` | No SQL; reads settings and opens a JDBC connection |
+| F1 browse | `02-Browse.png` | `SELECT * FROM <table>`; the table name is whitelisted. The form shows the grid row count |
+| F2 search | `05-Consultations-Patient-history.png`, `04-Appointments.png` | Patient history: `SELECT ... FROM Patient p JOIN Consultation c ... JOIN MedicalStaff m ... WHERE p.full_name LIKE ? ESCAPE '\'`. Free slots: `SELECT start_time, end_time, booking_unit_min FROM ConsultSlot WHERE med_staff_id = ? AND weekday = ?` plus `SELECT TIME(appointment_time) FROM Appointment WHERE med_staff_id = ? AND DATE(appointment_time) = ?` |
+| F3 master–detail | `05-Consultations-Prescription-lines.png` | Upper grid: `SELECT c.consultation_id, c.consultation_date, p.full_name, m.full_name, c.diagnosis FROM Consultation c JOIN Patient p ... JOIN MedicalStaff m ...`. Lower grid: `SELECT pl.line_no, md.medicine_name, pl.dosage, pl.frequency, pl.duration_days, pl.quantity, pl.unit_price, (pl.quantity * pl.unit_price) AS line_total FROM Prescription pr JOIN PrescriptionLine pl ... JOIN Medicine md ... WHERE pr.consultation_id = ?` |
+| F4 editing | `05-Consultation-editor.png`, `05-Consultation-editor-Validation-error.png` | `SELECT` with joins to Patient and MedicalStaff; `INSERT INTO Consultation (patient_id, med_staff_id, appointment_id, consultation_date, symptoms, diagnosis, notes) VALUES (?, ?, ?, ?, ?, ?, ?)`; matching UPDATE and DELETE; a dependency check before DELETE and a confirmation dialog |
+| F5 report | `09-Reports-Top-five-diagnoses.png` | `SELECT diagnosis, COUNT(*) AS visits FROM Consultation WHERE diagnosis IS NOT NULL [AND consultation_date >= ?] [AND consultation_date < ?] GROUP BY diagnosis HAVING COUNT(*) >= ? ORDER BY visits DESC, diagnosis ASC LIMIT 5` |
+| Q-T1 history | `10-Topic-queries-Consultation-history.png` | Multi-table join with LEFT JOINs to Prescription, PrescriptionLine and Medicine; GROUP_CONCAT of medicine names; `WHERE p.patient_id = ?` |
+| Q-T2 free slots | `10-Topic-queries-Free-slots.png` | Recursive CTE over ConsultSlot, LEFT JOIN Appointment with `status IN ('scheduled', 'completed')`, `WHERE a.appointment_id IS NULL` |
+| Q-T3 top-5 diagnoses | `09-Reports-Top-five-diagnoses-from-Q-T3.png` | Opens F5; aggregate query shown above |
+| Q-T4 full dose | `10-Topic-queries-Full-dose.png` | Recursive dose-number CTE and double NOT EXISTS |
+| Q-T5 fourteen-day cluster | `10-Topic-queries-Fourteen-day-cluster.png` | Self-join on NotifiableCase, `ABS(DATEDIFF(...)) <= 14`, grouped by disease and building |
 
 The source of each screen is in `com.uhs.ui` (`MainFrame`, `F0Connection`,
 `F1Browse`, `F2Search`, `F3MasterDetail`, `ConsultationForm`, `Top5ReportForm`,

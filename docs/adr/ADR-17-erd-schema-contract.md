@@ -4,7 +4,7 @@
 The D2 deliverable (due 12/10/2026, W5) is the ERD plus a draft schema plus one mapping
 rule per table group. The ERD (`docs/er/UHS-ERD.drawio`, 17 tables) calls itself the schema
 contract for `sql/01_schema.sql`, but a line-by-line check against `docs/D1-outline.md`,
-`CONTEXT.md`, and the merged `sql/03_queries.sql` (T18 view + index + transactions) found
+`CONTEXT.md`, and `sql/04_view-and-transactions-demo.sql` (T18 view + transactions) found
 the contract and its consumers disagreeing on column names, one column's meaning, one
 column's nullability, and one missing price column — plus a legend that documents only
 half the referential actions the brief requires.
@@ -12,7 +12,7 @@ half the referential actions the brief requires.
 ## 2. Decision
 - **ERD names win.** The diagram uses `med_staff_id` (MedicalStaff PK and every FK to it)
   and `STAFF.uni_staff_code`; `CONTEXT.md`, `docs/D1-outline.md`, ADR-16, and
-  `sql/03_queries.sql` used `staff_id` / `staff_code`. The diagram is the lone outlier
+  `sql/04_view-and-transactions-demo.sql` used `staff_id` / `staff_code`. The diagram is the lone outlier
   numerically but the only D2 artefact the marker reads first, so everything else is
   rewritten to it. `CONTEXT.md` now states the rule as: `med_staff_id` always means
   MedicalStaff; the Patient subtype is identified only by `STAFF.uni_staff_code`.
@@ -47,7 +47,7 @@ half the referential actions the brief requires.
   the legend now read `MR1/MR2/MR3/MR4/MR5/MR8`.
 
 ## 3. Dropped
-- **Renaming the ERD to `staff_id`.** Would have kept `03_queries.sql` untouched, but the
+- **Renaming the ERD to `staff_id`.** Would have kept the demonstration script untouched, but the
   glossary rule "`staff_id` means MedicalStaff" next to a `STAFF.staff_code` column is the
   exact ambiguity ADR-14 was written to kill; `med_staff_id` / `uni_staff_code` keeps the
   two identifiers visually distinct.
@@ -61,7 +61,7 @@ half the referential actions the brief requires.
   the checklist does.
 
 ## 4. Consequences
-Gain: one contract — ERD, `01_schema.sql`, D1 entity list, and `03_queries.sql` name the
+Gain: one contract — ERD, `01_schema.sql`, D1 entity list, and the query script name the
 same columns; every column has a BR; every FK states both referential actions. Loss: the
 T18 live verification (ADR-16) predates the renames and must be rerun on MySQL 8.4 before
 D3 — stated in ADR-16, not assumed. Known gaps left for the follow-up PR before 12/10:

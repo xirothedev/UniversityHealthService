@@ -9,6 +9,8 @@
 -- never updated; the actions only document intent). DEFAULTs only on
 -- Appointment.status and Medicine.stock_quantity.
 -- Runs twice in a row without manual repair: DROP IF EXISTS first.
+-- Dialect notes: the utf8mb4_0900_ai_ci collation and ENGINE = InnoDB are
+-- MySQL 8.4 specific. All keys, CHECKs and referential actions are standard.
 
 DROP DATABASE IF EXISTS uhs_db;
 
@@ -151,6 +153,12 @@ CREATE TABLE Appointment (
     REFERENCES MedicalStaff (med_staff_id)
     ON DELETE RESTRICT ON UPDATE RESTRICT
 ) ENGINE = InnoDB;
+
+-- Index for query Q02 (clinicians with free slots this week). Q02 seeks
+-- med_staff_id for equality, then narrows on appointment_time. Keeping the
+-- index in this script means every marker who builds the schema gets it.
+CREATE INDEX idx_appt_medstaff_time
+ON Appointment (med_staff_id, appointment_time);
 
 CREATE TABLE Consultation (
     consultation_id INT AUTO_INCREMENT PRIMARY KEY,

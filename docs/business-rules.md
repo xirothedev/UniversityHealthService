@@ -3,7 +3,9 @@
 Source: `docs/assignment.md` Topic 14 + `CONTEXT.md` + ADR-03/04/05/06/12/13/14/17.
 BR-01..BR-18 ship in D1 as submitted. BR-19 was added afterwards (D2 revision) to justify the
 Patient demographic columns; BR-20 was added in D2 to justify the frozen order-line price.
-Log both in the D2 "Updated Information" section.
+BR-21 and BR-22 state participation minima flagged by the D2 ERD review. The schema does not
+enforce those two minima with declarative constraints; the D3 discussion records them as
+known limits.
 Each rule is one numbered plain-English sentence. Every rule maps to at least one ER element (see `docs/er/UHS-ERD.drawio` and ADR-17).
 
 ## A. Who-is-who
@@ -11,7 +13,7 @@ Each rule is one numbered plain-English sentence. Every rule maps to at least on
 - **BR-01.** Every Patient is exactly one of Student or Staff, never both and never neither (disjoint + total ISA).
 - **BR-02.** A Student has one unique student code, a faculty, and at most one dorm Building (a day student boards nowhere); a Staff has one unique university staff code and one office.
 - **BR-03.** MedicalStaff is separate from Patient; the same human may have one row in each with no link between them. Specialty and consulting hours belong to MedicalStaff only.
-- **BR-04.** Each MedicalStaff member has one or more weekly ConsultSlots (weekday + start + end + booking unit, where the unit is the bookable increment inside the window rather than the window's length); a slot with no blocking Appointment is free.
+- **BR-04.** A MedicalStaff member may have weekly ConsultSlots (weekday + start + end + booking unit, where the unit is the bookable increment inside the window rather than the window's length); a slot with no blocking Appointment is free.
 - **BR-19.** Patient demographics — full name, date of birth, gender, phone — are recorded once on Patient and inherited by both subtypes; Student and Staff add only their own subtype attributes and never copy demographics.
 
 ## B. Care episode
@@ -40,6 +42,8 @@ Each rule is one numbered plain-English sentence. Every rule maps to at least on
 - **BR-16.** Each NotifiableCase records disease (free text, consistent spelling), report date, and exactly one exposure/report Building; this building — not the patient's dorm — drives the 14-day cluster query.
 - **BR-17.** ContactTrace links Patient to Patient with roles source / contact plus contact date and optional source case; a source cannot trace to itself.
 - **BR-18.** A Building is a hall, dorm, clinic, lab, pharmacy, or admin location; Students point at one dorm Building for admin, cases point at one Building for outbreak detection.
+- **BR-21.** Each MedicalStaff member attends at least one Consultation over time (participation minimum 1..n on the `attending` relationship).
+- **BR-22.** Each Building used as an exposure site has at least one NotifiableCase (participation minimum 1..n on `exposure site`).
 
 ## Coverage check (data modeller)
 
@@ -50,3 +54,4 @@ Each rule is one numbered plain-English sentence. Every rule maps to at least on
   `PrescriptionLine.unit_price` (frozen snapshot, no current price overwriting history) under BR-20.
 - Required queries: history BR-07; free slots BR-04+BR-05; top-5 diagnoses BR-07; every dose BR-13+BR-14; 14-day cluster BR-16+BR-17.
 - Blocking rules: scheduled + completed block a slot, cancelled + no-show free it (BR-04+BR-05, ADR-12). Double dose_no rejected by uniqueness (BR-14). Self-contact rejected (BR-17).
+- BR-21 and BR-22 document participation minima without a declarative enforcement mechanism. They are honest limits of the current schema, not silent assumptions.

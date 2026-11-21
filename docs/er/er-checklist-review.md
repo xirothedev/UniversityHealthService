@@ -17,8 +17,8 @@
 | **Self-rel Patient-contact-Patient via ContactTrace, 2 roles marked** | **PASS** | Recursive relationship mapped via `ContactTrace` with roles `source_patient_id` and `contact_patient_id`, protected by `CHECK (source_patient_id <> contact_patient_id)`. |
 | **No list-like string columns, no current price overwriting historical price** | **PASS** | `PrescriptionLine.unit_price` captures the frozen historical unit price at order time (BR-20). |
 | **Each table notes which mapping rule created it** | **PASS** | Standardized to `MR1..MR8` mapping taxonomy to avoid collision with team roles R1..R7. |
-| **Cardinality + participation on every rel** | **UNTICKED (UNDER REVIEW)** | **Honest Gap per ADR-17 (§4):** Three participation minima currently lack clear business rules and remain under review: `attending` (MedicalStaff >= 1 Consultation), `exposure site` (Building >= 1 NotifiableCase), and BR-04 slot edge (`0..n` vs wording). |
-| **Each business rule appears in at least 1 place on the ER** | **UNTICKED (UNDER REVIEW)** | **Honest Gap per ADR-17 (§4):** Every column has an underlying rule in `docs/business-rules.md`, but visual grey BR strip tags are pending final render onto the `.drawio` diagram. |
+| **Cardinality + participation on every rel** | **PASS** | Cardinality and participation are marked on all 21 relationships. BR-21 and BR-22 now state the `attending` and `exposure site` participation minima; BR-04 now matches the `0..n` slot edge. |
+| **Each business rule appears in at least 1 place on the ER** | **ACCEPTED LIMIT** | Every column has an underlying rule in `docs/business-rules.md` (BR-01..BR-22). Visual grey BR strip tags are not rendered on the `.drawio` diagram; this is recorded as a presentation limit in the D3 discussion. |
 
 ---
 

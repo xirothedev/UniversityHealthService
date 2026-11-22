@@ -631,14 +631,14 @@ ORDER BY b.building_id, nc1.case_id, nc2.case_id;
 **Result on the sample data:** 4 row(s).
 
 
-## Q06 — Which allergies are recorded for each patient, and what is the severity of each association? The composite key (patient_id,allergy_id) makes each returned association unique. This query is translated in T17 RA1.
+## Q06 — Which allergies are recorded for each patient, and what is the severity of each association? The composite key (patient_id,allergy_id) makes each returned association unique. Translated as RA1 in `docs/query-development-report.docx`.
 
 
 ```sql
 -- Which allergies are recorded for each patient, and what is the severity of
 -- each association?
 -- The composite key (patient_id,allergy_id) makes each returned association
--- unique. This query is translated in T17 RA1.
+-- unique. Translated as RA1 in docs/query-development-report.docx.
 SELECT
     p.patient_id,
     p.full_name AS patient_name,
@@ -655,13 +655,14 @@ ORDER BY p.patient_id, al.allergy_id;
 **Result on the sample data:** 16 row(s).
 
 
-## Q07 — Which medical staff members have never had any appointment recorded? Any recorded appointment counts, including cancelled and no-show. This is not the same as currently having free slots. T17 RA2 uses set difference.
+## Q07 — Which medical staff members have never had any appointment recorded? Any recorded appointment counts, including cancelled and no-show. This is not the same as currently having free slots. Translated as RA2 (set difference) in `docs/query-development-report.docx`.
 
 
 ```sql
 -- Which medical staff members have never had any appointment recorded?
 -- Any recorded appointment counts, including cancelled and no-show. This is
--- not the same as currently having free slots. T17 RA2 uses set difference.
+-- not the same as currently having free slots. Translated as RA2 (set
+-- difference) in docs/query-development-report.docx.
 SELECT
     ms.med_staff_id,
     ms.full_name AS clinician_name,
@@ -705,13 +706,14 @@ ORDER BY severe_allergy_count DESC, p.patient_id ASC;
 **Result on the sample data:** 4 row(s).
 
 
-## Q09 — Which patients have been prescribed a selected medicine at least once? EXISTS returns each patient once even when several prescriptions contain the medicine. T17 RA3 uses selection, joins and projection.
+## Q09 — Which patients have been prescribed a selected medicine at least once? EXISTS returns each patient once even when several prescriptions contain the medicine. Translated as RA3 in `docs/query-development-report.docx`.
 
 
 ```sql
 -- Which patients have been prescribed a selected medicine at least once?
 -- EXISTS returns each patient once even when several prescriptions contain the
--- medicine. T17 RA3 uses selection, joins and projection.
+-- medicine. Translated as RA3 (selection, joins, projection) in
+-- docs/query-development-report.docx.
 SELECT
     p.patient_id,
     p.full_name AS patient_name
@@ -735,14 +737,15 @@ ORDER BY p.patient_id;
 **Result on the sample data:** 2 row(s).
 
 
-## Q10 — Which patients have at least one consultation record or at least one vaccination record? UNION removes duplicates within and across branches. Both branches project the same columns and compatible types. T17 RA4 uses union.
+## Q10 — Which patients have at least one consultation record or at least one vaccination record? UNION removes duplicates within and across branches. Both branches project the same columns and compatible types. Translated as RA4 (union) in `docs/query-development-report.docx`.
 
 
 ```sql
 -- Which patients have at least one consultation record or at least one
 -- vaccination record?
 -- UNION removes duplicates within and across branches. Both branches project
--- the same columns and compatible types. T17 RA4 uses union.
+-- the same columns and compatible types. Translated as RA4 (union) in
+-- docs/query-development-report.docx.
 SELECT
     p.patient_id,
     p.full_name AS patient_name
@@ -813,9 +816,12 @@ join with outer joins, Q03 groups with HAVING, Q04 uses double NOT EXISTS
 
 for the for-all pattern, Q10 uses a set operation, and Q11 reads the view.
 
-Four queries (Q01, Q03, Q04 and Q05) are also expressed in relational
+Eight queries are expressed in relational algebra across two deliverables.
 
-algebra in `docs/relational-algebra.md`.
+`docs/relational-algebra.md` covers Q01, Q03, Q04 and Q05 with its own RA1–RA4
+labels. `docs/query-development-report.docx` covers Q06, Q07, Q09 and Q10 with
+its own RA1–RA4 labels. The two label sets are local to their document and are
+not interchangeable. Both sets are retained.
 # 9. The application
 
 ## 9.1 Connection

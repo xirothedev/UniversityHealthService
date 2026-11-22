@@ -172,3 +172,9 @@ pair appear once.
 
 The four algebra expressions cover the required query types in assignment §2.2:
 a multi-table join, aggregation with HAVING, a for-all query and a self-join.
+
+The RA1–RA4 labels in this file are local to this file: RA1=Q01, RA2=Q03,
+RA3=Q04 and RA4=Q05. A second T17 deliverable,
+`docs/query-development-report.docx`, uses its own RA1–RA4 labels for Q06,
+Q07, Q09 and Q10. Both sets are retained and cited separately in
+`docs/D3-final-report.md` and `sql/03_queries.sql`.

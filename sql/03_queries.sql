@@ -11,6 +11,11 @@
 -- FK-error demo, index creation, or table-reset statements. The index is
 -- created by 01_schema.sql so every build has it.
 -- The view SELECT is unchanged; OR REPLACE makes setup rerunnable.
+-- T17 has two algebra deliverables and both are retained:
+-- docs/relational-algebra.md covers Q01, Q03, Q04 and Q05
+-- (RA1=Q01, RA2=Q03, RA3=Q04, RA4=Q05);
+-- docs/query-development-report.docx covers Q06, Q07, Q09 and Q10
+-- (RA1=Q06, RA2=Q07, RA3=Q09, RA4=Q10). Label sets are local to each file.
 -- The supplement 02b_query_demo_supplement.sql adds extra demonstration rows;
 -- it is not needed for non-empty results. The base seed holds a zero-stock
 -- medicine (id 17) for Q12.
@@ -297,7 +302,7 @@ ORDER BY b.building_id, nc1.case_id, nc2.case_id;
 -- Which allergies are recorded for each patient, and what is the severity of
 -- each association?
 -- The composite key (patient_id,allergy_id) makes each returned association
--- unique. This query is translated in T17 RA1.
+-- unique. Translated as RA1 in docs/query-development-report.docx.
 SELECT
     p.patient_id,
     p.full_name AS patient_name,
@@ -313,7 +318,8 @@ ORDER BY p.patient_id, al.allergy_id;
 -- Q07 BEGIN
 -- Which medical staff members have never had any appointment recorded?
 -- Any recorded appointment counts, including cancelled and no-show. This is
--- not the same as currently having free slots. T17 RA2 uses set difference.
+-- not the same as currently having free slots. Translated as RA2 (set
+-- difference) in docs/query-development-report.docx.
 SELECT
     ms.med_staff_id,
     ms.full_name AS clinician_name,
@@ -349,7 +355,8 @@ ORDER BY severe_allergy_count DESC, p.patient_id ASC;
 -- Q09 BEGIN
 -- Which patients have been prescribed a selected medicine at least once?
 -- EXISTS returns each patient once even when several prescriptions contain the
--- medicine. T17 RA3 uses selection, joins and projection.
+-- medicine. Translated as RA3 (selection, joins, projection) in
+-- docs/query-development-report.docx.
 SELECT
     p.patient_id,
     p.full_name AS patient_name
@@ -373,7 +380,8 @@ ORDER BY p.patient_id;
 -- Which patients have at least one consultation record or at least one
 -- vaccination record?
 -- UNION removes duplicates within and across branches. Both branches project
--- the same columns and compatible types. T17 RA4 uses union.
+-- the same columns and compatible types. Translated as RA4 (union) in
+-- docs/query-development-report.docx.
 SELECT
     p.patient_id,
     p.full_name AS patient_name
